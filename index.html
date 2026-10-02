@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Dosen Politeknik Negeri Lhokseumawe</title>
+  <meta name="description"
+    content="Portal Data Dosen Politeknik Negeri Lhokseumawe beserta Portofolio Penelitian, Pengabdian, Publikasi, dan Paten PDDIKTI.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+
+<body>
+
+  <!-- ==================== NAVBAR ==================== -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-logo-badge">PNL</div>
+        <div class="brand-text">
+          <h1>DATA DOSEN</h1>
+          <p>POLITEKNIK NEGERI LHOKSEUMAWE</p>
+        </div>
+      </a>
+      <div class="nav-badge-pddikti">
+        <span class="dot"></span>
+        PDDIKTI Live API
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION & SEARCH ==================== -->
+  <section class="hero-section">
+    <div class="container hero-content">
+      <div class="hero-pill">
+        🎓 Sistem Informasi Portofolio Dosen
+      </div>
+      <h2 class="hero-title">
+        DATA DOSEN<br>
+        <span>POLITEKNIK NEGERI LHOKSEUMAWE</span>
+      </h2>
+      <p class="hero-subtitle">
+        Cari dan temukan portofolio tridharma perguruan tinggi, penelitian, pengabdian, publikasi ilmiah, dan HKI/paten.
+      </p>
+
+      <!-- Form Pencarian -->
+      <div class="search-card">
+        <form id="search-form" class="search-form" onsubmit="return false;">
+          <div class="search-input-wrap">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="search-input" name="q" class="search-input"
+              placeholder="Cari Nama atau NIDN Dosen (Contoh: ARYATI, AZWINUR, 0009067504)..." autocomplete="off">
+          </div>
+          <button type="submit" id="btn-search" class="btn-search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            CARI
+          </button>
+        </form>
+      </div>
+
+      <!-- Quick Search Chips -->
+      <div class="search-hints">
+        <span>Saran Pencarian:</span>
+        <button type="button" class="search-chip" data-query="ARYATI">ARYATI (0009067504)</button>
+        <button type="button" class="search-chip" data-query="AZWINUR">AZWINUR (0010057905)</button>
+        <button type="button" class="search-chip" data-query="TEUKU MUSTAQIM">TEUKU MUSTAQIM (0007066506)</button>
+        <button type="button" id="btn-reset-search" class="search-chip"
+          style="display:none; background: #f1f5f9; color: #475569;">✕ Reset Pencarian</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DAFTAR DOSEN ==================== -->
+  <main class="container">
+    <div class="section-header">
+      <h3 class="section-title">
+        <span class="indicator"></span>
+        <span id="section-title-text">Daftar Dosen Politeknik Negeri Lhokseumawe</span>
+      </h3>
+      <span id="count-badge" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+        Memuat...
+      </span>
+    </div>
+
+    <!-- Alert jika pencarian tidak menemukan hasil -->
+    <div id="alert-container"></div>
+
+    <!-- Skeleton Placeholder Loading -->
+    <div id="skeleton-container" class="skeleton-grid">
+      <div class="skeleton-card">
+        <div class="skeleton-header">
+          <div class="skeleton-avatar"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-line title"></div>
+            <div class="skeleton-line subtitle"></div>
+          </div>
+        </div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line button"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton-header">
+          <div class="skeleton-avatar"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-line title"></div>
+            <div class="skeleton-line subtitle"></div>
+          </div>
+        </div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line button"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton-header">
+          <div class="skeleton-avatar"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-line title"></div>
+            <div class="skeleton-line subtitle"></div>
+          </div>
+        </div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line button"></div>
+      </div>
+    </div>
+
+    <!-- Grid Card Dosen -->
+    <div id="dosen-grid" class="dosen-grid" style="display:none;"></div>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 Data Dosen Politeknik Negeri Lhokseumawe</p>
+      <p class="footer-pddikti">
+        <span>Sumber Data: PDDIKTI Kemdiktisaintek</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+# PHP Backup
+php_backup/
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
