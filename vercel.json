@@ -1,30 +1,3 @@
 {
-  "version": 2,
-  "cleanUrls": true,
-  "routes": [
-    {
-      "src": "/api/pddikti",
-      "dest": "/api/pddikti.js"
-    },
-    {
-      "src": "/index.php",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/detail.php",
-      "dest": "/detail.html"
-    },
-    {
-      "src": "/api.php",
-      "dest": "/api/pddikti.js"
-    },
-    {
-      "src": "/",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ]
+  "version": 2
 }
