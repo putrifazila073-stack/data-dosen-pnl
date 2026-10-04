@@ -1,155 +1,433 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Dosen Politeknik Negeri Lhokseumawe</title>
-  <meta name="description"
-    content="Portal Data Dosen Politeknik Negeri Lhokseumawe beserta Portofolio Penelitian, Pengabdian, Publikasi, dan Paten PDDIKTI.">
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Data Dosen Politeknik Negeri Lhokseumawe</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- ==================== NAVBAR ==================== -->
-  <header class="navbar">
-    <div class="container navbar-inner">
-      <a href="index.html" class="brand">
-        <div class="brand-logo-badge">PNL</div>
-        <div class="brand-text">
-          <h1>DATA DOSEN</h1>
-          <p>POLITEKNIK NEGERI LHOKSEUMAWE</p>
+    <header class="header">
+        <div class="header-inner">
+
+            <div class="logo-area">
+                <div class="logo-icon">👥</div>
+
+                <div>
+                    <h1>DATA DOSEN</h1>
+                    <p>Politeknik Negeri Lhokseumawe</p>
+                </div>
+            </div>
+
+            <div class="update-box">
+                <span>Terakhir diperbarui</span>
+                <strong>Data Dosen PNL</strong>
+            </div>
+
         </div>
-      </a>
-      <div class="nav-badge-pddikti">
-        <span class="dot"></span>
-        PDDIKTI Live API
-      </div>
-    </div>
-  </header>
+    </header>
 
-  <!-- ==================== HERO SECTION & SEARCH ==================== -->
-  <section class="hero-section">
-    <div class="container hero-content">
-      <div class="hero-pill">
-        🎓 Sistem Informasi Portofolio Dosen
-      </div>
-      <h2 class="hero-title">
-        DATA DOSEN<br>
-        <span>POLITEKNIK NEGERI LHOKSEUMAWE</span>
-      </h2>
-      <p class="hero-subtitle">
-        Cari dan temukan portofolio tridharma perguruan tinggi, penelitian, pengabdian, publikasi ilmiah, dan HKI/paten.
-      </p>
 
-      <!-- Form Pencarian -->
-      <div class="search-card">
-        <form id="search-form" class="search-form" onsubmit="return false;">
-          <div class="search-input-wrap">
-            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" id="search-input" name="q" class="search-input"
-              placeholder="Cari Nama atau NIDN Dosen (Contoh: ARYATI, AZWINUR, 0009067504)..." autocomplete="off">
-          </div>
-          <button type="submit" id="btn-search" class="btn-search">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            CARI
-          </button>
-        </form>
-      </div>
+    <main class="container">
 
-      <!-- Quick Search Chips -->
-      <div class="search-hints">
-        <span>Saran Pencarian:</span>
-        <button type="button" class="search-chip" data-query="ARYATI">ARYATI (0009067504)</button>
-        <button type="button" class="search-chip" data-query="AZWINUR">AZWINUR (0010057905)</button>
-        <button type="button" class="search-chip" data-query="TEUKU MUSTAQIM">TEUKU MUSTAQIM (0007066506)</button>
-        <button type="button" id="btn-reset-search" class="search-chip"
-          style="display:none; background: #f1f5f9; color: #475569;">✕ Reset Pencarian</button>
-      </div>
-    </div>
-  </section>
+        <section class="title-box">
 
-  <!-- ==================== DAFTAR DOSEN ==================== -->
-  <main class="container">
-    <div class="section-header">
-      <h3 class="section-title">
-        <span class="indicator"></span>
-        <span id="section-title-text">Daftar Dosen Politeknik Negeri Lhokseumawe</span>
-      </h3>
-      <span id="count-badge" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
-        Memuat...
-      </span>
-    </div>
+            <h2>Daftar Dosen</h2>
 
-    <!-- Alert jika pencarian tidak menemukan hasil -->
-    <div id="alert-container"></div>
+            <p>
+                Portal Informasi Dosen Politeknik Negeri Lhokseumawe
+            </p>
 
-    <!-- Skeleton Placeholder Loading -->
-    <div id="skeleton-container" class="skeleton-grid">
-      <div class="skeleton-card">
-        <div class="skeleton-header">
-          <div class="skeleton-avatar"></div>
-          <div class="skeleton-body">
-            <div class="skeleton-line title"></div>
-            <div class="skeleton-line subtitle"></div>
-          </div>
-        </div>
-        <div class="skeleton-line"></div>
-        <div class="skeleton-line"></div>
-        <div class="skeleton-line button"></div>
-      </div>
-      <div class="skeleton-card">
-        <div class="skeleton-header">
-          <div class="skeleton-avatar"></div>
-          <div class="skeleton-body">
-            <div class="skeleton-line title"></div>
-            <div class="skeleton-line subtitle"></div>
-          </div>
-        </div>
-        <div class="skeleton-line"></div>
-        <div class="skeleton-line"></div>
-        <div class="skeleton-line button"></div>
-      </div>
-      <div class="skeleton-card">
-        <div class="skeleton-header">
-          <div class="skeleton-avatar"></div>
-          <div class="skeleton-body">
-            <div class="skeleton-line title"></div>
-            <div class="skeleton-line subtitle"></div>
-          </div>
-        </div>
-        <div class="skeleton-line"></div>
-        <div class="skeleton-line"></div>
-        <div class="skeleton-line button"></div>
-      </div>
-    </div>
+        </section>
 
-    <!-- Grid Card Dosen -->
-    <div id="dosen-grid" class="dosen-grid" style="display:none;"></div>
-  </main>
 
-  <!-- ==================== FOOTER ==================== -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p>&copy; 2026 Data Dosen Politeknik Negeri Lhokseumawe</p>
-      <p class="footer-pddikti">
-        <span>Sumber Data: PDDIKTI Kemdiktisaintek</span>
-      </p>
-    </div>
-  </footer>
+        <section class="filter-box">
 
-  <script src="script.js"></script>
+            <label for="prodi">
+                Pilih Program Studi
+            </label>
+
+            <select id="prodi">
+                <option value="">-- Semua Program Studi --</option>
+            </select>
+
+        </section>
+
+
+        <section class="search-box">
+
+            <input
+                type="text"
+                id="search"
+                placeholder="Cari nama dosen atau NIDN..."
+            >
+
+            <button onclick="cariDosen()">
+                CARI
+            </button>
+
+        </section>
+
+
+        <section class="table-card">
+
+            <div class="table-header">
+
+                <div>
+                    <h2 id="judulData">
+                        Semua Program Studi
+                    </h2>
+                </div>
+
+                <div class="jumlah">
+                    <span id="jumlahDosen">0</span>
+                    Dosen
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>NO</th>
+                            <th>NAMA DOSEN</th>
+                            <th>NIDN</th>
+                            <th>PENDIDIKAN</th>
+                            <th>STATUS AKTIF</th>
+                            <th>PROGRAM STUDI</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="tabelDosen">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>
+            © 2026 Data Dosen Politeknik Negeri Lhokseumawe
+        </p>
+    </footer>
+
+
+<script>
+
+let semuaDosen = [];
+
+
+/* =========================
+   AMBIL DATA DARI data.json
+========================= */
+
+async function ambilData() {
+
+    try {
+
+        const response = await fetch("data.json");
+
+        const database = await response.json();
+
+        semuaDosen = database.dosen || [];
+
+        isiPilihanProdi();
+
+        tampilkanDosen(semuaDosen);
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById("tabelDosen").innerHTML = `
+            <tr>
+                <td colspan="6" class="kosong">
+                    Data dosen gagal dimuat.
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+/* =========================
+   PILIHAN PROGRAM STUDI
+========================= */
+
+function isiPilihanProdi() {
+
+    const select = document.getElementById("prodi");
+
+    const daftarProdi = [
+        ...new Set(
+            semuaDosen
+                .map(dosen => dosen.prodi)
+                .filter(prodi => prodi && prodi !== "-")
+        )
+    ].sort();
+
+    daftarProdi.forEach(prodi => {
+
+        const option = document.createElement("option");
+
+        option.value = prodi;
+
+        option.textContent = prodi;
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+/* =========================
+   TAMPILKAN DOSEN
+========================= */
+
+function tampilkanDosen(data) {
+
+    const tbody = document.getElementById("tabelDosen");
+
+    const jumlah = document.getElementById("jumlahDosen");
+
+    tbody.innerHTML = "";
+
+    jumlah.textContent = data.length;
+
+
+    if (data.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="kosong">
+                    Data dosen tidak ditemukan.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    data.forEach((dosen, index) => {
+
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+
+            <td>${index + 1}</td>
+
+            <td>
+                <a
+                    class="nama-dosen"
+                    href="detail.html?id=${encodeURIComponent(dosen.id)}&nidn=${encodeURIComponent(dosen.nidn || "")}"
+                >
+                    ${escapeHtml(dosen.nama || "Data tidak tersedia")}
+                </a>
+            </td>
+
+            <td>
+                ${escapeHtml(dosen.nidn || "-")}
+            </td>
+
+            <td>
+                ${escapeHtml(dosen.pendidikan_terakhir || "-")}
+            </td>
+
+            <td>
+
+                <span class="status">
+                    ${escapeHtml(dosen.status_aktivitas || "Aktif")}
+                </span>
+
+            </td>
+
+            <td>
+                ${escapeHtml(dosen.prodi || "-")}
+            </td>
+
+        `;
+
+        tbody.appendChild(tr);
+
+    });
+
+}
+
+
+/* =========================
+   FILTER PRODI
+========================= */
+
+document.getElementById("prodi").addEventListener(
+    "change",
+    function () {
+
+        const prodiDipilih = this.value;
+
+        const keyword =
+            document
+                .getElementById("search")
+                .value
+                .toLowerCase()
+                .trim();
+
+
+        let hasil = semuaDosen;
+
+
+        if (prodiDipilih) {
+
+            hasil = hasil.filter(dosen =>
+                String(dosen.prodi || "")
+                    .toLowerCase() ===
+                prodiDipilih.toLowerCase()
+            );
+
+        }
+
+
+        if (keyword) {
+
+            hasil = hasil.filter(dosen =>
+
+                String(dosen.nama || "")
+                    .toLowerCase()
+                    .includes(keyword)
+
+                ||
+
+                String(dosen.nidn || "")
+                    .toLowerCase()
+                    .includes(keyword)
+
+            );
+
+        }
+
+
+        document.getElementById("judulData").textContent =
+            prodiDipilih || "Semua Program Studi";
+
+
+        tampilkanDosen(hasil);
+
+    }
+);
+
+
+/* =========================
+   PENCARIAN
+========================= */
+
+function cariDosen() {
+
+    const keyword =
+        document
+            .getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const prodiDipilih =
+        document.getElementById("prodi").value;
+
+
+    let hasil = semuaDosen;
+
+
+    if (prodiDipilih) {
+
+        hasil = hasil.filter(dosen =>
+            String(dosen.prodi || "")
+                .toLowerCase() ===
+            prodiDipilih.toLowerCase()
+        );
+
+    }
+
+
+    if (keyword) {
+
+        hasil = hasil.filter(dosen =>
+
+            String(dosen.nama || "")
+                .toLowerCase()
+                .includes(keyword)
+
+            ||
+
+            String(dosen.nidn || "")
+                .toLowerCase()
+                .includes(keyword)
+
+        );
+
+    }
+
+
+    tampilkanDosen(hasil);
+
+}
+
+
+/* ENTER UNTUK MENCARI */
+
+document.getElementById("search").addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            cariDosen();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   AMANKAN TEKS
+========================= */
+
+function escapeHtml(text) {
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* JALANKAN */
+
+ambilData();
+
+</script>
+
 </body>
-
 </html>
