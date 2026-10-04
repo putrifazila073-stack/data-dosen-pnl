@@ -1,1 +1,33 @@
 
+{
+  "dosen": [
+    {
+      "id": "aryati-pnl",
+      "nama": "ARYATI",
+      "nidn": "",
+      "perguruan_tinggi": "Politeknik Negeri Lhokseumawe",
+      "prodi": "Akuntansi",
+
+      "penelitian": [
+        {
+          "judul": "Analisis Vector dalam Penentuan Determinan Perdagangan Suku Ritel di Indonesia",
+          "tahun": 2025
+        },
+        {
+          "judul": "Penerapan Financial Technology, Literasi Dan Inklusi Keuangan Terhadap Peningkatan Kinerja UMKM Di Kota Lhokseumawe",
+          "tahun": 2024
+        },
+        {
+          "judul": "ANALISA GOOD CORPORATE GOVERNANCE TERHADAP KINERJA PERUSAHAAN PADA EMITEN JAKARTA ISLAMIC INDEX 70",
+          "tahun": 2023
+        }
+      ],
+
+      "pengabdian": [],
+
+      "publikasi": [],
+
+      "paten": []
+    }
+  ]
+}
