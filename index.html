@@ -31,7 +31,6 @@
         </div>
     </header>
 
-
     <main class="container">
 
         <section class="title-box">
@@ -44,7 +43,6 @@
 
         </section>
 
-
         <section class="filter-box">
 
             <label for="prodi">
@@ -56,7 +54,6 @@
             </select>
 
         </section>
-
 
         <section class="search-box">
 
@@ -71,7 +68,6 @@
             </button>
 
         </section>
-
 
         <section class="table-card">
 
@@ -90,13 +86,11 @@
 
             </div>
 
-
             <div class="table-wrapper">
 
                 <table>
 
                     <thead>
-
                         <tr>
                             <th>NO</th>
                             <th>NAMA DOSEN</th>
@@ -105,11 +99,9 @@
                             <th>STATUS AKTIF</th>
                             <th>PROGRAM STUDI</th>
                         </tr>
-
                     </thead>
 
                     <tbody id="tabelDosen">
-
                     </tbody>
 
                 </table>
@@ -119,7 +111,6 @@
         </section>
 
     </main>
-
 
     <footer>
         <p>
@@ -133,10 +124,7 @@
 let semuaDosen = [];
 
 
-/* =========================
-   AMBIL DATA DARI data.json
-========================= */
-
+/* AMBIL DATA */
 async function ambilData() {
 
     try {
@@ -168,21 +156,32 @@ async function ambilData() {
 }
 
 
-/* =========================
-   PILIHAN PROGRAM STUDI
-========================= */
+/* NORMALISASI TEKS */
+function normalisasiTeks(teks) {
 
+    return String(teks || "")
+        .trim()
+        .replace(/\s+/g, " ")
+        .toLowerCase();
+
+}
+
+
+/* PILIHAN PROGRAM STUDI */
 function isiPilihanProdi() {
 
     const select = document.getElementById("prodi");
 
     const daftarProdi = [
         ...new Set(
+
             semuaDosen
-                .map(dosen => dosen.prodi)
+                .map(dosen => String(dosen.prodi || "").trim())
                 .filter(prodi => prodi && prodi !== "-")
+
         )
-    ].sort();
+    ].sort((a, b) => a.localeCompare(b));
+
 
     daftarProdi.forEach(prodi => {
 
@@ -199,15 +198,15 @@ function isiPilihanProdi() {
 }
 
 
-/* =========================
-   TAMPILKAN DOSEN
-========================= */
-
+/* TAMPILKAN DATA DOSEN */
 function tampilkanDosen(data) {
 
-    const tbody = document.getElementById("tabelDosen");
+    const tbody =
+        document.getElementById("tabelDosen");
 
-    const jumlah = document.getElementById("jumlahDosen");
+    const jumlah =
+        document.getElementById("jumlahDosen");
+
 
     tbody.innerHTML = "";
 
@@ -225,6 +224,7 @@ function tampilkanDosen(data) {
         `;
 
         return;
+
     }
 
 
@@ -232,40 +232,73 @@ function tampilkanDosen(data) {
 
         const tr = document.createElement("tr");
 
+
         tr.innerHTML = `
 
-            <td>${index + 1}</td>
+            <td>
+                ${index + 1}
+            </td>
+
 
             <td>
+
                 <a
                     class="nama-dosen"
                     href="detail.html?id=${encodeURIComponent(dosen.id)}&nidn=${encodeURIComponent(dosen.nidn || "")}"
                 >
-                    ${escapeHtml(dosen.nama || "Data tidak tersedia")}
+
+                    ${escapeHtml(
+                        dosen.nama ||
+                        "Data tidak tersedia"
+                    )}
+
                 </a>
+
             </td>
 
-            <td>
-                ${escapeHtml(dosen.nidn || "-")}
-            </td>
 
             <td>
-                ${escapeHtml(dosen.pendidikan_terakhir || "-")}
+
+                ${escapeHtml(
+                    dosen.nidn || "-"
+                )}
+
             </td>
+
+
+            <td>
+
+                ${escapeHtml(
+                    dosen.pendidikan_terakhir || "-"
+                )}
+
+            </td>
+
 
             <td>
 
                 <span class="status">
-                    ${escapeHtml(dosen.status_aktivitas || "Aktif")}
+
+                    ${escapeHtml(
+                        dosen.status_aktivitas ||
+                        "Aktif"
+                    )}
+
                 </span>
 
             </td>
 
+
             <td>
-                ${escapeHtml(dosen.prodi || "-")}
+
+                ${escapeHtml(
+                    dosen.prodi || "-"
+                )}
+
             </td>
 
         `;
+
 
         tbody.appendChild(tr);
 
@@ -274,116 +307,73 @@ function tampilkanDosen(data) {
 }
 
 
-/* =========================
-   FILTER PRODI
-========================= */
-
-document.getElementById("prodi").addEventListener(
-    "change",
-    function () {
-
-        const prodiDipilih = this.value;
-
-        const keyword =
-            document
-                .getElementById("search")
-                .value
-                .toLowerCase()
-                .trim();
-
-
-        let hasil = semuaDosen;
-
-
-        if (prodiDipilih) {
-
-            hasil = hasil.filter(dosen =>
-                String(dosen.prodi || "")
-                    .toLowerCase() ===
-                prodiDipilih.toLowerCase()
-            );
-
-        }
-
-
-        if (keyword) {
-
-            hasil = hasil.filter(dosen =>
-
-                String(dosen.nama || "")
-                    .toLowerCase()
-                    .includes(keyword)
-
-                ||
-
-                String(dosen.nidn || "")
-                    .toLowerCase()
-                    .includes(keyword)
-
-            );
-
-        }
-
-
-        document.getElementById("judulData").textContent =
-            prodiDipilih || "Semua Program Studi";
-
-
-        tampilkanDosen(hasil);
-
-    }
-);
-
-
-/* =========================
-   PENCARIAN
-========================= */
-
-function cariDosen() {
-
-    const keyword =
-        document
-            .getElementById("search")
-            .value
-            .toLowerCase()
-            .trim();
-
+/* FILTER BERDASARKAN PROGRAM STUDI */
+function filterData() {
 
     const prodiDipilih =
         document.getElementById("prodi").value;
 
 
+    const keyword =
+        document
+            .getElementById("search")
+            .value
+            .trim();
+
+
     let hasil = semuaDosen;
 
 
+    /* FILTER PRODI */
     if (prodiDipilih) {
 
-        hasil = hasil.filter(dosen =>
-            String(dosen.prodi || "")
-                .toLowerCase() ===
-            prodiDipilih.toLowerCase()
-        );
+        const prodiPilihan =
+            normalisasiTeks(prodiDipilih);
+
+
+        hasil = hasil.filter(dosen => {
+
+            const prodiDosen =
+                normalisasiTeks(dosen.prodi);
+
+
+            return prodiDosen === prodiPilihan;
+
+        });
 
     }
 
 
+    /* FILTER PENCARIAN */
     if (keyword) {
 
-        hasil = hasil.filter(dosen =>
+        const kataKunci =
+            normalisasiTeks(keyword);
 
-            String(dosen.nama || "")
-                .toLowerCase()
-                .includes(keyword)
 
-            ||
+        hasil = hasil.filter(dosen => {
 
-            String(dosen.nidn || "")
-                .toLowerCase()
-                .includes(keyword)
+            const nama =
+                normalisasiTeks(dosen.nama);
 
-        );
+
+            const nidn =
+                normalisasiTeks(dosen.nidn);
+
+
+            return (
+                nama.includes(kataKunci) ||
+                nidn.includes(kataKunci)
+            );
+
+        });
 
     }
+
+
+    document.getElementById("judulData").textContent =
+        prodiDipilih ||
+        "Semua Program Studi";
 
 
     tampilkanDosen(hasil);
@@ -391,40 +381,63 @@ function cariDosen() {
 }
 
 
-/* ENTER UNTUK MENCARI */
+/* SAAT PROGRAM STUDI DIPILIH */
+document
+    .getElementById("prodi")
+    .addEventListener(
+        "change",
+        function() {
 
-document.getElementById("search").addEventListener(
-    "keydown",
-    function(event) {
-
-        if (event.key === "Enter") {
-
-            cariDosen();
+            filterData();
 
         }
-
-    }
-);
+    );
 
 
-/* =========================
-   AMANKAN TEKS
-========================= */
+/* PENCARIAN */
+function cariDosen() {
 
+    filterData();
+
+}
+
+
+/* ENTER UNTUK MENCARI */
+document
+    .getElementById("search")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                cariDosen();
+
+            }
+
+        }
+    );
+
+
+/* ESCAPE HTML */
 function escapeHtml(text) {
 
     return String(text)
+
         .replace(/&/g, "&amp;")
+
         .replace(/</g, "&lt;")
+
         .replace(/>/g, "&gt;")
+
         .replace(/"/g, "&quot;")
+
         .replace(/'/g, "&#039;");
 
 }
 
 
-/* JALANKAN */
-
+/* JALANKAN DATA */
 ambilData();
 
 </script>
