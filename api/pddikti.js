@@ -57,6 +57,10 @@ export default async function handler(req, res) {
       params.nidn || ""
     ).trim();
 
+    // ==============================
+    // MEMBACA DATA JSON
+    // ==============================
+
     const filePath = path.join(
       process.cwd(),
       "data.json"
@@ -73,9 +77,9 @@ export default async function handler(req, res) {
       ? database.dosen
       : [];
 
-    // =========================
+    // ==============================
     // PENCARIAN DOSEN
-    // =========================
+    // ==============================
 
     if (
       action === "search" ||
@@ -104,6 +108,10 @@ export default async function handler(req, res) {
 
           String(dosen.prodi || "")
             .toLowerCase()
+            .includes(kataKunci) ||
+
+          String(dosen.perguruan_tinggi || "")
+            .toLowerCase()
             .includes(kataKunci)
         );
       });
@@ -111,21 +119,38 @@ export default async function handler(req, res) {
       return res.status(200).json({
         sukses: true,
         pesan: "Pencarian berhasil",
+
         data: hasil.map((dosen) => ({
           id: dosen.id,
           id_dosen: dosen.id,
+
           nama: dosen.nama,
           nidn: dosen.nidn,
+
           perguruan_tinggi:
             dosen.perguruan_tinggi,
-          prodi: dosen.prodi
+
+          prodi:
+            dosen.prodi,
+
+          jabatan_fungsional:
+            dosen.jabatan_fungsional,
+
+          pendidikan_terakhir:
+            dosen.pendidikan_terakhir,
+
+          status_kepegawaian:
+            dosen.status_kepegawaian,
+
+          status_aktivitas:
+            dosen.status_aktivitas
         }))
       });
     }
 
-    // =========================
-    // CARI DOSEN BERDASARKAN ID
-    // =========================
+    // ==============================
+    // MENCARI DOSEN BERDASARKAN ID
+    // ==============================
 
     let dosen = null;
 
@@ -151,9 +176,47 @@ export default async function handler(req, res) {
       });
     }
 
-    // =========================
+    // ==============================
+    // DATA PROFIL DOSEN
+    // ==============================
+
+    const profilDosen = {
+      id: dosen.id,
+
+      nama:
+        dosen.nama || "Data tidak tersedia",
+
+      nidn:
+        dosen.nidn || "Data tidak tersedia",
+
+      perguruan_tinggi:
+        dosen.perguruan_tinggi ||
+        "Data tidak tersedia",
+
+      prodi:
+        dosen.prodi ||
+        "Data tidak tersedia",
+
+      jabatan_fungsional:
+        dosen.jabatan_fungsional ||
+        "Data tidak tersedia",
+
+      pendidikan_terakhir:
+        dosen.pendidikan_terakhir ||
+        "Data tidak tersedia",
+
+      status_kepegawaian:
+        dosen.status_kepegawaian ||
+        "Data tidak tersedia",
+
+      status_aktivitas:
+        dosen.status_aktivitas ||
+        "Data tidak tersedia"
+    };
+
+    // ==============================
     // PROFIL
-    // =========================
+    // ==============================
 
     if (
       action === "profile" ||
@@ -161,33 +224,33 @@ export default async function handler(req, res) {
     ) {
       return res.status(200).json({
         sukses: true,
-        pesan: "Profil dosen berhasil diambil",
-        data: {
-          id: dosen.id,
-          nama: dosen.nama,
-          nidn: dosen.nidn,
-          perguruan_tinggi:
-            dosen.perguruan_tinggi,
-          prodi: dosen.prodi
-        }
+        pesan:
+          "Profil dosen berhasil diambil",
+
+        data: profilDosen
       });
     }
 
-    // =========================
+    // ==============================
     // PENELITIAN
-    // =========================
+    // ==============================
 
     if (action === "penelitian") {
       return res.status(200).json({
         sukses: true,
-        pesan: "Data penelitian berhasil diambil",
-        data: dosen.penelitian || []
+        pesan:
+          "Data penelitian berhasil diambil",
+
+        data:
+          Array.isArray(dosen.penelitian)
+            ? dosen.penelitian
+            : []
       });
     }
 
-    // =========================
-    // PENGABDIAN
-    // =========================
+    // ==============================
+    // PENGABDIAN MASYARAKAT
+    // ==============================
 
     if (
       action === "pengabdian" ||
@@ -196,14 +259,18 @@ export default async function handler(req, res) {
       return res.status(200).json({
         sukses: true,
         pesan:
-          "Data pengabdian berhasil diambil",
-        data: dosen.pengabdian || []
+          "Data pengabdian masyarakat berhasil diambil",
+
+        data:
+          Array.isArray(dosen.pengabdian)
+            ? dosen.pengabdian
+            : []
       });
     }
 
-    // =========================
-    // PUBLIKASI
-    // =========================
+    // ==============================
+    // PUBLIKASI KARYA
+    // ==============================
 
     if (
       action === "publikasi" ||
@@ -212,14 +279,18 @@ export default async function handler(req, res) {
       return res.status(200).json({
         sukses: true,
         pesan:
-          "Data publikasi berhasil diambil",
-        data: dosen.publikasi || []
+          "Data publikasi karya berhasil diambil",
+
+        data:
+          Array.isArray(dosen.publikasi)
+            ? dosen.publikasi
+            : []
       });
     }
 
-    // =========================
+    // ==============================
     // HKI / PATEN
-    // =========================
+    // ==============================
 
     if (
       action === "paten" ||
@@ -229,13 +300,17 @@ export default async function handler(req, res) {
         sukses: true,
         pesan:
           "Data HKI/Paten berhasil diambil",
-        data: dosen.paten || []
+
+        data:
+          Array.isArray(dosen.paten)
+            ? dosen.paten
+            : []
       });
     }
 
-    // =========================
-    // SEMUA DATA
-    // =========================
+    // ==============================
+    // SEMUA DATA DOSEN
+    // ==============================
 
     if (
       action === "detail" ||
@@ -244,37 +319,46 @@ export default async function handler(req, res) {
     ) {
       return res.status(200).json({
         sukses: true,
-        pesan: "Data dosen berhasil diambil",
+        pesan:
+          "Data dosen berhasil diambil",
+
         data: {
-          profil: {
-            id: dosen.id,
-            nama: dosen.nama,
-            nidn: dosen.nidn,
-            perguruan_tinggi:
-              dosen.perguruan_tinggi,
-            prodi: dosen.prodi
-          },
+          profil: profilDosen,
 
           penelitian:
-            dosen.penelitian || [],
+            Array.isArray(dosen.penelitian)
+              ? dosen.penelitian
+              : [],
 
           pengabdian:
-            dosen.pengabdian || [],
+            Array.isArray(dosen.pengabdian)
+              ? dosen.pengabdian
+              : [],
 
           publikasi:
-            dosen.publikasi || [],
+            Array.isArray(dosen.publikasi)
+              ? dosen.publikasi
+              : [],
 
           paten:
-            dosen.paten || []
+            Array.isArray(dosen.paten)
+              ? dosen.paten
+              : []
         }
       });
     }
 
+    // ==============================
+    // ACTION TIDAK DIKENALI
+    // ==============================
+
     return res.status(400).json({
       sukses: false,
+
       pesan:
         "Action API tidak dikenali: " +
         action,
+
       data: []
     });
 
@@ -286,9 +370,11 @@ export default async function handler(req, res) {
 
     return res.status(500).json({
       sukses: false,
+
       pesan:
         error.message ||
         "Terjadi kesalahan pada API data dosen",
+
       data: []
     });
   }
