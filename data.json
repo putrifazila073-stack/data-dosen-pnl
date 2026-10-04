@@ -26,9 +26,39 @@
         }
       ],
 
-      "pengabdian": [],
+      "pengabdian": [
+        {
+          "judul": "Pemanfaatan AI Tools dan Media Sosial dalam Membangun Strategi Pengemasan dan Pemasaran Produk pada UMKM Ahad Festival Kota Lhokseumawe",
+          "tahun": 2026
+        },
+        {
+          "judul": "Pelatihan Pemanfaatan Dana Desa Dalam Mewujudkan Desa Mandiri Bagi Pemuda Gampong Meunasah Mesjid Dalam Perspektif Undang-Undang Nomor 6 Tahun 2014 Tentang Desa",
+          "tahun": 2024
+        },
+        {
+          "judul": "Pelatihan Pengelolaan Keuangan Dan Penggunaan Digital Marketing Bagi UMKM Binaan Politeknik Negeri Lhokseumawe",
+          "tahun": 2022
+        },
+        {
+          "judul": "Pelatihan Menyusun Laporan Pengelolaan Dana Gampong Untuk Penanggulangan Covid 19 Gampong Alue Lim Kecamatan Blang Mangat Lhokseumawe",
+          "tahun": 2021
+        }
+      ],
 
-      "publikasi": [],
+      "publikasi": [
+        {
+          "judul": "Analysis of the Implementation of the Purchase Accounting Information System at PT Indonesia Asahan Aluminum",
+          "tahun": 2024
+        },
+        {
+          "judul": "ANALYSIS OF RETURN ON EQUITY, CURRENT RATIO AND DEBT TO EQUITY RATIO TO CHANGES IN PROFIT IN SHARIA ISSUERS JAKARTA ISLAMIC INDEX",
+          "tahun": 2022
+        },
+        {
+          "judul": "The Effect of Internal and External Factors on Non-Performing Financing at Islamic Commercial Banks in Indonesia",
+          "tahun": 2022
+        }
+      ],
 
       "paten": []
     }
