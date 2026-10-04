@@ -1,574 +1,818 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: #f5f3fa;
-    color: #25213a;
-    line-height: 1.6;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-.container {
-    width: min(1180px, calc(100% - 40px));
-    margin: 0 auto;
-}
-
-/* =========================
-   NAVBAR
-========================= */
-
-.navbar {
-    background: linear-gradient(135deg, #4c1d95, #7c3aed);
-    color: white;
-    box-shadow: 0 4px 20px rgba(76, 29, 149, 0.18);
-}
-
-.navbar-inner {
-    min-height: 82px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.brand-logo-badge {
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
-    background: white;
-    color: #5b21b6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    font-weight: 800;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
-}
-
-.brand-text h1 {
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-}
-
-.brand-text p {
-    font-size: 12px;
-    opacity: 0.88;
-    margin-top: 2px;
-    letter-spacing: 0.3px;
-}
-
-.nav-badge-pddikti {
-    padding: 8px 14px;
-    border-radius: 30px;
-    background: rgba(255, 255, 255, 0.13);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #86efac;
-    box-shadow: 0 0 0 4px rgba(134, 239, 172, 0.15);
-}
-
-/* =========================
-   HEADER DETAIL
-========================= */
-
-.detail-page-header {
-    padding: 28px 0 18px;
-}
-
-.btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: #5b21b6;
-    background: white;
-    border: 1px solid #e7e1f3;
-    padding: 10px 16px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    transition: 0.2s ease;
-}
-
-.btn-back:hover {
-    background: #f3eefe;
-    transform: translateY(-1px);
-}
-
-/* =========================
-   PROFILE CARD
-========================= */
-
-.profile-card {
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    border: 1px solid #e9e3f4;
-    box-shadow: 0 8px 30px rgba(61, 35, 105, 0.07);
-}
-
-.profile-top-banner {
-    min-height: 220px;
-    padding: 35px;
-    display: flex;
-    align-items: center;
-    gap: 28px;
-    color: white;
-    background:
-        radial-gradient(circle at 85% 20%, rgba(255,255,255,0.16), transparent 25%),
-        linear-gradient(135deg, #5b21b6, #7c3aed 60%, #8b5cf6);
-}
-
-.avatar-circle.large {
-    width: 112px;
-    height: 112px;
-    flex: 0 0 112px;
-    border-radius: 50%;
-    background: white;
-    color: #6d28d9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 34px;
-    font-weight: 800;
-    border: 5px solid rgba(255,255,255,0.35);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.16);
-}
-
-.profile-category-tag {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.14);
-    border: 1px solid rgba(255,255,255,0.2);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    margin-bottom: 9px;
-}
-
-.profile-nama {
-    font-size: 28px;
-    line-height: 1.25;
-    font-weight: 800;
-    margin-bottom: 12px;
-}
-
-.profile-nidn-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 7px 12px;
-    background: rgba(255,255,255,0.14);
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 8px;
-    font-size: 13px;
-}
-
-.profile-kampus {
-    margin-top: 10px;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.profile-prodi {
-    margin-top: 3px;
-    font-size: 13px;
-    opacity: 0.9;
-}
-
-/* =========================
-   DETAIL GRID
-========================= */
-
-.detail-grid {
-    padding: 28px 35px 32px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-}
-
-.detail-item {
-    padding: 17px 19px;
-    border: 1px solid #ebe7f3;
-    border-radius: 13px;
-    background: #faf9fd;
-}
-
-.detail-item-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-    color: #817a96;
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.detail-item-value {
-    font-size: 15px;
-    color: #29243d;
-    font-weight: 700;
-}
-
-#grid-aktivitas {
-    color: #15803d;
-}
-
-/* =========================
-   PORTFOLIO
-========================= */
-
-.portfolio-section {
-    margin: 28px 0 45px;
-}
-
-.section-header {
-    margin-bottom: 16px;
-}
-
-.section-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 17px;
-    color: #30264a;
-}
-
-.indicator {
-    width: 5px;
-    height: 22px;
-    border-radius: 10px;
-    background: #7c3aed;
-}
-
-/* =========================
-   TABS
-========================= */
-
-.tabs-wrapper {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    background: #ebe7f5;
-    padding: 6px;
-    border-radius: 14px;
-    margin-bottom: 18px;
-}
-
-.tab-btn {
-    border: 0;
-    background: transparent;
-    padding: 13px 10px;
-    border-radius: 10px;
-    color: #665d7c;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 700;
-    transition: 0.2s ease;
-}
-
-.tab-btn:hover {
-    color: #5b21b6;
-    background: rgba(255,255,255,0.6);
-}
-
-.tab-btn.active {
-    background: white;
-    color: #5b21b6;
-    box-shadow: 0 3px 10px rgba(58, 34, 96, 0.08);
-}
-
-.tab-counter {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 23px;
-    height: 23px;
-    margin-left: 5px;
-    padding: 0 6px;
-    border-radius: 20px;
-    background: #ede9fe;
-    color: #6d28d9;
-    font-size: 11px;
-}
-
-.tab-btn.active .tab-counter {
-    background: #7c3aed;
-    color: white;
-}
-
-/* =========================
-   TAB CONTENT
-========================= */
-
-.tab-pane {
-    display: none;
-}
-
-.tab-pane.active {
-    display: block;
-}
-
-.portfolio-card {
-    background: white;
-    border: 1px solid #e9e3f4;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 7px 25px rgba(61, 35, 105, 0.05);
-}
-
-.portfolio-card-header {
-    padding: 20px 23px;
-    border-bottom: 1px solid #eeeaf5;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-}
-
-.portfolio-card-title {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    font-size: 15px;
-    color: #33284d;
-}
-
-.portfolio-card-subtitle {
-    font-size: 12px;
-    color: #817a96;
-}
-
-/* =========================
-   TABLE PORTFOLIO
-========================= */
-
-.table-responsive {
-    width: 100%;
-    overflow-x: auto;
-}
-
-.table-responsive table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table-responsive th {
-    text-align: left;
-    padding: 13px 20px;
-    background: #faf9fd;
-    color: #716982;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.table-responsive td {
-    padding: 16px 20px;
-    border-top: 1px solid #f0edf5;
-    color: #39324b;
-    font-size: 13px;
-    vertical-align: top;
-}
-
-.table-responsive tr:hover td {
-    background: #fcfaff;
-}
-
-.kosong,
-.empty-state {
-    padding: 35px !important;
-    text-align: center;
-    color: #8b849a;
-}
-
-/* =========================
-   LOADING
-========================= */
-
-.loading-wrapper {
-    min-height: 350px;
-    background: white;
-    border-radius: 18px;
-    border: 1px solid #e9e3f4;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-}
-
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #ede9fe;
-    border-top-color: #7c3aed;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-}
-
-.loading-text {
-    color: #756d87;
-    font-size: 14px;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-.footer {
-    background: #211832;
-    color: #c8bfd8;
-    padding: 24px 0;
-    margin-top: 10px;
-}
-
-.footer-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    font-size: 12px;
-}
-
-/* =========================
-   RESPONSIVE TABLET
-========================= */
-
-@media (max-width: 800px) {
-
-    .container {
-        width: min(100% - 24px, 1180px);
-    }
-
-    .navbar-inner {
-        min-height: 72px;
-    }
-
-    .nav-badge-pddikti {
-        display: none;
-    }
-
-    .profile-top-banner {
-        padding: 28px;
-    }
-
-    .profile-nama {
-        font-size: 23px;
-    }
-
-    .detail-grid {
-        padding: 22px 28px 28px;
-    }
-
-    .tabs-wrapper {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .footer-inner {
-        flex-direction: column;
-        text-align: center;
-    }
-}
-
-/* =========================
-   RESPONSIVE HP
-========================= */
-
-@media (max-width: 560px) {
-
-    .container {
-        width: calc(100% - 20px);
-    }
-
-    .brand-logo-badge {
-        width: 44px;
-        height: 44px;
-        font-size: 15px;
-    }
-
-    .brand-text h1 {
-        font-size: 16px;
-    }
-
-    .brand-text p {
-        font-size: 9px;
-    }
-
-    .profile-top-banner {
-        flex-direction: column;
-        text-align: center;
-        padding: 30px 18px;
-    }
-
-    .avatar-circle.large {
-        width: 90px;
-        height: 90px;
-        flex-basis: 90px;
-        font-size: 27px;
-    }
-
-    .profile-nama {
-        font-size: 20px;
-    }
-
-    .profile-nidn-pill {
-        font-size: 12px;
-    }
-
-    .detail-grid {
-        grid-template-columns: 1fr;
-        padding: 18px;
-    }
-
-    .tabs-wrapper {
-        grid-template-columns: 1fr;
-    }
-
-    .tab-btn {
-        padding: 12px;
-    }
-
-    .portfolio-card-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .detail-page-header {
-        padding-top: 18px;
-    }
-
-    .btn-back {
-        width: 100%;
-        justify-content: center;
-    }
-}
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title id="page-title">
+        Detail Dosen - Data Dosen Politeknik Negeri Lhokseumawe
+    </title>
+
+    <meta
+        name="description"
+        content="Detail profil dan portofolio dosen Politeknik Negeri Lhokseumawe."
+    >
+
+    <!-- CSS KHUSUS HALAMAN DETAIL -->
+    <link rel="stylesheet" href="detail.css">
+
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="navbar">
+
+        <div class="container navbar-inner">
+
+            <a href="index.html" class="brand">
+
+                <div class="brand-logo-badge">
+                    PNL
+                </div>
+
+                <div class="brand-text">
+
+                    <h1>
+                        DATA DOSEN
+                    </h1>
+
+                    <p>
+                        POLITEKNIK NEGERI LHOKSEUMAWE
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <div class="nav-badge-pddikti">
+
+                <span class="dot"></span>
+
+                DATA DOSEN PNL
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================
+         KONTEN UTAMA
+    ========================== -->
+
+    <main class="container">
+
+
+        <!-- Tombol kembali -->
+
+        <div class="detail-page-header">
+
+            <a
+                href="index.html"
+                class="btn-back"
+            >
+
+                <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+
+                    <line
+                        x1="19"
+                        y1="12"
+                        x2="5"
+                        y2="12"
+                    ></line>
+
+                    <polyline
+                        points="12 19 5 12 12 5"
+                    ></polyline>
+
+                </svg>
+
+                Kembali ke Data Dosen
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =========================
+             LOADING
+        ========================== -->
+
+        <div
+            id="detail-skeleton"
+            class="loading-wrapper"
+        >
+
+            <div class="spinner"></div>
+
+            <div class="loading-text">
+                Memuat profil dan portofolio dosen...
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             KONTEN DETAIL
+        ========================== -->
+
+        <div
+            id="detail-content"
+            style="display: none;"
+        >
+
+
+            <!-- =========================
+                 PROFIL DOSEN
+            ========================== -->
+
+            <section class="profile-card">
+
+
+                <!-- Banner profil -->
+
+                <div class="profile-top-banner">
+
+
+                    <!-- Avatar -->
+
+                    <div
+                        id="profile-avatar"
+                        class="avatar-circle large"
+                    >
+                        AR
+                    </div>
+
+
+
+                    <!-- Informasi utama -->
+
+                    <div class="profile-main-info">
+
+
+                        <div class="profile-category-tag">
+                            DATA DOSEN
+                        </div>
+
+
+                        <h2
+                            id="dosen-nama"
+                            class="profile-nama"
+                        >
+                            Memuat...
+                        </h2>
+
+
+                        <div
+                            id="dosen-nidn-pill"
+                            class="profile-nidn-pill"
+                        >
+
+                            <svg
+                                width="15"
+                                height="15"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+
+                                <rect
+                                    x="3"
+                                    y="4"
+                                    width="18"
+                                    height="16"
+                                    rx="2"
+                                ></rect>
+
+                                <line
+                                    x1="7"
+                                    y1="8"
+                                    x2="17"
+                                    y2="8"
+                                ></line>
+
+                                <line
+                                    x1="7"
+                                    y1="12"
+                                    x2="13"
+                                    y2="12"
+                                ></line>
+
+                            </svg>
+
+                            NIDN:
+
+                            <strong id="dosen-nidn-text">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div
+                            id="dosen-kampus"
+                            class="profile-kampus"
+                        >
+                            Politeknik Negeri Lhokseumawe
+                        </div>
+
+
+                        <div
+                            id="dosen-prodi"
+                            class="profile-prodi"
+                        >
+                            Program Studi: -
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================
+                     INFORMASI DOSEN
+                ========================== -->
+
+                <div class="detail-grid">
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-item-label">
+                            NIDN
+                        </div>
+
+                        <div
+                            id="grid-nidn"
+                            class="detail-item-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-item-label">
+                            Jabatan Fungsional
+                        </div>
+
+                        <div
+                            id="grid-jabatan"
+                            class="detail-item-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-item-label">
+                            Pendidikan Terakhir
+                        </div>
+
+                        <div
+                            id="grid-pendidikan"
+                            class="detail-item-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-item-label">
+                            Status Kepegawaian
+                        </div>
+
+                        <div
+                            id="grid-kepegawaian"
+                            class="detail-item-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-item-label">
+                            Status Aktivitas
+                        </div>
+
+                        <div
+                            id="grid-aktivitas"
+                            class="detail-item-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================
+                 PORTOFOLIO
+            ========================== -->
+
+            <section class="portfolio-section">
+
+
+                <div class="section-header">
+
+                    <h3 class="section-title">
+
+                        <span class="indicator"></span>
+
+                        PORTOFOLIO DOSEN
+
+                    </h3>
+
+                </div>
+
+
+
+                <!-- =========================
+                     TAB
+                ========================== -->
+
+                <div
+                    class="tabs-wrapper"
+                    role="tablist"
+                >
+
+
+                    <!-- PENELITIAN -->
+
+                    <button
+                        type="button"
+                        class="tab-btn active"
+                        data-tab="tab-penelitian"
+                        role="tab"
+                        aria-selected="true"
+                        id="btn-penelitian"
+                    >
+
+                        <span>
+                            PENELITIAN
+                        </span>
+
+                        <span
+                            id="counter-penelitian"
+                            class="tab-counter"
+                        >
+                            0
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- PENGABDIAN -->
+
+                    <button
+                        type="button"
+                        class="tab-btn"
+                        data-tab="tab-pengabdian"
+                        role="tab"
+                        aria-selected="false"
+                        id="btn-pengabdian"
+                    >
+
+                        <span>
+                            PENGABDIAN
+                        </span>
+
+                        <span
+                            id="counter-pengabdian"
+                            class="tab-counter"
+                        >
+                            0
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- PUBLIKASI -->
+
+                    <button
+                        type="button"
+                        class="tab-btn"
+                        data-tab="tab-publikasi"
+                        role="tab"
+                        aria-selected="false"
+                        id="btn-publikasi"
+                    >
+
+                        <span>
+                            PUBLIKASI
+                        </span>
+
+                        <span
+                            id="counter-publikasi"
+                            class="tab-counter"
+                        >
+                            0
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- HKI -->
+
+                    <button
+                        type="button"
+                        class="tab-btn"
+                        data-tab="tab-paten"
+                        role="tab"
+                        aria-selected="false"
+                        id="btn-paten"
+                    >
+
+                        <span>
+                            HKI / PATEN
+                        </span>
+
+                        <span
+                            id="counter-paten"
+                            class="tab-counter"
+                        >
+                            0
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+
+
+                <!-- =========================
+                     PENELITIAN
+                ========================== -->
+
+                <div
+                    id="tab-penelitian"
+                    class="tab-pane active"
+                    role="tabpanel"
+                >
+
+                    <div class="portfolio-card">
+
+
+                        <div class="portfolio-card-header">
+
+                            <h4 class="portfolio-card-title">
+
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+
+                                    <path
+                                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                                    ></path>
+
+                                    <polyline
+                                        points="14 2 14 8 20 8"
+                                    ></polyline>
+
+                                    <line
+                                        x1="16"
+                                        y1="13"
+                                        x2="8"
+                                        y2="13"
+                                    ></line>
+
+                                    <line
+                                        x1="16"
+                                        y1="17"
+                                        x2="8"
+                                        y2="17"
+                                    ></line>
+
+                                </svg>
+
+                                Portofolio Penelitian
+
+                            </h4>
+
+
+                            <span
+                                id="sub-counter-penelitian"
+                                class="portfolio-card-subtitle"
+                            >
+                                Total: 0 Penelitian
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="container-penelitian"
+                            class="table-responsive"
+                        ></div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================
+                     PENGABDIAN
+                ========================== -->
+
+                <div
+                    id="tab-pengabdian"
+                    class="tab-pane"
+                    role="tabpanel"
+                >
+
+                    <div class="portfolio-card">
+
+
+                        <div class="portfolio-card-header">
+
+                            <h4 class="portfolio-card-title">
+
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+
+                                    <path
+                                        d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
+                                    ></path>
+
+                                    <circle
+                                        cx="9"
+                                        cy="7"
+                                        r="4"
+                                    ></circle>
+
+                                    <path
+                                        d="M23 21v-2a4 4 0 0 0-3-3.87"
+                                    ></path>
+
+                                    <path
+                                        d="M16 3.13a4 4 0 0 1 0 7.75"
+                                    ></path>
+
+                                </svg>
+
+                                Portofolio Pengabdian Masyarakat
+
+                            </h4>
+
+
+                            <span
+                                id="sub-counter-pengabdian"
+                                class="portfolio-card-subtitle"
+                            >
+                                Total: 0 Pengabdian
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="container-pengabdian"
+                            class="table-responsive"
+                        ></div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================
+                     PUBLIKASI
+                ========================== -->
+
+                <div
+                    id="tab-publikasi"
+                    class="tab-pane"
+                    role="tabpanel"
+                >
+
+                    <div class="portfolio-card">
+
+
+                        <div class="portfolio-card-header">
+
+                            <h4 class="portfolio-card-title">
+
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+
+                                    <path
+                                        d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"
+                                    ></path>
+
+                                    <path
+                                        d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+                                    ></path>
+
+                                </svg>
+
+                                Portofolio Publikasi Karya
+
+                            </h4>
+
+
+                            <span
+                                id="sub-counter-publikasi"
+                                class="portfolio-card-subtitle"
+                            >
+                                Total: 0 Publikasi
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="container-publikasi"
+                            class="table-responsive"
+                        ></div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================
+                     HKI / PATEN
+                ========================== -->
+
+                <div
+                    id="tab-paten"
+                    class="tab-pane"
+                    role="tabpanel"
+                >
+
+                    <div class="portfolio-card">
+
+
+                        <div class="portfolio-card-header">
+
+                            <h4 class="portfolio-card-title">
+
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+
+                                    <circle
+                                        cx="12"
+                                        cy="8"
+                                        r="7"
+                                    ></circle>
+
+                                    <polyline
+                                        points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"
+                                    ></polyline>
+
+                                </svg>
+
+                                Portofolio HKI / Paten
+
+                            </h4>
+
+
+                            <span
+                                id="sub-counter-paten"
+                                class="portfolio-card-subtitle"
+                            >
+                                Total: 0 HKI / Paten
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="container-paten"
+                            class="table-responsive"
+                        ></div>
+
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer class="footer">
+
+        <div class="container footer-inner">
+
+            <p>
+                &copy; 2026 Data Dosen
+                Politeknik Negeri Lhokseumawe
+            </p>
+
+            <p class="footer-pddikti">
+                <span>
+                    Sumber Data: PDDIKTI Kemdiktisaintek
+                </span>
+            </p>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
