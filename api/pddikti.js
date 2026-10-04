@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -16,7 +19,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    let params = req.method === "GET" ? req.query : req.body;
+    let params = {};
+
+    if (req.method === "GET") {
+      params = req.query || {};
+    } else {
+      params = req.body || {};
+    }
 
     if (typeof params === "string") {
       try {
@@ -26,95 +35,48 @@ export default async function handler(req, res) {
       }
     }
 
-    params = params || {};
-
-    const action = String(params.action || "search").toLowerCase();
+    const action = String(
+      params.action || "search"
+    ).toLowerCase();
 
     const keyword = String(
-      params.keyword || params.nama || params.q || ""
+      params.keyword ||
+      params.nama ||
+      params.q ||
+      ""
     ).trim();
 
     const id = String(
       params.id ||
       params.id_dosen ||
       params.id_sdm ||
-      params.idSdm ||
-      params.sdm_id ||
-      params.uuid ||
       ""
     ).trim();
 
     const nidn = String(
-      params.nidn || params.nidnHint || ""
+      params.nidn || ""
     ).trim();
 
-    const headers = {
-      "Accept": "application/json, text/plain, */*",
-      "User-Agent": "Mozilla/5.0",
-      "Origin": "https://pddikti.kemdiktisaintek.go.id",
-      "Referer": "https://pddikti.kemdiktisaintek.go.id/"
-    };
+    const filePath = path.join(
+      process.cwd(),
+      "data.json"
+    );
 
-    async function ambilData(url, dosenId = "") {
-      const options = {
-        method: dosenId ? "POST" : "GET",
-        headers: { ...headers }
-      };
+    const fileData = fs.readFileSync(
+      filePath,
+      "utf8"
+    );
 
-      if (dosenId) {
-        options.headers["Content-Type"] = "application/json";
-        options.body = JSON.stringify({
-          id: dosenId
-        });
-      }
+    const database = JSON.parse(fileData);
 
-      const response = await fetch(url, options);
-      const teks = await response.text();
+    const daftarDosen = Array.isArray(database.dosen)
+      ? database.dosen
+      : [];
 
-      let hasil;
-
-      try {
-        hasil = JSON.parse(teks);
-      } catch {
-        throw new Error(
-          `PDDIKTI mengembalikan respons bukan JSON (HTTP ${response.status})`
-        );
-      }
-
-      if (!response.ok) {
-        throw new Error(
-          hasil.message ||
-          `Permintaan PDDIKTI gagal (HTTP ${response.status})`
-        );
-      }
-
-      return {
-        sukses: true,
-        pesan: hasil.message || "Data berhasil diambil",
-        data: hasil.data !== undefined
-          ? hasil.data
-          : hasil
-      };
-    }
-
-    const endpoint = {
-      profile:
-        "https://pddikti.kemdiktisaintek.go.id/api/dosen/profile",
-
-      penelitian:
-        "https://pddikti.kemdiktisaintek.go.id/api/dosen/portofolio/penelitian",
-
-      pengabdian:
-        "https://pddikti.kemdiktisaintek.go.id/api/dosen/portofolio/pengabdian",
-
-      publikasi:
-        "https://pddikti.kemdiktisaintek.go.id/api/dosen/portofolio/karya",
-
-      paten:
-        "https://pddikti.kemdiktisaintek.go.id/api/dosen/portofolio/paten"
-    };
-
+    // =========================
     // PENCARIAN DOSEN
+    // =========================
+
     if (
       action === "search" ||
       action === "cari" ||
@@ -128,115 +90,205 @@ export default async function handler(req, res) {
         });
       }
 
-      const url =
-        "https://pddikti.kemdiktisaintek.go.id/api/pencarian/dosen/" +
-        encodeURIComponent(keyword);
+      const kataKunci = keyword.toLowerCase();
 
-      const hasil = await ambilData(url);
+      const hasil = daftarDosen.filter((dosen) => {
+        return (
+          String(dosen.nama || "")
+            .toLowerCase()
+            .includes(kataKunci) ||
+
+          String(dosen.nidn || "")
+            .toLowerCase()
+            .includes(kataKunci) ||
+
+          String(dosen.prodi || "")
+            .toLowerCase()
+            .includes(kataKunci)
+        );
+      });
 
       return res.status(200).json({
         sukses: true,
         pesan: "Pencarian berhasil",
-        data: Array.isArray(hasil.data)
-          ? hasil.data
-          : []
+        data: hasil.map((dosen) => ({
+          id: dosen.id,
+          id_dosen: dosen.id,
+          nama: dosen.nama,
+          nidn: dosen.nidn,
+          perguruan_tinggi:
+            dosen.perguruan_tinggi,
+          prodi: dosen.prodi
+        }))
       });
     }
 
-    // AKSI SELAIN PENCARIAN MEMERLUKAN ID
-    if (!id) {
-      return res.status(400).json({
+    // =========================
+    // CARI DOSEN BERDASARKAN ID
+    // =========================
+
+    let dosen = null;
+
+    if (id) {
+      dosen = daftarDosen.find(
+        (item) =>
+          String(item.id) === id
+      );
+    }
+
+    if (!dosen && nidn) {
+      dosen = daftarDosen.find(
+        (item) =>
+          String(item.nidn || "") === nidn
+      );
+    }
+
+    if (!dosen) {
+      return res.status(404).json({
         sukses: false,
-        pesan: "ID dosen belum diberikan",
+        pesan: "Data dosen tidak ditemukan",
         data: []
       });
     }
 
-    const alias = {
-      profil: "profile",
-      pengabdian_masyarakat: "pengabdian",
-      karya: "publikasi",
-      hki: "paten"
-    };
-
-    const jenis = alias[action] || action;
-
+    // =========================
     // PROFIL
-    if (jenis === "profile") {
-      const hasil = await ambilData(
-        endpoint.profile,
-        id
-      );
+    // =========================
 
-      if (
-        nidn &&
-        hasil.data &&
-        typeof hasil.data === "object" &&
-        !Array.isArray(hasil.data)
-      ) {
-        hasil.data.nidn = nidn;
-      }
-
-      return res.status(200).json(hasil);
+    if (
+      action === "profile" ||
+      action === "profil"
+    ) {
+      return res.status(200).json({
+        sukses: true,
+        pesan: "Profil dosen berhasil diambil",
+        data: {
+          id: dosen.id,
+          nama: dosen.nama,
+          nidn: dosen.nidn,
+          perguruan_tinggi:
+            dosen.perguruan_tinggi,
+          prodi: dosen.prodi
+        }
+      });
     }
 
-    // PENELITIAN / PENGABDIAN / PUBLIKASI / PATEN
-    if (endpoint[jenis]) {
-      const hasil = await ambilData(
-        endpoint[jenis],
-        id
-      );
+    // =========================
+    // PENELITIAN
+    // =========================
 
-      return res.status(200).json(hasil);
+    if (action === "penelitian") {
+      return res.status(200).json({
+        sukses: true,
+        pesan: "Data penelitian berhasil diambil",
+        data: dosen.penelitian || []
+      });
     }
 
-    // SEMUA DATA DOSEN
+    // =========================
+    // PENGABDIAN
+    // =========================
+
+    if (
+      action === "pengabdian" ||
+      action === "pengabdian_masyarakat"
+    ) {
+      return res.status(200).json({
+        sukses: true,
+        pesan:
+          "Data pengabdian berhasil diambil",
+        data: dosen.pengabdian || []
+      });
+    }
+
+    // =========================
+    // PUBLIKASI
+    // =========================
+
+    if (
+      action === "publikasi" ||
+      action === "karya"
+    ) {
+      return res.status(200).json({
+        sukses: true,
+        pesan:
+          "Data publikasi berhasil diambil",
+        data: dosen.publikasi || []
+      });
+    }
+
+    // =========================
+    // HKI / PATEN
+    // =========================
+
+    if (
+      action === "paten" ||
+      action === "hki"
+    ) {
+      return res.status(200).json({
+        sukses: true,
+        pesan:
+          "Data HKI/Paten berhasil diambil",
+        data: dosen.paten || []
+      });
+    }
+
+    // =========================
+    // SEMUA DATA
+    // =========================
+
     if (
       action === "detail" ||
       action === "all" ||
       action === "semua"
     ) {
-      const [
-        profil,
-        penelitian,
-        pengabdian,
-        publikasi,
-        paten
-      ] = await Promise.all([
-        ambilData(endpoint.profile, id),
-        ambilData(endpoint.penelitian, id),
-        ambilData(endpoint.pengabdian, id),
-        ambilData(endpoint.publikasi, id),
-        ambilData(endpoint.paten, id)
-      ]);
-
       return res.status(200).json({
         sukses: true,
         pesan: "Data dosen berhasil diambil",
         data: {
-          profil,
-          penelitian,
-          pengabdian,
-          publikasi,
-          paten
+          profil: {
+            id: dosen.id,
+            nama: dosen.nama,
+            nidn: dosen.nidn,
+            perguruan_tinggi:
+              dosen.perguruan_tinggi,
+            prodi: dosen.prodi
+          },
+
+          penelitian:
+            dosen.penelitian || [],
+
+          pengabdian:
+            dosen.pengabdian || [],
+
+          publikasi:
+            dosen.publikasi || [],
+
+          paten:
+            dosen.paten || []
         }
       });
     }
 
     return res.status(400).json({
       sukses: false,
-      pesan: "Action API tidak dikenali: " + action,
+      pesan:
+        "Action API tidak dikenali: " +
+        action,
       data: []
     });
 
   } catch (error) {
-    console.error("API PDDIKTI ERROR:", error);
+    console.error(
+      "API DATA DOSEN ERROR:",
+      error
+    );
 
-    return res.status(502).json({
+    return res.status(500).json({
       sukses: false,
       pesan:
         error.message ||
-        "Terjadi kesalahan saat mengambil data PDDIKTI",
+        "Terjadi kesalahan pada API data dosen",
       data: []
     });
   }
