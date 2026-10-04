@@ -1,205 +1,480 @@
-
 <?php
+
+set_time_limit(0);
+ini_set('memory_limit', '512M');
 
 $file = __DIR__ . "/data.json";
 
+$API = "https://pddikti.fastapicloud.dev/api";
+
 if (!file_exists($file)) {
-    die("File data.json tidak ditemukan.");
+    die("data.json tidak ditemukan.");
 }
 
-$data = json_decode(file_get_contents($file), true);
+$data = json_decode(
+    file_get_contents($file),
+    true
+);
 
-if (!$data || !isset($data["dosen"]) || !is_array($data["dosen"])) {
+if (
+    !$data ||
+    !isset($data["dosen"]) ||
+    !is_array($data["dosen"])
+) {
     die("Format data.json tidak valid.");
 }
 
-/*
-|--------------------------------------------------------------------------
-| DATA PORTFOLIO
-|--------------------------------------------------------------------------
-| Isi berdasarkan NIDN.
-| Data identitas dosen TIDAK DIUBAH.
-*/
+$dosenList = &$data["dosen"];
 
-$portfolio = [
-
-    // =========================
-    // GUNTUR SYAHPUTRA
-    // =========================
-    "0127118701" => [
-
-        "penelitian" => [
-            [
-                "judul" => "RANCANG BANGUN NAS SERVER DI LINGKUNGAN JURUSAN TIK PNL DALAM UPAYA MENGURANGI KETERGANTUNGAN TERHADAP JARINGAN INTERNET",
-                "tahun" => 2024
-            ],
-            [
-                "judul" => "Implementasi Pengukuran Capaian Pembelajaran Lulusan Berbasis Website",
-                "tahun" => 2026
-            ]
-        ],
-
-        "pengabdian" => [
-            [
-                "judul" => "Penerapan Virtual Reality (VR) Berbasis Video 360 dalam Rangka Optimalisasi Teknologi Multimedia untuk Mendukung Sarana Promosi Sekolah pada SMK N 5 Lhokseumawe",
-                "tahun" => 2024
-            ],
-            [
-                "judul" => "Pelatihan Penerapan Sistem Layanan Informasi Bagi Guru SMKN 5 Lhokseumawe",
-                "tahun" => 2022
-            ],
-            [
-                "judul" => "Rancang Bangun Network Attached Storage (NAS) Server pada Ruang Lingkup Jurusan Teknologi Informasi dan Komputer Politeknik Negeri Lhokseumawe dalam Upaya Mengurangi Ketergantungan terhadap Jaringan Internet",
-                "tahun" => 2023
-            ]
-        ],
-
-        "publikasi" => [
-            [
-                "judul" => "Implementasi Aplikasi The Dude Untuk Monitoring Jaringan Berbasis Telegram",
-                "tahun" => 2025
-            ],
-            [
-                "judul" => "Analisis Dan Perancangan Virtual Tour Berbasis Video 360 Pada Gedung Jurusan Teknologi Informasi Dan Komputer Menggunakan Teknik Multi Panorama",
-                "tahun" => 2025
-            ],
-            [
-                "judul" => "Perancangan Game 2D \"Bertutur Aceh Dasar\" Berbasis Android",
-                "tahun" => 2026
-            ],
-            [
-                "judul" => "Pembuatan Game 3D Petualangan Labirin Menggunakan Algoritma Dijkstra pada Non-Player Character (NPC)",
-                "tahun" => 2024
-            ],
-            [
-                "judul" => "Analisa Perbandingan Honeypot Cowrie dan Honeypot Dionaea dalam Mendeteksi Serangan Port Scanning dan Brute Force",
-                "tahun" => 2024
-            ],
-            [
-                "judul" => "Peningkatan Ketrampilan Penggunaan Teknologi Informasi pada Sistem Pembelajaran Daring bagi Guru SMK Negeri 5 Lhokseumawe",
-                "tahun" => 2021
-            ]
-        ],
-
-        "paten" => []
-    ],
+$total = count($dosenList);
+$berhasil = 0;
+$dilewati = 0;
+$gagal = 0;
 
 
-    // =========================
-    // ARYATI
-    // =========================
-    "0009067504" => [
+/* =========================================================
+   FUNGSI REQUEST
+========================================================= */
 
-        "penelitian" => [
-            [
-                "judul" => "Analisis Vector dalam Penentuan Determinan Perdagangan Suku Ritel di Indonesia",
-                "tahun" => 2025
-            ],
-            [
-                "judul" => "Penerapan Financial Technology, Literasi Dan Inklusi Keuangan Terhadap Peningkatan Kinerja UMKM Di Kota Lhokseumawe",
-                "tahun" => 2024
-            ],
-            [
-                "judul" => "ANALISA GOOD CORPORATE GOVERNANCE TERHADAP KINERJA PERUSAHAAN PADA EMITEN JAKARTA ISLAMIC INDEX 70",
-                "tahun" => 2023
-            ]
-        ],
+function requestAPI($url)
+{
+    $ch = curl_init($url);
 
-        "pengabdian" => [
-            [
-                "judul" => "Pemanfaatan AI Tools dan Media Sosial dalam Membangun Strategi Pengemasan dan Pemasaran Produk pada UMKM Ahad Festival Kota Lhokseumawe",
-                "tahun" => 2026
-            ],
-            [
-                "judul" => "Pelatihan Pemanfaatan Dana Desa Dalam Mewujudkan Desa Mandiri Bagi Pemuda Gampong Meunasah Mesjid Dalam Perspektif Undang-Undang Nomor 6 Tahun 2014 Tentang Desa",
-                "tahun" => 2024
-            ],
-            [
-                "judul" => "Pelatihan Pengelolaan Keuangan Dan Penggunaan Digital Marketing Bagi UMKM Binaan Politeknik Negeri Lhokseumawe",
-                "tahun" => 2022
-            ],
-            [
-                "judul" => "Pelatihan Menyusun Laporan Pengelolaan Dana Gampong Untuk Penanggulangan Covid 19 Gampong Alue Lim Kecamatan Blang Mangat Lhokseumawe",
-                "tahun" => 2021
-            ]
-        ],
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_CONNECTTIMEOUT => 10,
+        CURLOPT_HTTPHEADER => [
+            "Accept: application/json",
+            "User-Agent: Mozilla/5.0"
+        ]
+    ]);
 
-        "publikasi" => [
-            [
-                "judul" => "Analysis of the Implementation of the Purchase Accounting Information System at PT Indonesia Asahan Aluminum",
-                "tahun" => 2024
-            ],
-            [
-                "judul" => "ANALYSIS OF RETURN ON EQUITY, CURRENT RATIO AND DEBT TO EQUITY RATIO TO CHANGES IN PROFIT IN SHARIA ISSUERS JAKARTA ISLAMIC INDEX",
-                "tahun" => 2022
-            ],
-            [
-                "judul" => "The Effect of Internal and External Factors on Non-Performing Financing at Islamic Commercial Banks in Indonesia",
-                "tahun" => 2022
-            ]
-        ],
+    $hasil = curl_exec($ch);
 
-        "paten" => []
-    ]
+    $httpCode = curl_getinfo(
+        $ch,
+        CURLINFO_HTTP_CODE
+    );
 
-];
+    curl_close($ch);
+
+    if (
+        $hasil === false ||
+        $httpCode < 200 ||
+        $httpCode >= 300
+    ) {
+        return null;
+    }
+
+    $json = json_decode(
+        $hasil,
+        true
+    );
+
+    return $json;
+}
 
 
-/*
-|--------------------------------------------------------------------------
-| PROSES
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   AMBIL DATA ARRAY DARI RESPONSE API
+========================================================= */
 
-$jumlahDosen = count($data["dosen"]);
-$jumlahDiupdate = 0;
+function ambilArray($response)
+{
+    if (!is_array($response)) {
+        return [];
+    }
 
-foreach ($data["dosen"] as &$dosen) {
+    if (
+        isset($response["data"]) &&
+        is_array($response["data"])
+    ) {
+        if (
+            isset($response["data"]["data"]) &&
+            is_array($response["data"]["data"])
+        ) {
+            return $response["data"]["data"];
+        }
 
-    $nidn = trim((string)($dosen["nidn"] ?? ""));
+        return $response["data"];
+    }
+
+    if (
+        isset($response["results"]) &&
+        is_array($response["results"])
+    ) {
+        return $response["results"];
+    }
+
+    if (
+        isset($response["result"]) &&
+        is_array($response["result"])
+    ) {
+        return $response["result"];
+    }
+
+    return [];
+}
+
+
+/* =========================================================
+   AMBIL JUDUL
+========================================================= */
+
+function ambilJudul($item)
+{
+    if (!is_array($item)) {
+        return "";
+    }
+
+    $fields = [
+        "judul",
+        "judul_kegiatan",
+        "judul_penelitian",
+        "judul_karya",
+        "nama_kegiatan",
+        "nama"
+    ];
+
+    foreach ($fields as $field) {
+
+        if (
+            isset($item[$field]) &&
+            trim((string)$item[$field]) !== ""
+        ) {
+            return trim(
+                (string)$item[$field]
+            );
+        }
+    }
+
+    return "";
+}
+
+
+/* =========================================================
+   AMBIL TAHUN
+========================================================= */
+
+function ambilTahun($item)
+{
+    if (!is_array($item)) {
+        return null;
+    }
+
+    $fields = [
+        "tahun",
+        "tahun_kegiatan",
+        "tahun_pelaksanaan",
+        "year"
+    ];
+
+    foreach ($fields as $field) {
+
+        if (
+            isset($item[$field]) &&
+            trim((string)$item[$field]) !== ""
+        ) {
+            return trim(
+                (string)$item[$field]
+            );
+        }
+    }
+
+    return null;
+}
+
+
+/* =========================================================
+   KONVERSI PORTFOLIO
+========================================================= */
+
+function formatPortfolio($response)
+{
+    $hasil = [];
+
+    $items = ambilArray($response);
+
+    foreach ($items as $item) {
+
+        $judul = ambilJudul($item);
+
+        if ($judul === "") {
+            continue;
+        }
+
+        $tahun = ambilTahun($item);
+
+        $baris = [
+            "judul" => $judul
+        ];
+
+        if ($tahun !== null) {
+            $baris["tahun"] = $tahun;
+        }
+
+        $hasil[] = $baris;
+    }
+
+    return $hasil;
+}
+
+
+/* =========================================================
+   PROSES 312 DOSEN
+========================================================= */
+
+foreach ($dosenList as $index => &$dosen) {
+
+    $nama = trim(
+        (string)($dosen["nama"] ?? "")
+    );
+
+    $nidn = trim(
+        (string)($dosen["nidn"] ?? "")
+    );
+
+    echo "<div style='font-family:Arial'>";
+    echo "<b>" . ($index + 1) . " / " . $total . "</b> ";
+    echo htmlspecialchars($nama);
+    echo " - NIDN: ";
+    echo htmlspecialchars($nidn);
+    echo "<br>";
+
+    flush();
 
     /*
-     * Kalau NIDN ditemukan dalam daftar portfolio,
-     * hanya portfolio yang diubah.
+     * NIDN kosong tidak bisa dicari
      */
-    if ($nidn !== "" && isset($portfolio[$nidn])) {
 
-        $dosen["penelitian"] = $portfolio[$nidn]["penelitian"];
-        $dosen["pengabdian"] = $portfolio[$nidn]["pengabdian"];
-        $dosen["publikasi"] = $portfolio[$nidn]["publikasi"];
-        $dosen["paten"] = $portfolio[$nidn]["paten"];
+    if ($nidn === "") {
 
-        $jumlahDiupdate++;
+        echo "⚠️ NIDN kosong<br><br>";
+
+        $dilewati++;
+
+        continue;
     }
+
 
     /*
-     * Kalau portfolio belum ada, jangan hapus data lama.
+     * =====================================================
+     * CARI DOSEN BERDASARKAN NIDN
+     * =====================================================
      */
-    if (!isset($dosen["penelitian"])) {
-        $dosen["penelitian"] = [];
+
+    $urlSearch =
+        $API .
+        "/search/dosen/" .
+        rawurlencode($nidn) .
+        "/";
+
+    $search = requestAPI(
+        $urlSearch
+    );
+
+    $hasilSearch = ambilArray(
+        $search
+    );
+
+    $idDosen = "";
+
+
+    /*
+     * Cari hasil yang NIDN-nya benar-benar cocok
+     */
+
+    foreach ($hasilSearch as $hasil) {
+
+        if (!is_array($hasil)) {
+            continue;
+        }
+
+        $nidnHasil = trim(
+            (string)(
+                $hasil["nidn"] ??
+                $hasil["NIDN"] ??
+                ""
+            )
+        );
+
+        if (
+            $nidnHasil === $nidn
+        ) {
+
+            $idDosen =
+                $hasil["id"] ??
+                $hasil["id_dosen"] ??
+                $hasil["id_sdm"] ??
+                "";
+
+            break;
+        }
     }
 
-    if (!isset($dosen["pengabdian"])) {
-        $dosen["pengabdian"] = [];
+
+    /*
+     * Kalau tidak ditemukan
+     */
+
+    if ($idDosen === "") {
+
+        echo "❌ ID dosen tidak ditemukan<br><br>";
+
+        $gagal++;
+
+        continue;
     }
 
-    if (!isset($dosen["publikasi"])) {
-        $dosen["publikasi"] = [];
+    echo "ID Dosen ditemukan: ";
+    echo htmlspecialchars(
+        (string)$idDosen
+    );
+    echo "<br>";
+
+
+    /*
+     * =====================================================
+     * PENELITIAN
+     * =====================================================
+     */
+
+    $penelitian = requestAPI(
+        $API .
+        "/dosen/penelitian/" .
+        rawurlencode($idDosen) .
+        "/"
+    );
+
+
+    /*
+     * =====================================================
+     * PENGABDIAN
+     * =====================================================
+     */
+
+    $pengabdian = requestAPI(
+        $API .
+        "/dosen/pengabdian/" .
+        rawurlencode($idDosen) .
+        "/"
+    );
+
+
+    /*
+     * =====================================================
+     * PUBLIKASI / KARYA
+     * =====================================================
+     */
+
+    $publikasi = requestAPI(
+        $API .
+        "/dosen/karya/" .
+        rawurlencode($idDosen) .
+        "/"
+    );
+
+
+    /*
+     * =====================================================
+     * PATEN / HKI
+     * =====================================================
+     */
+
+    $paten = requestAPI(
+        $API .
+        "/dosen/paten/" .
+        rawurlencode($idDosen) .
+        "/"
+    );
+
+
+    /*
+     * =====================================================
+     * SIMPAN PORTFOLIO
+     * =====================================================
+     */
+
+    $dataPenelitian =
+        formatPortfolio(
+            $penelitian
+        );
+
+    $dataPengabdian =
+        formatPortfolio(
+            $pengabdian
+        );
+
+    $dataPublikasi =
+        formatPortfolio(
+            $publikasi
+        );
+
+    $dataPaten =
+        formatPortfolio(
+            $paten
+        );
+
+
+    /*
+     * HANYA mengganti portfolio.
+     * IDENTITAS DOSEN TIDAK DISENTUH.
+     */
+
+    if (count($dataPenelitian) > 0) {
+        $dosen["penelitian"] =
+            $dataPenelitian;
     }
 
-    if (!isset($dosen["paten"])) {
-        $dosen["paten"] = [];
+    if (count($dataPengabdian) > 0) {
+        $dosen["pengabdian"] =
+            $dataPengabdian;
     }
+
+    if (count($dataPublikasi) > 0) {
+        $dosen["publikasi"] =
+            $dataPublikasi;
+    }
+
+    if (count($dataPaten) > 0) {
+        $dosen["paten"] =
+            $dataPaten;
+    }
+
+
+    echo "Penelitian: ";
+    echo count($dataPenelitian);
+    echo "<br>";
+
+    echo "Pengabdian: ";
+    echo count($dataPengabdian);
+    echo "<br>";
+
+    echo "Publikasi: ";
+    echo count($dataPublikasi);
+    echo "<br>";
+
+    echo "Paten: ";
+    echo count($dataPaten);
+    echo "<br><br>";
+
+    $berhasil++;
+
+    /*
+     * Jeda sedikit agar tidak terlalu agresif
+     */
+
+    usleep(200000);
 }
 
 unset($dosen);
 
 
-/*
-|--------------------------------------------------------------------------
-| SIMPAN
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   SIMPAN DATA.JSON
+========================================================= */
 
 $jsonBaru = json_encode(
     $data,
@@ -212,69 +487,44 @@ if ($jsonBaru === false) {
     die("Gagal membuat JSON.");
 }
 
-if (file_put_contents($file, $jsonBaru) === false) {
+if (
+    file_put_contents(
+        $file,
+        $jsonBaru
+    ) === false
+) {
     die("Gagal menyimpan data.json.");
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| HASIL
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   HASIL AKHIR
+========================================================= */
 
-echo "<!DOCTYPE html>";
-echo "<html lang='id'>";
-echo "<head>";
-echo "<meta charset='UTF-8'>";
-echo "<title>Update Portfolio Dosen</title>";
-echo "<style>
-body{
-    font-family:Arial,sans-serif;
-    background:#f4f1ff;
-    padding:40px;
-}
-.box{
-    max-width:600px;
-    margin:auto;
-    background:white;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 5px 20px rgba(0,0,0,.1);
-}
-h1{
-    color:#6d28d9;
-}
-.success{
-    background:#ecfdf5;
-    padding:15px;
-    border-radius:10px;
-    color:#166534;
-}
-.info{
-    margin-top:15px;
-    line-height:1.8;
-}
-</style>";
-echo "</head>";
-echo "<body>";
+echo "<hr>";
 
-echo "<div class='box'>";
-echo "<h1>Update Portfolio Dosen</h1>";
+echo "<h2>SELESAI</h2>";
 
-echo "<div class='success'>";
-echo "Berhasil memperbarui data portfolio.";
-echo "</div>";
+echo "Jumlah dosen: <b>"
+    . $total .
+    "</b><br>";
 
-echo "<div class='info'>";
-echo "Jumlah dosen: <b>" . $jumlahDosen . "</b><br>";
-echo "Data dosen yang diperbarui: <b>" . $jumlahDiupdate . "</b><br>";
-echo "Data identitas dosen tetap dipertahankan.";
-echo "</div>";
+echo "Berhasil diproses: <b>"
+    . $berhasil .
+    "</b><br>";
+
+echo "Dilewati: <b>"
+    . $dilewati .
+    "</b><br>";
+
+echo "Gagal ditemukan: <b>"
+    . $gagal .
+    "</b><br>";
+
+echo "<br>";
+
+echo "<b>data.json sudah diperbarui.</b>";
 
 echo "</div>";
-
-echo "</body>";
-echo "</html>";
 
 ?>
