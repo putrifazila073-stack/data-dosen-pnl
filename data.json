@@ -1,12 +1,15 @@
-
 {
   "dosen": [
     {
       "id": "aryati-pnl",
       "nama": "ARYATI",
-      "nidn": "",
+      "nidn": "0009067504",
       "perguruan_tinggi": "Politeknik Negeri Lhokseumawe",
       "prodi": "Akuntansi",
+      "jabatan_fungsional": "Lektor Kepala",
+      "pendidikan_terakhir": "S2",
+      "status_kepegawaian": "PNS",
+      "status_aktivitas": "Aktif",
 
       "penelitian": [
         {
