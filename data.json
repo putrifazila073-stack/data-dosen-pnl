@@ -81,9 +81,23 @@
     "status_aktivitas": "TUGAS DI INSTANSI LAIN",
     "ikatan_kerja": "Dosen Tetap",
     "semester": "2026/2027 Ganjil",
-    "penelitian": [],
+    "penelitian": [
+      {
+        "judul": "ORGANIZATIONAL JUSTICE AND JOB SATISFACTION: Impact on Employee Commitment and Performance",
+        "tahun": 2022,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/author/view/5340648"
+      }
+    ],
     "pengabdian": [],
-    "publikasi": [],
+    "publikasi": [
+      {
+        "judul": "ORGANIZATIONAL JUSTICE AND JOB SATISFACTION: Impact on Employee Commitment and Performance",
+        "tahun": 2022,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/author/view/5340648"
+      }
+    ],
     "paten": []
   },
   {
@@ -301,6 +315,12 @@
       {
         "judul": "ANALYSIS ANALYSIS DETERMINANT ADOPTION Artificial Generative INTELLIGENCE IN SYSTEM CLOUD-BASED ACCOUNTING INFORMATION: A PERSPECTIVE TRUST AND ALGORITHMIC Accountability",
         "tahun": 2026
+      },
+      {
+        "judul": "ANALYSIS OF THE POTENTIAL ACCEPTANCE OF ZAKAT PROFESSION WITH A NATURAL APPROACH",
+        "tahun": 2022,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/2977521"
       }
     ],
     "pengabdian": [],
@@ -311,6 +331,12 @@
         "sumber": "GARUDA",
         "author_id": "5996880",
         "url": "https://garuda.kemdiktisaintek.go.id/author/view/5996880"
+      },
+      {
+        "judul": "ANALYSIS OF THE POTENTIAL ACCEPTANCE OF ZAKAT PROFESSION WITH A NATURAL APPROACH",
+        "tahun": 2022,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/2977521"
       }
     ],
     "paten": []
@@ -1094,7 +1120,14 @@
     "ikatan_kerja": "Dosen Tetap",
     "semester": "2026/2027 Ganjil",
     "penelitian": [],
-    "pengabdian": [],
+    "pengabdian": [
+      {
+        "judul": "PKM Membangun Internet Server dan Pemblokiran Situs Pornografi serta Penerapan E-Learning Sekolah Bagi Pengelola Jaringan Internet Sekolah SMKN 1 Lhoksukon",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/journal/view/17084?issue=Vol+10%2C+No+1+%282026%29%3A+Maret"
+      }
+    ],
     "publikasi": [
       {
         "judul": "PENGARUH DIAMETER DAN KETEBALAN PASIR PADA SARINGAN TERHADAP TOTAL SOLID DALAM AIR",
@@ -1116,6 +1149,12 @@
         "sumber": "GARUDA",
         "author_id": "6229433",
         "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/970259"
+      },
+      {
+        "judul": "PKM Membangun Internet Server dan Pemblokiran Situs Pornografi serta Penerapan E-Learning Sekolah Bagi Pengelola Jaringan Internet Sekolah SMKN 1 Lhoksukon",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/journal/view/17084?issue=Vol+10%2C+No+1+%282026%29%3A+Maret"
       }
     ],
     "paten": [],
@@ -1139,7 +1178,14 @@
     "ikatan_kerja": "Dosen Tetap",
     "semester": "2026/2027 Ganjil",
     "penelitian": [],
-    "pengabdian": [],
+    "pengabdian": [
+      {
+        "judul": "PKM Membangun Internet Server dan Pemblokiran Situs Pornografi serta Penerapan E-Learning Sekolah Bagi Pengelola Jaringan Internet Sekolah SMKN 1 Lhoksukon",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/journal/view/17084?issue=Vol+10%2C+No+1+%282026%29%3A+Maret"
+      }
+    ],
     "publikasi": [
       {
         "judul": "PENGARUH DIAMETER DAN KETEBALAN PASIR PADA SARINGAN TERHADAP TOTAL SOLID DALAM AIR",
@@ -1161,6 +1207,12 @@
         "sumber": "GARUDA",
         "author_id": "6229433",
         "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/970259"
+      },
+      {
+        "judul": "PKM Membangun Internet Server dan Pemblokiran Situs Pornografi serta Penerapan E-Learning Sekolah Bagi Pengelola Jaringan Internet Sekolah SMKN 1 Lhoksukon",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/journal/view/17084?issue=Vol+10%2C+No+1+%282026%29%3A+Maret"
       }
     ],
     "paten": [],
@@ -1184,7 +1236,14 @@
     "ikatan_kerja": "Dosen Tetap",
     "semester": "2026/2027 Ganjil",
     "penelitian": [],
-    "pengabdian": [],
+    "pengabdian": [
+      {
+        "judul": "PKM Membangun Internet Server dan Pemblokiran Situs Pornografi serta Penerapan E-Learning Sekolah Bagi Pengelola Jaringan Internet Sekolah SMKN 1 Lhoksukon",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/journal/view/17084?issue=Vol+10%2C+No+1+%282026%29%3A+Maret"
+      }
+    ],
     "publikasi": [
       {
         "judul": "PENGARUH DIAMETER DAN KETEBALAN PASIR PADA SARINGAN TERHADAP TOTAL SOLID DALAM AIR",
@@ -1206,6 +1265,12 @@
         "sumber": "GARUDA",
         "author_id": "6229433",
         "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/970259"
+      },
+      {
+        "judul": "PKM Membangun Internet Server dan Pemblokiran Situs Pornografi serta Penerapan E-Learning Sekolah Bagi Pengelola Jaringan Internet Sekolah SMKN 1 Lhoksukon",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/journal/view/17084?issue=Vol+10%2C+No+1+%282026%29%3A+Maret"
       }
     ],
     "paten": [],
@@ -1987,9 +2052,35 @@
     "status_aktivitas": "Aktif",
     "ikatan_kerja": "Dosen Tetap",
     "semester": "2026/2027 Ganjil",
-    "penelitian": [],
+    "penelitian": [
+      {
+        "judul": "Analisis Kerusakan Jalan di Jalan Jangka Mengunakan Metode PCI",
+        "tahun": 2025,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/author/view/8253024"
+      },
+      {
+        "judul": "TINJAUAN TEBAL PERKERASAN PENINGKATAN JALAN ALUE SEUMAMBU KECAMATAN COT GIREK STA 0+200 S.D STA 1+500",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/author/view/11070127"
+      }
+    ],
     "pengabdian": [],
-    "publikasi": [],
+    "publikasi": [
+      {
+        "judul": "Analisis Kerusakan Jalan di Jalan Jangka Mengunakan Metode PCI",
+        "tahun": 2025,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/author/view/8253024"
+      },
+      {
+        "judul": "TINJAUAN TEBAL PERKERASAN PENINGKATAN JALAN ALUE SEUMAMBU KECAMATAN COT GIREK STA 0+200 S.D STA 1+500",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/author/view/11070127"
+      }
+    ],
     "paten": []
   },
   {
@@ -2160,9 +2251,35 @@
     "status_aktivitas": "Aktif",
     "ikatan_kerja": "Dosen Tetap",
     "semester": "2026/2027 Ganjil",
-    "penelitian": [],
+    "penelitian": [
+      {
+        "judul": "Pengaruh Alokasi Anggaran Kesehatan, Bantuan Sosial, Dan Pembangunan Berkelanjutan Terhadap Angka Harapan Hidup Di Provinsi Aceh",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/6601882"
+      },
+      {
+        "judul": "THE INFLUENCE OF APPARATUS HUMAN RESOURCE QUALITY AND BUDGET MANAGEMENT EFFECTIVENESS ON SMART CITY IMPLEMENTATION IN LHOKSEUMAWE CITY",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/6660698"
+      }
+    ],
     "pengabdian": [],
-    "publikasi": [],
+    "publikasi": [
+      {
+        "judul": "Pengaruh Alokasi Anggaran Kesehatan, Bantuan Sosial, Dan Pembangunan Berkelanjutan Terhadap Angka Harapan Hidup Di Provinsi Aceh",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/6601882"
+      },
+      {
+        "judul": "THE INFLUENCE OF APPARATUS HUMAN RESOURCE QUALITY AND BUDGET MANAGEMENT EFFECTIVENESS ON SMART CITY IMPLEMENTATION IN LHOKSEUMAWE CITY",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/6660698"
+      }
+    ],
     "paten": []
   },
   {
@@ -2339,9 +2456,35 @@
     "status_aktivitas": "Aktif",
     "ikatan_kerja": "Dosen Tetap",
     "semester": "2026/2027 Ganjil",
-    "penelitian": [],
+    "penelitian": [
+      {
+        "judul": "Rancang Bangun Alat Etching Printed Circuit Board Otomatis",
+        "tahun": 2025,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/journal/view/29910?issue=Vol.+22+No.+2+%282025%29%3A+Jurnal+Litek%2C+September+2025&page=2"
+      },
+      {
+        "judul": "Analisis Material Biomassa Sekam sebagai Anechoic Chamber pada Spektrum X Band",
+        "tahun": 2025,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/journal/view/29910?page=5"
+      }
+    ],
     "pengabdian": [],
-    "publikasi": [],
+    "publikasi": [
+      {
+        "judul": "Rancang Bangun Alat Etching Printed Circuit Board Otomatis",
+        "tahun": 2025,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/journal/view/29910?issue=Vol.+22+No.+2+%282025%29%3A+Jurnal+Litek%2C+September+2025&page=2"
+      },
+      {
+        "judul": "Analisis Material Biomassa Sekam sebagai Anechoic Chamber pada Spektrum X Band",
+        "tahun": 2025,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/journal/view/29910?page=5"
+      }
+    ],
     "paten": []
   },
   {
@@ -6273,7 +6416,14 @@
     "ikatan_kerja": "Dosen Tetap",
     "semester": "2026/2027 Ganjil",
     "penelitian": [],
-    "pengabdian": [],
+    "pengabdian": [
+      {
+        "judul": "PKM Membangun Internet Server dan Pemblokiran Situs Pornografi serta Penerapan E-Learning Sekolah Bagi Pengelola Jaringan Internet Sekolah SMKN 1 Lhoksukon",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/journal/view/17084?issue=Vol+10%2C+No+1+%282026%29%3A+Maret"
+      }
+    ],
     "publikasi": [
       {
         "judul": "Penggunaan Metode TOPSIS sebagai Pendukung Keputusan Bantuan Modal Usaha bagi Masyarakat Pedesaan di Kabupaten Pidie",
@@ -6288,6 +6438,12 @@
         "sumber": "GARUDA",
         "author_id": "1259832",
         "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/3862499"
+      },
+      {
+        "judul": "PKM Membangun Internet Server dan Pemblokiran Situs Pornografi serta Penerapan E-Learning Sekolah Bagi Pengelola Jaringan Internet Sekolah SMKN 1 Lhoksukon",
+        "tahun": 2026,
+        "sumber": "GARUDA",
+        "url": "https://garuda.kemdiktisaintek.go.id/journal/view/17084?issue=Vol+10%2C+No+1+%282026%29%3A+Maret"
       }
     ],
     "paten": [],
