@@ -131,9 +131,21 @@ async function ambilData() {
 
         const response = await fetch("data.json");
 
+        if (!response.ok) {
+            throw new Error("data.json tidak ditemukan");
+        }
+
         const database = await response.json();
 
-        semuaDosen = database.dosen || [];
+        /*
+         * data.json sekarang berbentuk array langsung.
+         * Kode ini juga tetap bisa membaca struktur lama.
+         */
+        semuaDosen = Array.isArray(database)
+            ? database
+            : (database.dosen || []);
+
+        console.log("Jumlah data dosen:", semuaDosen.length);
 
         isiPilihanProdi();
 
@@ -141,7 +153,7 @@ async function ambilData() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error("Gagal memuat data:", error);
 
         document.getElementById("tabelDosen").innerHTML = `
             <tr>
