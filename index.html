@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* LOGO PNL */
         .logo-pnl {
             width: 70px;
             height: 70px;
@@ -36,7 +35,6 @@
         }
 
         @media (max-width: 600px) {
-
             .logo-pnl {
                 width: 55px;
                 height: 55px;
@@ -53,7 +51,6 @@
             .logo-area p {
                 font-size: 13px;
             }
-
         }
     </style>
 </head>
@@ -66,7 +63,7 @@
             <div class="logo-area">
 
                 <img
-                    src="logo-pnl.png.png"
+                    src="Logo.pnl.png.png"
                     alt="Logo Politeknik Negeri Lhokseumawe"
                     class="logo-pnl"
                 >
@@ -270,7 +267,6 @@ function tampilkanDosen(data) {
     const jumlah =
         document.getElementById("jumlahDosen");
 
-
     tbody.innerHTML = "";
 
     jumlah.textContent = data.length;
@@ -295,13 +291,11 @@ function tampilkanDosen(data) {
 
         const tr = document.createElement("tr");
 
-
         tr.innerHTML = `
 
             <td>
                 ${index + 1}
             </td>
-
 
             <td>
 
@@ -319,7 +313,6 @@ function tampilkanDosen(data) {
 
             </td>
 
-
             <td>
 
                 ${escapeHtml(
@@ -328,7 +321,6 @@ function tampilkanDosen(data) {
 
             </td>
 
-
             <td>
 
                 ${escapeHtml(
@@ -336,7 +328,6 @@ function tampilkanDosen(data) {
                 )}
 
             </td>
-
 
             <td>
 
@@ -351,7 +342,6 @@ function tampilkanDosen(data) {
 
             </td>
 
-
             <td>
 
                 ${escapeHtml(
@@ -361,7 +351,6 @@ function tampilkanDosen(data) {
             </td>
 
         `;
-
 
         tbody.appendChild(tr);
 
@@ -376,13 +365,11 @@ function filterData() {
     const prodiDipilih =
         document.getElementById("prodi").value;
 
-
     const keyword =
         document
             .getElementById("search")
             .value
             .trim();
-
 
     let hasil = semuaDosen;
 
@@ -393,12 +380,10 @@ function filterData() {
         const prodiPilihan =
             normalisasiTeks(prodiDipilih);
 
-
         hasil = hasil.filter(dosen => {
 
             const prodiDosen =
                 normalisasiTeks(dosen.prodi);
-
 
             return prodiDosen === prodiPilihan;
 
@@ -413,16 +398,13 @@ function filterData() {
         const kataKunci =
             normalisasiTeks(keyword);
 
-
         hasil = hasil.filter(dosen => {
 
             const nama =
                 normalisasiTeks(dosen.nama);
 
-
             const nidn =
                 normalisasiTeks(dosen.nidn);
-
 
             return (
                 nama.includes(kataKunci) ||
@@ -437,7 +419,6 @@ function filterData() {
     document.getElementById("judulData").textContent =
         prodiDipilih ||
         "Semua Program Studi";
-
 
     tampilkanDosen(hasil);
 
