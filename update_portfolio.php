@@ -17,7 +17,6 @@ if (!is_array($data)) {
     die("Format data.json tidak valid.");
 }
 
-// Menyesuaikan apakah root JSON berbentuk Array Dosen langsung atau Objek {"dosen": [...]}
 if (isset($data["dosen"]) && is_array($data["dosen"])) {
     $dosenList = &$data["dosen"];
 } else {
@@ -29,32 +28,22 @@ $berhasil = 0;
 $dilewati = 0;
 $gagal = 0;
 
-/* =========================================================
-   MAPPING MANUAL ID HASH PDDIKTI (SOLUSI KHUSUS)
-   Jika pencarian API gagal menemukan ID Hash PDDikti,
-   masukkan NIDN & ID Hash PDDikti-nya di sini.
-========================================================= */
+// Daftar ID Hash Manual (Backup Terakhir)
 $manualIdMap = [
-    "0027017001" => "Cjhx88e7kZcTuM1TMcZkS-s1cR0-uV0PJgX7RhvjnuROOHFpp-gC-Vbi8pZb_w0mO4JLcA==", // A JANNIFAR
+    "0027017001" => "Cjhx88e7kZcTuM1TMcZkS-s1cR0-uV0PJgX7RhvjnuROOHFpp-gC-Vbi8pZb_w0mO4JLcA==",
 ];
-
-
-/* =========================================================
-   FUNGSI REQUEST
-========================================================= */
 
 function requestAPI($url)
 {
     $ch = curl_init($url);
-
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_TIMEOUT => 30,
+        CURLOPT_TIMEOUT => 25,
         CURLOPT_CONNECTTIMEOUT => 10,
         CURLOPT_HTTPHEADER => [
             "Accept: application/json",
-            "User-Agent: Mozilla/5.0"
+            "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         ]
     ]);
 
@@ -69,44 +58,24 @@ function requestAPI($url)
     return json_decode($hasil, true);
 }
 
-
-/* =========================================================
-   AMBIL DATA ARRAY DARI RESPONSE API
-========================================================= */
-
 function ambilArray($response)
 {
-    if (!is_array($response)) {
-        return [];
-    }
-
+    if (!is_array($response)) return [];
     if (isset($response["data"]) && is_array($response["data"])) {
         if (isset($response["data"]["data"]) && is_array($response["data"]["data"])) {
             return $response["data"]["data"];
         }
         return $response["data"];
     }
-
-    if (isset($response["results"]) && is_array($response["results"])) {
-        return $response["results"];
-    }
-
-    if (isset($response["result"]) && is_array($response["result"])) {
-        return $response["result"];
-    }
+    if (isset($response["results"]) && is_array($response["results"])) return $response["results"];
+    if (isset($response["result"]) && is_array($response["result"])) return $response["result"];
 
     return $response;
 }
 
-
-/* =========================================================
-   AMBIL JUDUL & TAHUN
-========================================================= */
-
 function ambilJudul($item)
 {
     if (!is_array($item)) return "";
-
     $fields = ["judul", "judul_kegiatan", "judul_penelitian", "judul_karya", "nama_kegiatan", "nama"];
     foreach ($fields as $field) {
         if (isset($item[$field]) && trim((string)$item[$field]) !== "") {
@@ -119,7 +88,6 @@ function ambilJudul($item)
 function ambilTahun($item)
 {
     if (!is_array($item)) return null;
-
     $fields = ["tahun", "tahun_kegiatan", "tahun_pelaksanaan", "year"];
     foreach ($fields as $field) {
         if (isset($item[$field]) && trim((string)$item[$field]) !== "") {
@@ -129,16 +97,10 @@ function ambilTahun($item)
     return null;
 }
 
-
-/* =========================================================
-   KONVERSI PORTFOLIO
-========================================================= */
-
 function formatPortfolio($response, $sumber = "PDDIKTI")
 {
     $hasil = [];
     $items = ambilArray($response);
-
     if (!is_array($items)) return [];
 
     foreach ($items as $item) {
@@ -146,26 +108,14 @@ function formatPortfolio($response, $sumber = "PDDIKTI")
         if ($judul === "") continue;
 
         $tahun = ambilTahun($item);
-
-        $baris = [
-            "judul" => $judul,
-            "sumber" => $sumber
-        ];
-
+        $baris = ["judul" => $judul, "sumber" => $sumber];
         if ($tahun !== null) {
             $baris["tahun"] = is_numeric($tahun) ? (int)$tahun : $tahun;
         }
-
         $hasil[] = $baris;
     }
-
     return $hasil;
 }
-
-
-/* =========================================================
-   PROSES PENGGABUNGAN (MERGE) PORTOFOLIO TANPA DUPLIKASI
-========================================================= */
 
 function gabungPortofolio($lama, $baru)
 {
@@ -190,45 +140,61 @@ function gabungPortofolio($lama, $baru)
     return $lama;
 }
 
-
-/* =========================================================
-   PROSES PER DOSEN
-========================================================= */
-
+// PROSES LOOPING ALL DOSEN
 foreach ($dosenList as $index => &$dosen) {
 
     $nama = trim((string)($dosen["nama"] ?? ""));
     $nidn = trim((string)($dosen["nidn"] ?? ""));
 
-    echo "<div style='font-family:Arial; font-size:14px;'>";
-    echo "<b>" . ($index + 1) . " / " . $total . "</b> ";
-    echo htmlspecialchars($nama) . " - NIDN: " . htmlspecialchars($nidn) . "<br>";
+    echo "<div style='font-family:monospace; font-size:13px; margin-bottom:8px;'>";
+    echo "<b>[" . ($index + 1) . "/{$total}]</b> " . htmlspecialchars($nama) . " (NIDN: " . ($nidn ?: "KOSONG") . ")<br>";
     flush();
 
     if ($nidn === "") {
-        echo "⚠️ NIDN kosong<br><br></div>";
+        echo "└─ ⚠️ Skipped: NIDN Kosong<br></div>";
         $dilewati++;
         continue;
     }
 
     $idDosen = "";
 
-    // 1. Cek dari mapping manual terlebih dahulu
+    // 1. Cek dari mapping manual
     if (isset($manualIdMap[$nidn])) {
         $idDosen = $manualIdMap[$nidn];
-    } else {
-        // 2. Jika tidak ada di mapping manual, cari via API
-        $urlSearch = $API . "/search/dosen/" . rawurlencode($nidn) . "/";
-        $search = requestAPI($urlSearch);
-        $hasilSearch = ambilArray($search);
+    } 
 
-        if (is_array($hasilSearch)) {
-            foreach ($hasilSearch as $hasil) {
-                if (!is_array($hasil)) continue;
+    // 2. Cari via API berdasarkan NIDN
+    if ($idDosen === "") {
+        $urlSearchNidn = $API . "/search/dosen/" . rawurlencode($nidn) . "/";
+        $searchNidn = requestAPI($urlSearchNidn);
+        $hasilSearchNidn = ambilArray($searchNidn);
 
-                $nidnHasil = trim((string)($hasil["nidn"] ?? $hasil["NIDN"] ?? ""));
+        if (is_array($hasilSearchNidn)) {
+            foreach ($hasilSearchNidn as $h) {
+                if (!is_array($h)) continue;
+                $nidnHasil = trim((string)($h["nidn"] ?? $h["NIDN"] ?? ""));
                 if ($nidnHasil === $nidn) {
-                    $idDosen = $hasil["id"] ?? $hasil["id_sdm"] ?? $hasil["id_dosen"] ?? "";
+                    $idDosen = $h["id"] ?? $h["id_sdm"] ?? $h["id_dosen"] ?? "";
+                    break;
+                }
+            }
+        }
+    }
+
+    // 3. Jika via NIDN gagal, cari via Nama Dosen + Kampus
+    if ($idDosen === "") {
+        $urlSearchNama = $API . "/search/dosen/" . rawurlencode($nama) . "/";
+        $searchNama = requestAPI($urlSearchNama);
+        $hasilSearchNama = ambilArray($searchNama);
+
+        if (is_array($hasilSearchNama)) {
+            foreach ($hasilSearchNama as $h) {
+                if (!is_array($h)) continue;
+                $pt = strtolower((string)($h["pt"] ?? $h["perguruan_tinggi"] ?? ""));
+                $nidnHasil = trim((string)($h["nidn"] ?? $h["NIDN"] ?? ""));
+
+                if (($nidnHasil === $nidn) || (strpos($pt, "lhokseumawe") !== false && $nidnHasil === $nidn)) {
+                    $idDosen = $h["id"] ?? $h["id_sdm"] ?? $h["id_dosen"] ?? "";
                     break;
                 }
             }
@@ -236,15 +202,15 @@ foreach ($dosenList as $index => &$dosen) {
     }
 
     if ($idDosen === "") {
-        echo "❌ ID dosen tidak ditemukan di PDDIKTI<br><br></div>";
+        echo "└─ ❌ Gagal: ID Dosen tidak ditemukan di PDDikti<br></div>";
         $gagal++;
         usleep(100000);
         continue;
     }
 
-    echo "ID Dosen PDDIKTI: " . htmlspecialchars((string)$idDosen) . "<br>";
+    echo "└─ ID PDDikti: " . htmlspecialchars((string)$idDosen) . "<br>";
 
-    // Fetch portofolio dari API PDDIKTI
+    // Fetch portofolio
     $penelitian = requestAPI($API . "/dosen/penelitian/" . rawurlencode($idDosen) . "/");
     $pengabdian = requestAPI($API . "/dosen/pengabdian/" . rawurlencode($idDosen) . "/");
     $publikasi  = requestAPI($API . "/dosen/karya/" . rawurlencode($idDosen) . "/");
@@ -255,52 +221,29 @@ foreach ($dosenList as $index => &$dosen) {
     $dataPublikasi  = formatPortfolio($publikasi, "PDDIKTI");
     $dataPaten      = formatPortfolio($paten, "PDDIKTI");
 
-    // Gabungkan data baru ke data lama tanpa menimpa data Garuda
     $dosen["penelitian"] = gabungPortofolio($dosen["penelitian"] ?? [], $dataPenelitian);
     $dosen["pengabdian"] = gabungPortofolio($dosen["pengabdian"] ?? [], $dataPengabdian);
     $dosen["publikasi"]  = gabungPortofolio($dosen["publikasi"] ?? [], $dataPublikasi);
     $dosen["paten"]      = gabungPortofolio($dosen["paten"] ?? [], $dataPaten);
 
-    echo "Total Penelitian: " . count($dosen["penelitian"]) . "<br>";
-    echo "Total Pengabdian: " . count($dosen["pengabdian"]) . "<br>";
-    echo "Total Publikasi: " . count($dosen["publikasi"]) . "<br>";
-    echo "Total Paten: " . count($dosen["paten"]) . "<br><br></div>";
+    echo "   [Hasil] Penelitian: " . count($dosen["penelitian"]) . " | Pengabdian: " . count($dosen["pengabdian"]) . " | Publikasi: " . count($dosen["publikasi"]) . " | Paten: " . count($dosen["paten"]) . "<br></div>";
 
     $berhasil++;
-    usleep(200000); // Jeda 0.2 detik
+
+    // Simpan progres ke file per 10 data
+    if ($berhasil % 10 === 0) {
+        file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+    }
+
+    usleep(250000); // Jeda 0.25 detik
 }
 
 unset($dosen);
 
+// Simpan Akhir
+file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
-/* =========================================================
-   SIMPAN DATA.JSON
-========================================================= */
-
-$jsonBaru = json_encode(
-    $data,
-    JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-);
-
-if ($jsonBaru === false) {
-    die("Gagal membuat JSON.");
-}
-
-if (file_put_contents($file, $jsonBaru) === false) {
-    die("Gagal menyimpan data.json.");
-}
-
-
-/* =========================================================
-   HASIL AKHIR
-========================================================= */
-
-echo "<hr><div style='font-family:Arial'>";
-echo "<h2>SELESAI</h2>";
-echo "Jumlah dosen: <b>" . $total . "</b><br>";
-echo "Berhasil diproses: <b>" . $berhasil . "</b><br>";
-echo "Dilewati: <b>" . $dilewati . "</b><br>";
-echo "Gagal ditemukan: <b>" . $gagal . "</b><br><br>";
-echo "<b>data.json berhasil diperbarui.</b></div>";
-
+echo "<hr><h3>PROSES SELESAI</h3>";
+echo "Total: <b>{$total}</b> | Berhasil: <b>{$berhasil}</b> | Dilewati: <b>{$dilewati}</b> | Gagal: <b>{$gagal}</b><br>";
+echo "Data JSON berhasil disimpan secara bertahap.";
 ?>
