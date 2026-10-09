@@ -17,7 +17,7 @@ if (!is_array($data)) {
     die("Format data.json tidak valid.");
 }
 
-// PERBAIKAN 1: Menyesuaikan apakah root JSON berbentuk Array Dosen langsung atau Objek {"dosen": [...]}
+// Menyesuaikan apakah root JSON berbentuk Array Dosen langsung atau Objek {"dosen": [...]}
 if (isset($data["dosen"]) && is_array($data["dosen"])) {
     $dosenList = &$data["dosen"];
 } else {
@@ -28,6 +28,15 @@ $total = count($dosenList);
 $berhasil = 0;
 $dilewati = 0;
 $gagal = 0;
+
+/* =========================================================
+   MAPPING MANUAL ID HASH PDDIKTI (SOLUSI KHUSUS)
+   Jika pencarian API gagal menemukan ID Hash PDDikti,
+   masukkan NIDN & ID Hash PDDikti-nya di sini.
+========================================================= */
+$manualIdMap = [
+    "0027017001" => "Cjhx88e7kZcTuM1TMcZkS-s1cR0-uV0PJgX7RhvjnuROOHFpp-gC-Vbi8pZb_w0mO4JLcA==", // A JANNIFAR
+];
 
 
 /* =========================================================
@@ -202,23 +211,26 @@ foreach ($dosenList as $index => &$dosen) {
         continue;
     }
 
-    /*
-     * CARI DOSEN BERDASARKAN NIDN
-     */
-    $urlSearch = $API . "/search/dosen/" . rawurlencode($nidn) . "/";
-    $search = requestAPI($urlSearch);
-    $hasilSearch = ambilArray($search);
-
     $idDosen = "";
 
-    if (is_array($hasilSearch)) {
-        foreach ($hasilSearch as $hasil) {
-            if (!is_array($hasil)) continue;
+    // 1. Cek dari mapping manual terlebih dahulu
+    if (isset($manualIdMap[$nidn])) {
+        $idDosen = $manualIdMap[$nidn];
+    } else {
+        // 2. Jika tidak ada di mapping manual, cari via API
+        $urlSearch = $API . "/search/dosen/" . rawurlencode($nidn) . "/";
+        $search = requestAPI($urlSearch);
+        $hasilSearch = ambilArray($search);
 
-            $nidnHasil = trim((string)($hasil["nidn"] ?? $hasil["NIDN"] ?? ""));
-            if ($nidnHasil === $nidn) {
-                $idDosen = $hasil["id"] ?? $hasil["id_dosen"] ?? $hasil["id_sdm"] ?? "";
-                break;
+        if (is_array($hasilSearch)) {
+            foreach ($hasilSearch as $hasil) {
+                if (!is_array($hasil)) continue;
+
+                $nidnHasil = trim((string)($hasil["nidn"] ?? $hasil["NIDN"] ?? ""));
+                if ($nidnHasil === $nidn) {
+                    $idDosen = $hasil["id"] ?? $hasil["id_sdm"] ?? $hasil["id_dosen"] ?? "";
+                    break;
+                }
             }
         }
     }
@@ -232,7 +244,7 @@ foreach ($dosenList as $index => &$dosen) {
 
     echo "ID Dosen PDDIKTI: " . htmlspecialchars((string)$idDosen) . "<br>";
 
-    // Fetch dari API PDDIKTI
+    // Fetch portofolio dari API PDDIKTI
     $penelitian = requestAPI($API . "/dosen/penelitian/" . rawurlencode($idDosen) . "/");
     $pengabdian = requestAPI($API . "/dosen/pengabdian/" . rawurlencode($idDosen) . "/");
     $publikasi  = requestAPI($API . "/dosen/karya/" . rawurlencode($idDosen) . "/");
@@ -243,7 +255,7 @@ foreach ($dosenList as $index => &$dosen) {
     $dataPublikasi  = formatPortfolio($publikasi, "PDDIKTI");
     $dataPaten      = formatPortfolio($paten, "PDDIKTI");
 
-    // PERBAIKAN 2: Menggabungkan data (merge) tanpa menghapus data GARUDA
+    // Gabungkan data baru ke data lama tanpa menimpa data Garuda
     $dosen["penelitian"] = gabungPortofolio($dosen["penelitian"] ?? [], $dataPenelitian);
     $dosen["pengabdian"] = gabungPortofolio($dosen["pengabdian"] ?? [], $dataPengabdian);
     $dosen["publikasi"]  = gabungPortofolio($dosen["publikasi"] ?? [], $dataPublikasi);
@@ -255,7 +267,7 @@ foreach ($dosenList as $index => &$dosen) {
     echo "Total Paten: " . count($dosen["paten"]) . "<br><br></div>";
 
     $berhasil++;
-    usleep(200000); // Jeda 0.2s
+    usleep(200000); // Jeda 0.2 detik
 }
 
 unset($dosen);
@@ -289,6 +301,6 @@ echo "Jumlah dosen: <b>" . $total . "</b><br>";
 echo "Berhasil diproses: <b>" . $berhasil . "</b><br>";
 echo "Dilewati: <b>" . $dilewati . "</b><br>";
 echo "Gagal ditemukan: <b>" . $gagal . "</b><br><br>";
-echo "<b>data.json berhasil diperbarui tanpa menimpa data terdahulu.</b></div>";
+echo "<b>data.json berhasil diperbarui.</b></div>";
 
 ?>
