@@ -1,506 +1,872 @@
-<?php
-/**
- * ============================================================================
- * DETAIL.PHP - DATA DOSEN & PORTOFOLIO POLITEKNIK NEGERI LHOKSEUMAWE
- * Menampilkan rincian data profil dan 4 tab portofolio:
- * 1. Penelitian
- * 2. Pengabdian Masyarakat
- * 3. Publikasi Karya
- * 4. HKI / Paten
- * Mengambil data real-time via API PDDIKTI Kemdiktisaintek tanpa database
- * ============================================================================
- */
-
-require_once __DIR__ . '/api.php';
-
-// Ambil ID Dosen dari parameter URL, gunakan default Dosen Aryati jika tidak diset
-$idDosen = isset($_GET['id']) && !empty(trim($_GET['id'])) 
-    ? trim($_GET['id']) 
-    : DEFAULT_DOSEN_ID;
-
-// Ambil NIDN jika dikirimkan dari parameter URL
-$nidnParam = isset($_GET['nidn']) && !empty(trim($_GET['nidn'])) ? trim($_GET['nidn']) : '';
-
-// Ambil seluruh data profil dan portofolio menggunakan cURL
-$semuaData = ambilSemuaDataDosen($idDosen, $nidnParam);
-
-// Data Profil
-$resProfil = $semuaData['profil'];
-$profil = !empty($resProfil['data']) ? $resProfil['data'] : [];
-
-// Data Portofolio
-$penelitianList = !empty($semuaData['penelitian']['data']) && is_array($semuaData['penelitian']['data']) 
-    ? $semuaData['penelitian']['data'] 
-    : [];
-
-$pengabdianList = !empty($semuaData['pengabdian']['data']) && is_array($semuaData['pengabdian']['data']) 
-    ? $semuaData['pengabdian']['data'] 
-    : [];
-
-$publikasiList  = !empty($semuaData['publikasi']['data']) && is_array($semuaData['publikasi']['data']) 
-    ? $semuaData['publikasi']['data'] 
-    : [];
-
-$patenList      = !empty($semuaData['paten']['data']) && is_array($semuaData['paten']['data']) 
-    ? $semuaData['paten']['data'] 
-    : [];
-
-// Inisialisasi variabel profil dosen sesuai spesifikasi
-$namaDosen          = !empty($profil['nama_dosen']) ? htmlspecialchars($profil['nama_dosen']) : 'ARYATI';
-$perguruanTinggi    = !empty($profil['nama_pt']) ? htmlspecialchars($profil['nama_pt']) : 'Politeknik Negeri Lhokseumawe';
-$programStudi       = !empty($profil['nama_prodi']) ? htmlspecialchars($profil['nama_prodi']) : 'Akuntansi';
-
-// NIDN Handling: Pastikan NIDN valid dan sesuai dengan dosen
-$nidnRaw = '';
-if (!empty($nidnParam) && $nidnParam !== 'Data tidak tersedia') {
-    $nidnRaw = $nidnParam;
-} elseif (!empty($profil['nidn'])) {
-    $nidnRaw = $profil['nidn'];
-} elseif ($idDosen === DEFAULT_DOSEN_ID || stripos($namaDosen, 'ARYATI') !== false) {
-    $nidnRaw = DEFAULT_DOSEN_NIDN;
-} else {
-    // Cari NIDN valid otomatis dari API pencarian PDDIKTI
-    $nidnRaw = cariNidnDosen($namaDosen, $perguruanTinggi);
-}
-
-$nidn               = (!empty($nidnRaw) && $nidnRaw !== 'Data tidak tersedia') ? htmlspecialchars($nidnRaw) : 'Data tidak tersedia';
-$jabatanFungsional  = !empty($profil['jabatan_akademik']) ? htmlspecialchars($profil['jabatan_akademik']) : 'Data tidak tersedia';
-$pendidikanTerakhir = !empty($profil['pendidikan_tertinggi']) ? htmlspecialchars($profil['pendidikan_tertinggi']) : 'Data tidak tersedia';
-$statusKepegawaian  = !empty($profil['status_ikatan_kerja']) ? htmlspecialchars($profil['status_ikatan_kerja']) : 'Data tidak tersedia';
-$statusAktivitas    = !empty($profil['status_aktivitas']) ? htmlspecialchars($profil['status_aktivitas']) : 'Data tidak tersedia';
-
-// Inisial avatar
-$inisial = mb_substr($namaDosen, 0, 2);
-?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?= $namaDosen ?> - Data Dosen Politeknik Negeri Lhokseumawe</title>
-  <meta name="description" content="Detail profil dan portofolio dosen <?= $namaDosen ?> Politeknik Negeri Lhokseumawe terintegrasi PDDIKTI.">
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Dosen - PNL</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f3fa;
+            color: #222;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #5b21b6, #7c3aed);
+            color: white;
+            padding: 25px 20px;
+        }
+
+        .header-content {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .back {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 22px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        }
+
+        .card h2 {
+            color: #5b21b6;
+            margin-bottom: 20px;
+            font-size: 21px;
+            border-bottom: 2px solid #ede9fe;
+            padding-bottom: 10px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .profile-item {
+            background: #f8f7fc;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .profile-label {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .profile-value {
+            font-weight: 600;
+            color: #222;
+        }
+
+        .item {
+            padding: 16px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item-title {
+            font-weight: 600;
+            line-height: 1.5;
+            color: #222;
+        }
+
+        .item-year {
+            display: inline-block;
+            margin-top: 8px;
+            background: #ede9fe;
+            color: #5b21b6;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .item-source {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #888;
+            background: #fafafa;
+            border-radius: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #5b21b6;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        @media (max-width: 700px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .container {
+                padding: 0 12px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-  <!-- ==================== NAVBAR ==================== -->
-  <header class="navbar">
-    <div class="container navbar-inner">
-      <div class="brand">
-        <div class="brand-logo-badge">PNL</div>
-        <div class="brand-text">
-          <h1>DATA DOSEN</h1>
-          <p>POLITEKNIK NEGERI LHOKSEUMAWE</p>
-        </div>
-      </div>
-      <div class="nav-badge-pddikti">
-        <span class="dot"></span>
-        PDDIKTI Live API
-      </div>
-    </div>
-  </header>
+    <div class="header">
+        <div class="header-content">
 
-  <!-- ==================== MAIN CONTENT ==================== -->
-  <main class="container">
-    <div class="detail-page-header">
-      <a href="index.php" class="btn-back">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        Kembali ke Pencarian
-      </a>
+            <a href="index.html" class="back">
+                ← Kembali ke Data Dosen
+            </a>
+
+            <h1>Detail Dosen</h1>
+
+            <p>
+                Politeknik Negeri Lhokseumawe
+            </p>
+
+        </div>
     </div>
 
-    <!-- ==================== BAGIAN 1: DATA DOSEN ==================== -->
-    <section class="profile-card">
-      <div class="profile-top-banner">
-        <div class="avatar-circle large"><?= $inisial ?></div>
-        <div class="profile-main-info">
-          <div class="profile-category-tag">DATA DOSEN</div>
-          <h2 class="profile-nama"><?= $namaDosen ?></h2>
-          <?php if ($nidn !== 'Data tidak tersedia'): ?>
-            <div class="profile-nidn-pill">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="16" rx="2"></rect>
-                <line x1="7" y1="8" x2="17" y2="8"></line>
-                <line x1="7" y1="12" x2="13" y2="12"></line>
-              </svg>
-              NIDN: <strong><?= $nidn ?></strong>
-            </div>
-          <?php endif; ?>
-          <div class="profile-kampus"><?= $perguruanTinggi ?></div>
-          <div class="profile-prodi">Program Studi: <?= $programStudi ?></div>
-        </div>
-      </div>
 
-      <!-- Grid Detail Informasi Dosen -->
-      <div class="detail-grid">
-        <div class="detail-item">
-          <div class="detail-item-label">NIDN</div>
-          <div class="detail-item-value <?= ($nidn === 'Data tidak tersedia') ? 'unavailable' : '' ?>">
-            <?php if ($nidn !== 'Data tidak tersedia'): ?>
-              <span class="badge badge-nidn-large"><?= $nidn ?></span>
-            <?php else: ?>
-              <?= $nidn ?>
-            <?php endif; ?>
-          </div>
+    <main class="container">
+
+        <div id="loading" class="loading">
+            Memuat data dosen...
         </div>
 
-        <div class="detail-item">
-          <div class="detail-item-label">Jabatan Fungsional</div>
-          <div class="detail-item-value <?= ($jabatanFungsional === 'Data tidak tersedia') ? 'unavailable' : '' ?>">
-            <?php if ($jabatanFungsional !== 'Data tidak tersedia'): ?>
-              <span class="badge badge-purple"><?= $jabatanFungsional ?></span>
-            <?php else: ?>
-              <?= $jabatanFungsional ?>
-            <?php endif; ?>
-          </div>
+
+        <div id="content" style="display:none;">
+
+            <!-- PROFIL -->
+            <section class="card">
+
+                <h2>Profil Dosen</h2>
+
+                <div class="profile-grid">
+
+                    <div class="profile-item">
+                        <div class="profile-label">Nama</div>
+                        <div class="profile-value" id="nama">-</div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-label">NIDN</div>
+                        <div class="profile-value" id="nidn">-</div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-label">Perguruan Tinggi</div>
+                        <div class="profile-value" id="perguruan">-</div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-label">Program Studi</div>
+                        <div class="profile-value" id="prodi">-</div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-label">Jabatan Fungsional</div>
+                        <div class="profile-value" id="jabatan">-</div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-label">Pendidikan</div>
+                        <div class="profile-value" id="pendidikan">-</div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-label">Status Kepegawaian</div>
+                        <div class="profile-value" id="statusPegawai">-</div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-label">Status Aktivitas</div>
+                        <div class="profile-value" id="statusAktif">-</div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- PENELITIAN -->
+            <section class="card">
+
+                <h2>Penelitian</h2>
+
+                <div id="penelitian">
+                    <div class="empty">
+                        Belum ada data penelitian.
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- PENGABDIAN -->
+            <section class="card">
+
+                <h2>Pengabdian Masyarakat</h2>
+
+                <div id="pengabdian">
+                    <div class="empty">
+                        Belum ada data pengabdian masyarakat.
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- PUBLIKASI -->
+            <section class="card">
+
+                <h2>
+                    Publikasi Karya
+                    <span class="badge" id="jumlahPublikasi">0</span>
+                </h2>
+
+                <div id="publikasi">
+                    <div class="empty">
+                        Belum ada data publikasi.
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- PATEN -->
+            <section class="card">
+
+                <h2>HKI / Paten</h2>
+
+                <div id="paten">
+                    <div class="empty">
+                        Belum ada data HKI / Paten.
+                    </div>
+                </div>
+
+            </section>
+
         </div>
 
-        <div class="detail-item">
-          <div class="detail-item-label">Pendidikan Terakhir</div>
-          <div class="detail-item-value <?= ($pendidikanTerakhir === 'Data tidak tersedia') ? 'unavailable' : '' ?>">
-            <?php if ($pendidikanTerakhir !== 'Data tidak tersedia'): ?>
-              <span class="badge badge-pink"><?= $pendidikanTerakhir ?></span>
-            <?php else: ?>
-              <?= $pendidikanTerakhir ?>
-            <?php endif; ?>
-          </div>
-        </div>
 
-        <div class="detail-item">
-          <div class="detail-item-label">Status Kepegawaian</div>
-          <div class="detail-item-value <?= ($statusKepegawaian === 'Data tidak tersedia') ? 'unavailable' : '' ?>">
-            <?= $statusKepegawaian ?>
-          </div>
-        </div>
+        <div id="error" class="error" style="display:none;"></div>
 
-        <div class="detail-item">
-          <div class="detail-item-label">Status Aktivitas</div>
-          <div class="detail-item-value <?= ($statusAktivitas === 'Data tidak tersedia') ? 'unavailable' : '' ?>">
-            <?php if (strtolower($statusAktivitas) === 'aktif'): ?>
-              <span class="badge badge-success"><?= $statusAktivitas ?></span>
-            <?php else: ?>
-              <?= $statusAktivitas ?>
-            <?php endif; ?>
-          </div>
-        </div>
-      </div>
-    </section>
+    </main>
 
-    <!-- ==================== BAGIAN 2: PORTOFOLIO ==================== -->
-    <section class="portfolio-section">
-      <div class="section-header">
-        <h3 class="section-title">
-          <span class="indicator"></span>
-          PORTOFOLIO DOSEN
-        </h3>
-      </div>
 
-      <!-- Tab Buttons Navigasi -->
-      <div class="tabs-wrapper" role="tablist">
-        <button class="tab-btn active" data-tab="tab-penelitian" role="tab" aria-selected="true" id="btn-penelitian">
-          <span>1. PENELITIAN</span>
-          <span class="tab-counter"><?= count($penelitianList) ?></span>
-        </button>
+<script>
 
-        <button class="tab-btn" data-tab="tab-pengabdian" role="tab" aria-selected="false" id="btn-pengabdian">
-          <span>2. PENGABDIAN MASYARAKAT</span>
-          <span class="tab-counter"><?= count($pengabdianList) ?></span>
-        </button>
+    const params =
+        new URLSearchParams(window.location.search);
 
-        <button class="tab-btn" data-tab="tab-publikasi" role="tab" aria-selected="false" id="btn-publikasi">
-          <span>3. PUBLIKASI KARYA</span>
-          <span class="tab-counter"><?= count($publikasiList) ?></span>
-        </button>
 
-        <button class="tab-btn" data-tab="tab-paten" role="tab" aria-selected="false" id="btn-paten">
-          <span>4. HKI / PATEN</span>
-          <span class="tab-counter"><?= count($patenList) ?></span>
-        </button>
-      </div>
+    const idDosen =
+        params.get("id");
 
-      <!-- TAB 1: PENELITIAN -->
-      <div id="tab-penelitian" class="tab-pane active" role="tabpanel">
-        <div class="portfolio-card">
-          <div class="portfolio-card-header">
-            <h4 class="portfolio-card-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" color="#6d28d9">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="16" y1="13" x2="8" y2="13"></line>
-                <line x1="16" y1="17" x2="8" y2="17"></line>
-                <polyline points="10 9 9 9 8 9"></polyline>
-              </svg>
-              Portofolio Penelitian
-            </h4>
-            <span class="portfolio-card-subtitle">Total: <?= count($penelitianList) ?> Penelitian</span>
-          </div>
 
-          <div class="table-responsive">
-            <?php if (!empty($penelitianList)): ?>
-              <table class="modern-table">
-                <thead>
-                  <tr>
-                    <th class="col-no">No</th>
-                    <th>Judul Penelitian</th>
-                    <th class="col-tahun">Tahun</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php foreach ($penelitianList as $i => $item): ?>
-                    <tr>
-                      <td class="col-no"><?= $i + 1 ?></td>
-                      <td>
-                        <div class="table-item-title"><?= htmlspecialchars($item['judul_kegiatan'] ?? '-') ?></div>
-                        <?php if (!empty($item['jenis_kegiatan'])): ?>
-                          <span class="table-item-meta"><?= htmlspecialchars($item['jenis_kegiatan']) ?></span>
-                        <?php endif; ?>
-                      </td>
-                      <td class="col-tahun">
-                        <?php 
-                          $thn = (!empty($item['tahun_kegiatan']) && (int)$item['tahun_kegiatan'] > 0) 
-                              ? htmlspecialchars($item['tahun_kegiatan']) 
-                              : '-';
-                        ?>
-                        <span class="year-badge"><?= $thn ?></span>
-                      </td>
-                    </tr>
-                  <?php endforeach; ?>
-                </tbody>
-              </table>
-            <?php else: ?>
-              <div class="empty-state">
-                <div class="empty-icon">🔬</div>
-                <div class="empty-title">Data belum tersedia</div>
-                <div class="empty-desc">Belum ada catatan data penelitian untuk dosen ini pada sistem PDDIKTI.</div>
-              </div>
-            <?php endif; ?>
-          </div>
-        </div>
-      </div>
+    const nidnDosen =
+        params.get("nidn");
 
-      <!-- TAB 2: PENGABDIAN MASYARAKAT -->
-      <div id="tab-pengabdian" class="tab-pane" role="tabpanel">
-        <div class="portfolio-card">
-          <div class="portfolio-card-header">
-            <h4 class="portfolio-card-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" color="#6d28d9">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
-              Portofolio Pengabdian Masyarakat
-            </h4>
-            <span class="portfolio-card-subtitle">Total: <?= count($pengabdianList) ?> Pengabdian</span>
-          </div>
 
-          <div class="table-responsive">
-            <?php if (!empty($pengabdianList)): ?>
-              <table class="modern-table">
-                <thead>
-                  <tr>
-                    <th class="col-no">No</th>
-                    <th>Judul Pengabdian</th>
-                    <th class="col-tahun">Tahun</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php foreach ($pengabdianList as $i => $item): ?>
-                    <tr>
-                      <td class="col-no"><?= $i + 1 ?></td>
-                      <td>
-                        <div class="table-item-title"><?= htmlspecialchars($item['judul_kegiatan'] ?? '-') ?></div>
-                        <?php if (!empty($item['jenis_kegiatan'])): ?>
-                          <span class="table-item-meta"><?= htmlspecialchars($item['jenis_kegiatan']) ?></span>
-                        <?php endif; ?>
-                      </td>
-                      <td class="col-tahun">
-                        <?php 
-                          $thn = (!empty($item['tahun_kegiatan']) && (int)$item['tahun_kegiatan'] > 0) 
-                              ? htmlspecialchars($item['tahun_kegiatan']) 
-                              : '-';
-                        ?>
-                        <span class="year-badge"><?= $thn ?></span>
-                      </td>
-                    </tr>
-                  <?php endforeach; ?>
-                </tbody>
-              </table>
-            <?php else: ?>
-              <div class="empty-state">
-                <div class="empty-icon">🤝</div>
-                <div class="empty-title">Data belum tersedia</div>
-                <div class="empty-desc">Belum ada catatan data pengabdian masyarakat untuk dosen ini pada sistem PDDIKTI.</div>
-              </div>
-            <?php endif; ?>
-          </div>
-        </div>
-      </div>
+    /* NORMALISASI */
+    function normalisasi(value) {
 
-      <!-- TAB 3: PUBLIKASI KARYA -->
-      <div id="tab-publikasi" class="tab-pane" role="tabpanel">
-        <div class="portfolio-card">
-          <div class="portfolio-card-header">
-            <h4 class="portfolio-card-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" color="#6d28d9">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-              </svg>
-              Portofolio Publikasi Karya
-            </h4>
-            <span class="portfolio-card-subtitle">Total: <?= count($publikasiList) ?> Publikasi</span>
-          </div>
+        return String(value || "")
+            .trim()
+            .replace(/\s+/g, " ")
+            .toLowerCase();
 
-          <div class="table-responsive">
-            <?php if (!empty($publikasiList)): ?>
-              <table class="modern-table">
-                <thead>
-                  <tr>
-                    <th class="col-no">No</th>
-                    <th>Judul Publikasi</th>
-                    <th class="col-tahun">Tahun</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php foreach ($publikasiList as $i => $item): ?>
-                    <tr>
-                      <td class="col-no"><?= $i + 1 ?></td>
-                      <td>
-                        <div class="table-item-title"><?= htmlspecialchars($item['judul_kegiatan'] ?? '-') ?></div>
-                        <?php if (!empty($item['jenis_kegiatan'])): ?>
-                          <span class="table-item-meta"><?= htmlspecialchars($item['jenis_kegiatan']) ?></span>
-                        <?php endif; ?>
-                      </td>
-                      <td class="col-tahun">
-                        <?php 
-                          $thn = (!empty($item['tahun_kegiatan']) && (int)$item['tahun_kegiatan'] > 0) 
-                              ? htmlspecialchars($item['tahun_kegiatan']) 
-                              : '-';
-                        ?>
-                        <span class="year-badge"><?= $thn ?></span>
-                      </td>
-                    </tr>
-                  <?php endforeach; ?>
-                </tbody>
-              </table>
-            <?php else: ?>
-              <div class="empty-state">
-                <div class="empty-icon">📚</div>
-                <div class="empty-title">Data belum tersedia</div>
-                <div class="empty-desc">Belum ada catatan data publikasi karya untuk dosen ini pada sistem PDDIKTI.</div>
-              </div>
-            <?php endif; ?>
-          </div>
-        </div>
-      </div>
+    }
 
-      <!-- TAB 4: HKI / PATEN -->
-      <div id="tab-paten" class="tab-pane" role="tabpanel">
-        <div class="portfolio-card">
-          <div class="portfolio-card-header">
-            <h4 class="portfolio-card-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" color="#6d28d9">
-                <circle cx="12" cy="8" r="7"></circle>
-                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-              </svg>
-              Portofolio HKI / Paten
-            </h4>
-            <span class="portfolio-card-subtitle">Total: <?= count($patenList) ?> HKI / Paten</span>
-          </div>
 
-          <div class="table-responsive">
-            <?php if (!empty($patenList)): ?>
-              <table class="modern-table">
-                <thead>
-                  <tr>
-                    <th class="col-no">No</th>
-                    <th>Judul HKI/Paten</th>
-                    <th class="col-tahun">Tahun</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php foreach ($patenList as $i => $item): ?>
-                    <tr>
-                      <td class="col-no"><?= $i + 1 ?></td>
-                      <td>
-                        <div class="table-item-title"><?= htmlspecialchars($item['judul_kegiatan'] ?? '-') ?></div>
-                        <?php if (!empty($item['jenis_kegiatan'])): ?>
-                          <span class="table-item-meta"><?= htmlspecialchars($item['jenis_kegiatan']) ?></span>
-                        <?php endif; ?>
-                      </td>
-                      <td class="col-tahun">
-                        <?php 
-                          $thn = (!empty($item['tahun_kegiatan']) && (int)$item['tahun_kegiatan'] > 0) 
-                              ? htmlspecialchars($item['tahun_kegiatan']) 
-                              : '-';
-                        ?>
-                        <span class="year-badge"><?= $thn ?></span>
-                      </td>
-                    </tr>
-                  <?php endforeach; ?>
-                </tbody>
-              </table>
-            <?php else: ?>
-              <div class="empty-state">
-                <div class="empty-icon">🛡️</div>
-                <div class="empty-title">Data belum tersedia</div>
-                <div class="empty-desc">Belum ada catatan data HKI atau Paten untuk dosen ini pada sistem PDDIKTI.</div>
-              </div>
-            <?php endif; ?>
-          </div>
-        </div>
-      </div>
+    /* ESCAPE HTML */
+    function escapeHTML(text) {
 
-    </section>
-  </main>
+        const div =
+            document.createElement("div");
 
-  <!-- ==================== FOOTER ==================== -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p>&copy; <?= date('Y') ?> Data Dosen Politeknik Negeri Lhokseumawe</p>
-      <p class="footer-pddikti">
-        <span>Sumber Data: PDDIKTI Kemdiktisaintek</span>
-      </p>
-    </div>
-  </footer>
+        div.textContent =
+            text ?? "-";
 
-  <!-- ==================== JAVASCRIPT TAB INTERACTION ==================== -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const tabButtons = document.querySelectorAll('.tab-btn');
-      const tabPanes = document.querySelectorAll('.tab-pane');
+        return div.innerHTML;
 
-      tabButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          const targetTabId = this.getAttribute('data-tab');
+    }
 
-          // Nonaktifkan semua tab button
-          tabButtons.forEach(btn => {
-            btn.classList.remove('active');
-            btn.setAttribute('aria-selected', 'false');
-          });
 
-          // Sembunyikan semua tab content
-          tabPanes.forEach(pane => {
-            pane.classList.remove('active');
-          });
+    /* TAMPILKAN PORTOFOLIO */
+    function tampilkanItem(
+        containerId,
+        data,
+        kosongText,
+        sourceText = ""
+    ) {
 
-          // Aktifkan tab yang dipilih
-          this.classList.add('active');
-          this.setAttribute('aria-selected', 'true');
+        const container =
+            document.getElementById(containerId);
 
-          const targetPane = document.getElementById(targetTabId);
-          if (targetPane) {
-            targetPane.classList.add('active');
-          }
-        });
-      });
-    });
-  </script>
+
+        if (
+            !Array.isArray(data) ||
+            data.length === 0
+        ) {
+
+            container.innerHTML = `
+                <div class="empty">
+                    ${escapeHTML(kosongText)}
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            data.map((item, index) => {
+
+                const judul =
+                    item.judul ||
+                    item.title ||
+                    item.nama ||
+                    item.name ||
+                    "Judul tidak tersedia";
+
+
+                const tahun =
+                    item.tahun ||
+                    item.year ||
+                    "";
+
+
+                const url =
+                    item.url && typeof item.url === "string" && item.url.startsWith("http")
+                    ? item.url.trim()
+                    : "";
+
+
+                let sumberText = "Sumber belum diverifikasi";
+                if (item.sumber && String(item.sumber).trim()) {
+                    sumberText = String(item.sumber).trim();
+                } else if (url && url.includes("garuda.kemdiktisaintek.go.id")) {
+                    sumberText = "GARUDA";
+                } else if (url && url.includes("pddikti.kemdiktisaintek.go.id")) {
+                    sumberText = "PDDIKTI";
+                }
+
+
+                return `
+
+                    <div class="item">
+
+                        <div class="item-title">
+
+                            ${index + 1}.
+                            ${escapeHTML(judul)}
+
+                        </div>
+
+
+                        ${
+                            tahun
+                            ? `
+                                <div class="item-year">
+                                    Tahun: ${escapeHTML(tahun)}
+                                </div>
+                              `
+                            : `
+                                <div class="item-year" style="background:#f1f5f9; color:#64748b;">
+                                    Tahun: Belum tersedia
+                                </div>
+                              `
+                        }
+
+
+                        <div class="item-source" style="margin-top: 6px;">
+                            Sumber: ${escapeHTML(sumberText)}
+                        </div>
+
+                        ${
+                            url
+                            ? `
+                                <div style="margin-top: 6px;">
+                                    <a href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer" style="color: #5b21b6; font-size: 13px; font-weight: bold; text-decoration: underline;">
+                                        Lihat publikasi / tautan sumber ↗
+                                    </a>
+                                </div>
+                              `
+                            : ""
+                        }
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+    }
+
+
+    /* CARI DATA DOSEN */
+    async function cariDosen() {
+
+        const response =
+            await fetch("data.json");
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "File data.json tidak dapat dibaca."
+            );
+
+        }
+
+
+        const json =
+            await response.json();
+
+
+        let daftarDosen =
+            Array.isArray(json)
+            ? json
+            : (
+                json.data ||
+                json.dosen ||
+                json.lecturers ||
+                json.items ||
+                []
+            );
+
+
+        let dosen = null;
+
+
+        /*
+         * PENTING:
+         * Cari berdasarkan NIDN terlebih dahulu.
+         * Karena NIDN adalah identitas dosen
+         * yang dikirim oleh index.html.
+         */
+
+        if (nidnDosen) {
+
+            dosen =
+                daftarDosen.find(item =>
+
+                    normalisasi(item.nidn) ===
+                    normalisasi(nidnDosen)
+
+                );
+
+        }
+
+
+        /*
+         * Jika NIDN tidak ditemukan,
+         * baru coba ID.
+         */
+
+        if (!dosen && idDosen) {
+
+            dosen =
+                daftarDosen.find(item =>
+
+                    normalisasi(item.id) ===
+                    normalisasi(idDosen)
+
+                );
+
+        }
+
+
+        if (!dosen) {
+
+            throw new Error(
+                "Data dosen tidak ditemukan untuk NIDN: " +
+                (nidnDosen || "-")
+            );
+
+        }
+
+
+        return dosen;
+
+    }
+
+
+    /* DATA GARUDA */
+    async function cariDataGaruda(dosen) {
+
+        try {
+
+            const response =
+                await fetch("data_garuda.json");
+
+
+            if (!response.ok) {
+
+                return null;
+
+            }
+
+
+            const json =
+                await response.json();
+
+
+            const daftar =
+                Array.isArray(json)
+                ? json
+                : (
+                    json.data ||
+                    json.dosen ||
+                    json.lecturers ||
+                    json.items ||
+                    []
+                );
+
+
+            /*
+             * Cari berdasarkan NIDN.
+             */
+
+            let hasil =
+                daftar.find(item =>
+
+                    normalisasi(item.nidn) ===
+                    normalisasi(dosen.nidn)
+
+                );
+
+
+            /*
+             * Jika tidak ada,
+             * cari berdasarkan ID.
+             */
+
+            if (!hasil && dosen.id) {
+
+                hasil =
+                    daftar.find(item =>
+
+                        normalisasi(item.id) ===
+                        normalisasi(dosen.id)
+
+                    );
+
+            }
+
+
+            return hasil || null;
+
+        } catch (error) {
+
+            console.log(
+                "Data Garuda tidak tersedia."
+            );
+
+            return null;
+
+        }
+
+    }
+
+
+    /* GABUNG DATA */
+    function gabungkanData(
+        dosen,
+        garuda
+    ) {
+
+        const hasil = {
+            ...dosen
+        };
+
+
+        if (!garuda) {
+
+            return hasil;
+
+        }
+
+
+        if (
+            Array.isArray(garuda.penelitian) &&
+            garuda.penelitian.length > 0
+        ) {
+
+            hasil.penelitian =
+                garuda.penelitian;
+
+        }
+
+
+        if (
+            Array.isArray(garuda.pengabdian) &&
+            garuda.pengabdian.length > 0
+        ) {
+
+            hasil.pengabdian =
+                garuda.pengabdian;
+
+        }
+
+
+        if (
+            Array.isArray(garuda.publikasi) &&
+            garuda.publikasi.length > 0
+        ) {
+
+            hasil.publikasi =
+                garuda.publikasi;
+
+        }
+
+
+        if (
+            Array.isArray(garuda.paten) &&
+            garuda.paten.length > 0
+        ) {
+
+            hasil.paten =
+                garuda.paten;
+
+        }
+
+
+        return hasil;
+
+    }
+
+
+    /* TAMPILKAN */
+    async function tampilkanDosen() {
+
+        try {
+
+            const dosen =
+                await cariDosen();
+
+
+            const garuda =
+                await cariDataGaruda(dosen);
+
+
+            const data =
+                gabungkanData(
+                    dosen,
+                    garuda
+                );
+
+
+            /* PROFIL */
+
+            document.getElementById("nama")
+                .textContent =
+                data.nama || "-";
+
+
+            document.getElementById("nidn")
+                .textContent =
+                data.nidn || "-";
+
+
+            document.getElementById("perguruan")
+                .textContent =
+                data.perguruan_tinggi || "-";
+
+
+            document.getElementById("prodi")
+                .textContent =
+                data.prodi || "-";
+
+
+            document.getElementById("jabatan")
+                .textContent =
+                data.jabatan_fungsional || "-";
+
+
+            document.getElementById("pendidikan")
+                .textContent =
+                data.pendidikan_terakhir || "-";
+
+
+            document.getElementById("statusPegawai")
+                .textContent =
+                data.status_kepegawaian || "-";
+
+
+            document.getElementById("statusAktif")
+                .textContent =
+                data.status_aktivitas || "-";
+
+
+            /* PENELITIAN */
+
+            tampilkanItem(
+                "penelitian",
+                data.penelitian,
+                "Belum ada data penelitian."
+            );
+
+
+            /* PENGABDIAN */
+
+            tampilkanItem(
+                "pengabdian",
+                data.pengabdian,
+                "Belum ada data pengabdian masyarakat."
+            );
+
+
+            /* PUBLIKASI */
+
+            const jumlah =
+                Array.isArray(data.publikasi)
+                ? data.publikasi.length
+                : 0;
+
+
+            document.getElementById(
+                "jumlahPublikasi"
+            ).textContent =
+                jumlah;
+
+
+            tampilkanItem(
+                "publikasi",
+                data.publikasi,
+                "Belum ada data publikasi."
+            );
+
+
+            /* PATEN */
+
+            tampilkanItem(
+                "paten",
+                data.paten,
+                "Belum ada data HKI / Paten."
+            );
+
+
+            /* TAMPILKAN */
+
+            document.getElementById(
+                "loading"
+            ).style.display =
+                "none";
+
+
+            document.getElementById(
+                "content"
+            ).style.display =
+                "block";
+
+
+            document.title =
+                `${data.nama || "Dosen"} - PNL`;
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            document.getElementById(
+                "loading"
+            ).style.display =
+                "none";
+
+
+            const errorBox =
+                document.getElementById("error");
+
+
+            errorBox.style.display =
+                "block";
+
+
+            errorBox.textContent =
+                "Gagal memuat data: " +
+                error.message;
+
+        }
+
+    }
+
+
+    tampilkanDosen();
+
+</script>
+
 </body>
 </html>

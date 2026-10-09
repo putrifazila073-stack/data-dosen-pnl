@@ -186,106 +186,304 @@ if ($isPencarian) {
     </div>
   </section>
 
-  <!-- ==================== DAFTAR DOSEN ==================== -->
+  <!-- ==================== KONTEN UTAMA ==================== -->
   <main class="container">
+
+    <!-- ==================== FILTER & STATISTIK PROGRAM STUDI ==================== -->
+    <section class="prodi-stats-card">
+      <div class="prodi-filter-header">
+        <div class="prodi-filter-left">
+          <label for="filter-prodi" class="prodi-filter-label">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            Pilih Program Studi:
+          </label>
+          <div class="select-prodi-wrap">
+            <select id="filter-prodi" class="select-prodi" aria-label="Filter berdasarkan Program Studi">
+              <option value="">Semua Program Studi (312 Dosen)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tombol Unduh Data Utama -->
+        <div class="download-dropdown-wrap">
+          <button type="button" id="btn-unduh-toggle" class="btn-unduh" aria-expanded="false" aria-haspopup="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Unduh Data</span>
+            <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <div id="download-menu" class="download-dropdown-menu">
+            <div class="download-menu-header">Pilihan Unduhan Data</div>
+            <button type="button" class="download-item" id="btn-unduh-semua-csv">
+              <div class="download-item-icon csv">CSV</div>
+              <div class="download-item-text">
+                <strong>Unduh Data Semua Dosen (CSV)</strong>
+                <small>Daftar 312 dosen lengkap format Excel / CSV</small>
+              </div>
+            </button>
+            <button type="button" class="download-item" id="btn-unduh-prodi-csv">
+              <div class="download-item-icon csv">CSV</div>
+              <div class="download-item-text">
+                <strong id="btn-unduh-prodi-label">Unduh Data Prodi Terpilih (CSV)</strong>
+                <small>Hanya dosen dari program studi aktif</small>
+              </div>
+            </button>
+            <button type="button" class="download-item" id="btn-unduh-portofolio-json">
+              <div class="download-item-icon json">JSON</div>
+              <div class="download-item-text">
+                <strong>Unduh Portofolio Lengkap (JSON)</strong>
+                <small>Profil, penelitian, pengabdian, publikasi, paten</small>
+              </div>
+            </button>
+            <button type="button" class="download-item" id="btn-unduh-karya-csv">
+              <div class="download-item-icon csv">CSV</div>
+              <div class="download-item-text">
+                <strong>Unduh Rincian Portofolio Karya (CSV)</strong>
+                <small>Tabel rincian judul, tahun, sumber, dan tautan</small>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Judul Program Studi Terpilih -->
+      <div class="prodi-selected-badge-wrap">
+        <span class="prodi-active-pill">Program Studi</span>
+        <h3 id="prodi-active-name" class="prodi-active-title">Semua Program Studi</h3>
+      </div>
+
+      <!-- 4 Kotak Ringkasan Statistik -->
+      <div class="stats-grid">
+        <div class="stat-box stat-dosen">
+          <div class="stat-icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Jumlah Dosen</span>
+            <div class="stat-value" id="stat-dosen-count">0</div>
+            <span class="stat-desc">Dosen unik terdaftar</span>
+          </div>
+        </div>
+
+        <div class="stat-box stat-penelitian">
+          <div class="stat-icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Penelitian</span>
+            <div class="stat-value" id="stat-penelitian-count">0</div>
+            <span class="stat-desc">Total judul penelitian</span>
+          </div>
+        </div>
+
+        <div class="stat-box stat-pengabdian">
+          <div class="stat-icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Pengabdian Masyarakat</span>
+            <div class="stat-value" id="stat-pengabdian-count">0</div>
+            <span class="stat-desc">Total kegiatan pengabdian</span>
+          </div>
+        </div>
+
+        <div class="stat-box stat-publikasi">
+          <div class="stat-icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Publikasi Karya</span>
+            <div class="stat-value" id="stat-publikasi-count">0</div>
+            <span class="stat-desc">Artikel jurnal &amp; prosiding</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== HEADER DAFTAR DOSEN ==================== -->
     <div class="section-header">
-      <h3 class="section-title">
-        <span class="indicator"></span>
-        <?php if ($isPencarian): ?>
-          Hasil Pencarian Dosen "<?= htmlspecialchars($keyword) ?>"
-        <?php else: ?>
-          Daftar Dosen Politeknik Negeri Lhokseumawe
-        <?php endif; ?>
-      </h3>
-      <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
-        Ditemukan: <?= count($daftarDosen) ?> Dosen
-      </span>
+      <div class="section-header-titles">
+        <h3 class="section-title">
+          <span class="indicator"></span>
+          <span id="section-title-text">Tabel Data Dosen Politeknik Negeri Lhokseumawe</span>
+        </h3>
+        <span id="count-badge" class="count-badge-text">
+          Memuat data...
+        </span>
+      </div>
+
+      <!-- Mode Tampilan: Tabel (Default) / Kartu -->
+      <div class="view-toggle-wrap">
+        <span class="view-toggle-label">Tampilan:</span>
+        <button type="button" id="btn-view-table" class="view-btn active" title="Tampilan Tabel Portofolio">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18"></path>
+          </svg>
+          Tabel
+        </button>
+        <button type="button" id="btn-view-grid" class="view-btn" title="Tampilan Kartu">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          Kartu
+        </button>
+      </div>
     </div>
 
     <!-- Alert jika pencarian tidak menemukan hasil -->
-    <?php if (!empty($pesanStatus)): ?>
-      <div class="alert alert-warning">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="8" x2="12" y2="12"></line>
-          <line x1="12" y1="16" x2="12.01" y2="16"></line>
-        </svg>
-        <div>
-          <?= $pesanStatus ?>
-          <a href="index.php" style="margin-left: 8px; font-weight: 600; text-decoration: underline;">Kembali ke Daftar Dosen</a>
+    <div id="alert-container"></div>
+
+    <!-- Skeleton Placeholder Loading -->
+    <div id="skeleton-container" class="skeleton-grid" style="display:none;"></div>
+
+    <!-- ==================== TABEL UTAMA 312 DOSEN ==================== -->
+    <div id="dosen-table-section" class="table-card-container">
+      <div class="table-responsive">
+        <table class="dosen-main-table" id="dosen-table">
+          <thead>
+            <tr>
+              <th class="col-center col-no" data-sort="no">No.</th>
+              <th data-sort="nama" class="sortable">Nama Dosen <span class="sort-icon">⇅</span></th>
+              <th data-sort="nidn" class="sortable">NIDN <span class="sort-icon">⇅</span></th>
+              <th data-sort="pendidikan" class="sortable">Pendidikan <span class="sort-icon">⇅</span></th>
+              <th data-sort="status" class="sortable">Status Aktif <span class="sort-icon">⇅</span></th>
+              <th data-sort="prodi" class="sortable">Program Studi <span class="sort-icon">⇅</span></th>
+              <th data-sort="penelitian" class="col-center sortable">Penelitian <span class="sort-icon">⇅</span></th>
+              <th data-sort="pengabdian" class="col-center sortable">Pengabdian <span class="sort-icon">⇅</span></th>
+              <th data-sort="publikasi" class="col-center sortable">Publikasi <span class="sort-icon">⇅</span></th>
+              <th class="col-center col-aksi">Aksi Portofolio</th>
+            </tr>
+          </thead>
+          <tbody id="dosen-table-body">
+            <!-- Diisi melalui JavaScript dari data.json -->
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer-info">
+        <span id="table-showing-info">Menampilkan 0 dosen</span>
+        <span class="table-scroll-hint">💡 Geser tabel ke kanan/kiri pada layar ponsel</span>
+      </div>
+    </div>
+
+    <!-- Grid Card Dosen (Alternatif Tampilan) -->
+    <div id="dosen-grid" class="dosen-grid" style="display:none;"></div>
+  </main>
+
+  <!-- ==================== MODAL LIHAT KARYA ==================== -->
+  <div id="modal-karya" class="modal-overlay" style="display:none;" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <div class="modal-badge-prodi" id="modal-karya-prodi">Program Studi</div>
+          <h3 class="modal-title" id="modal-karya-nama">Nama Dosen</h3>
+          <div class="modal-meta-row">
+            <span>NIDN: <strong id="modal-karya-nidn">-</strong></span>
+            <span class="dot-separator">•</span>
+            <span>Pendidikan: <strong id="modal-karya-pendidikan">-</strong></span>
+            <span class="dot-separator">•</span>
+            <span>Status: <strong id="modal-karya-status">-</strong></span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" id="modal-karya-close" aria-label="Tutup Modal">&times;</button>
+      </div>
+
+      <div class="modal-tabs">
+        <button type="button" class="modal-tab-btn active" data-modaltab="modal-tab-penelitian">
+          Penelitian (<span id="modal-count-penelitian">0</span>)
+        </button>
+        <button type="button" class="modal-tab-btn" data-modaltab="modal-tab-pengabdian">
+          Pengabdian (<span id="modal-count-pengabdian">0</span>)
+        </button>
+        <button type="button" class="modal-tab-btn" data-modaltab="modal-tab-publikasi">
+          Publikasi (<span id="modal-count-publikasi">0</span>)
+        </button>
+        <button type="button" class="modal-tab-btn" data-modaltab="modal-tab-paten">
+          HKI / Paten (<span id="modal-count-paten">0</span>)
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div id="modal-tab-penelitian" class="modal-tab-content active">
+          <div id="modal-list-penelitian" class="modal-works-list"></div>
+        </div>
+        <div id="modal-tab-pengabdian" class="modal-tab-content">
+          <div id="modal-list-pengabdian" class="modal-works-list"></div>
+        </div>
+        <div id="modal-tab-publikasi" class="modal-tab-content">
+          <div id="modal-list-publikasi" class="modal-works-list"></div>
+        </div>
+        <div id="modal-tab-paten" class="modal-tab-content">
+          <div id="modal-list-paten" class="modal-works-list"></div>
         </div>
       </div>
-    <?php endif; ?>
 
-    <!-- Grid Card Dosen -->
-    <div class="dosen-grid">
-      <?php foreach ($daftarDosen as $dosen): 
-        $inisial = mb_substr($dosen['nama'], 0, 2);
-        $linkDetail = 'detail.php?id=' . urlencode($dosen['id']) . '&nidn=' . urlencode($dosen['nidn']);
-      ?>
-        <div class="dosen-card">
-          <div class="card-header-flex">
-            <div class="avatar-circle"><?= $inisial ?></div>
-            <div class="card-header-info">
-              <h4 class="dosen-name"><?= htmlspecialchars($dosen['nama']) ?></h4>
-              <div class="dosen-nidn-tag">
-                <span class="nidn-prefix">NIDN:</span> <strong><?= htmlspecialchars($dosen['nidn']) ?></strong>
-              </div>
-              <div class="dosen-inst"><?= htmlspecialchars($dosen['nama_pt']) ?></div>
-              <div class="dosen-prodi">Program Studi: <?= htmlspecialchars($dosen['nama_prodi']) ?></div>
-            </div>
-          </div>
-
-          <ul class="meta-list">
-            <li class="meta-item">
-              <span class="meta-label">NIDN</span>
-              <span class="meta-value">
-                <?php if (!empty($dosen['nidn']) && $dosen['nidn'] !== 'Data tidak tersedia'): ?>
-                  <span class="badge badge-nidn"><?= htmlspecialchars($dosen['nidn']) ?></span>
-                <?php else: ?>
-                  <span style="font-size:0.8rem; color:var(--text-subtle); font-style:italic;">Data tidak tersedia</span>
-                <?php endif; ?>
-              </span>
-            </li>
-            <li class="meta-item">
-              <span class="meta-label">Jabatan Fungsional</span>
-              <span class="meta-value">
-                <span class="badge badge-purple"><?= htmlspecialchars($dosen['jabatan']) ?></span>
-              </span>
-            </li>
-            <li class="meta-item">
-              <span class="meta-label">Pendidikan</span>
-              <span class="meta-value"><?= htmlspecialchars($dosen['pendidikan']) ?></span>
-            </li>
-            <li class="meta-item">
-              <span class="meta-label">Status Aktivitas</span>
-              <span class="meta-value">
-                <span class="badge badge-success"><?= htmlspecialchars($dosen['status']) ?></span>
-              </span>
-            </li>
-          </ul>
-
-          <a href="<?= $linkDetail ?>" class="btn-detail">
-            Lihat Portofolio &amp; Rincian
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <div class="modal-footer">
+        <div class="modal-footer-left">
+          <button type="button" class="btn-modal-action" id="modal-btn-unduh-json">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Unduh Portofolio (JSON)
+          </button>
+          <button type="button" class="btn-modal-action" id="modal-btn-cetak-pdf">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            Cetak / Simpan PDF
+          </button>
+        </div>
+        <div class="modal-footer-right">
+          <a href="#" id="modal-link-detail" class="btn-modal-detail">
+            Buka Halaman Detail Profil
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </a>
         </div>
-      <?php endforeach; ?>
+      </div>
     </div>
-  </main>
+  </div>
 
   <!-- ==================== FOOTER ==================== -->
   <footer class="footer">
     <div class="container footer-inner">
       <p>&copy; <?= date('Y') ?> Data Dosen Politeknik Negeri Lhokseumawe</p>
       <p class="footer-pddikti">
-        <span>Sumber Data: PDDIKTI Kemdiktisaintek</span>
+        <span>Sumber Data: PDDIKTI &amp; Portal Resmi PNL</span>
       </p>
     </div>
   </footer>
 
+  <script src="script.js"></script>
 </body>
 </html>
