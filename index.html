@@ -55,7 +55,9 @@
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
             <input type="text" id="search-input" name="q" class="search-input"
-              placeholder="Cari Nama atau NIDN Dosen (Contoh: ARYATI, AZWINUR, 0009067504)..." autocomplete="off">
+              placeholder="Cari Nama atau NIDN Dosen..." autocomplete="off">
+            <!-- Dropdown Riwayat Pencarian -->
+            <div id="search-history-dropdown" class="search-history-dropdown" style="display: none;"></div>
           </div>
           <button type="submit" id="btn-search" class="btn-search">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -68,8 +70,9 @@
         </form>
       </div>
 
-      <!-- Reset Pencarian -->
-      <div class="search-hints">
+      <!-- Riwayat Pencarian & Reset -->
+      <div id="search-history-container" class="search-hints" style="display: none;"></div>
+      <div id="search-reset-container" class="search-hints" style="margin-top: 6px;">
         <button type="button" id="btn-reset-search" class="search-chip"
           style="display:none; background: #f1f5f9; color: #475569;">✕ Reset Pencarian</button>
       </div>
