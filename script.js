@@ -967,25 +967,124 @@ function downloadCsvByProdi() {
 }
 
 /**
- * 3. Unduh Portofolio Lengkap (JSON)
+ * 3. Unduh Portofolio Lengkap (Excel)
  */
-function downloadJsonFullPortfolio() {
+function downloadExcelFullPortfolio() {
   const dataset = AppState.allDosen;
   if (!dataset || dataset.length === 0) {
     alert('Data portofolio belum tersedia.');
     return;
   }
 
-  const exportData = {
-    institusi: 'Politeknik Negeri Lhokseumawe',
-    total_dosen: dataset.length,
-    tanggal_unduh: new Date().toISOString(),
-    sumber_data: 'Portal Resmi Data Dosen PNL & GARUDA Kemdiktisaintek',
-    dosen: dataset
-  };
+  const exportDate = new Date().toLocaleString('id-ID', {
+    dateStyle: 'long',
+    timeStyle: 'short'
+  });
 
-  const jsonContent = JSON.stringify(exportData, null, 2);
-  triggerBrowserDownload(jsonContent, 'portofolio-dosen-pnl-lengkap.json', 'application/json');
+  let rowsHtml = '';
+  dataset.forEach((d, idx) => {
+    const totalKarya = (Number(d.totalPenelitian) || 0) +
+                       (Number(d.totalPengabdian) || 0) +
+                       (Number(d.totalPublikasi) || 0) +
+                       (Number(d.totalPaten) || 0);
+
+    rowsHtml += `
+      <tr>
+        <td class="num-cell" style="text-align:center;">${idx + 1}</td>
+        <td style="font-weight:600;">${escapeHtml(d.nama || '')}</td>
+        <td style="mso-number-format:'\\@'; text-align:center;">${escapeHtml(d.nidn || '')}</td>
+        <td>${escapeHtml(d.prodi || '')}</td>
+        <td>${escapeHtml(d.jurusan || '')}</td>
+        <td>${escapeHtml(d.fungsional || '-')}</td>
+        <td style="text-align:center;">${escapeHtml(d.pendidikan || '-')}</td>
+        <td>${escapeHtml(d.status || '-')}</td>
+        <td>${escapeHtml(d.aktivitas || 'Aktif')}</td>
+        <td class="num-cell">${Number(d.totalPenelitian) || 0}</td>
+        <td class="num-cell">${Number(d.totalPengabdian) || 0}</td>
+        <td class="num-cell">${Number(d.totalPublikasi) || 0}</td>
+        <td class="num-cell">${Number(d.totalPaten) || 0}</td>
+        <td class="num-cell" style="font-weight:bold; background-color:#f1f5f9;">${totalKarya}</td>
+      </tr>
+    `;
+  });
+
+  const tableHtml = `
+    <table>
+      <thead>
+        <tr>
+          <th colspan="14" style="background-color:#0b2545; color:#ffffff; font-size:14pt; padding:12px; text-align:left;">
+            PORTOFOLIO LENGKAP DOSEN POLITEKNIK NEGERI LHOKSEUMAWE (PNL)
+          </th>
+        </tr>
+        <tr>
+          <td colspan="14" style="background-color:#f8fafc; color:#64748b; font-size:10pt; padding:6px 12px; border-bottom:2px solid #cbd5e1;">
+            Tanggal Ekspor: ${escapeHtml(exportDate)} &nbsp;|&nbsp; Total Dosen: ${dataset.length} &nbsp;|&nbsp; Sumber Data: Portal Resmi PNL &amp; PDDikti / GARUDA
+          </td>
+        </tr>
+        <tr style="background-color:#1e3a8a; color:#ffffff; font-weight:bold; text-align:center;">
+          <th style="background-color:#1e3a8a; color:#ffffff;">No</th>
+          <th style="background-color:#1e3a8a; color:#ffffff;">Nama Dosen</th>
+          <th style="background-color:#1e3a8a; color:#ffffff;">NIDN</th>
+          <th style="background-color:#1e3a8a; color:#ffffff;">Program Studi</th>
+          <th style="background-color:#1e3a8a; color:#ffffff;">Jurusan</th>
+          <th style="background-color:#1e3a8a; color:#ffffff;">Jabatan Fungsional</th>
+          <th style="background-color:#1e3a8a; color:#ffffff;">Pendidikan</th>
+          <th style="background-color:#1e3a8a; color:#ffffff;">Status Kepegawaian</th>
+          <th style="background-color:#1e3a8a; color:#ffffff;">Status Aktivitas</th>
+          <th style="background-color:#1e3a8a; color:#ffffff;">Penelitian</th>
+          <th style="background-color:#1e3a8a; color:#ffffff;">Pengabdian</th>
+          <th style="background-color:#1e3a8a; color:#ffffff;">Publikasi</th>
+          <th style="background-color:#1e3a8a; color:#ffffff;">Paten / HKI</th>
+          <th style="background-color:#0b2545; color:#ffffff;">Total Karya</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rowsHtml}
+      </tbody>
+    </table>
+  `;
+
+  const excelXml = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+      <!--[if gte mso 9]>
+      <xml>
+        <x:ExcelWorkbook>
+          <x:ExcelWorksheets>
+            <x:ExcelWorksheet>
+              <x:Name>Portofolio Dosen PNL</x:Name>
+              <x:WorksheetOptions>
+                <x:DisplayGridlines/>
+              </x:WorksheetOptions>
+            </x:ExcelWorksheet>
+          </x:ExcelWorksheets>
+        </x:ExcelWorkbook>
+      </xml>
+      <![endif]-->
+      <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
+      <style>
+        body { font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #1e293b; }
+        table { border-collapse: collapse; width: 100%; }
+        th { border: 1px solid #cbd5e1; padding: 6px 8px; font-weight: bold; }
+        td { border: 1px solid #e2e8f0; padding: 5px 8px; vertical-align: middle; mso-number-format: "\\@"; }
+        .num-cell { text-align: right; mso-number-format: "#,##0"; }
+      </style>
+    </head>
+    <body>
+      ${tableHtml}
+    </body>
+    </html>
+  `.trim();
+
+  const excelContent = '\uFEFF' + excelXml;
+  triggerBrowserDownload(excelContent, 'portofolio-dosen-pnl-lengkap.xls', 'application/vnd.ms-excel;charset=utf-8;');
+}
+
+// Alias untuk kompatibilitas uji & pemanggilan modul
+function downloadJsonFullPortfolio() {
+  return downloadExcelFullPortfolio();
 }
 
 /**
@@ -1082,13 +1181,170 @@ function downloadCsvWorksDetail() {
 }
 
 /**
- * 5. Unduh Portofolio Per Dosen (JSON)
+ * 5. Unduh Portofolio Per Dosen (Excel)
  */
-function downloadJsonPerDosen(dosen) {
+function downloadExcelPerDosen(dosen) {
   if (!dosen) return;
-  const fileName = `portofolio-${slugify(dosen.nama)}.json`;
-  const jsonContent = JSON.stringify(dosen, null, 2);
-  triggerBrowserDownload(jsonContent, fileName, 'application/json');
+
+  const exportDate = new Date().toLocaleString('id-ID', {
+    dateStyle: 'long',
+    timeStyle: 'short'
+  });
+
+  const penelitianList = Array.isArray(dosen.penelitian) ? dosen.penelitian : [];
+  const pengabdianList = Array.isArray(dosen.pengabdian) ? dosen.pengabdian : [];
+  const publikasiList = Array.isArray(dosen.publikasi) ? dosen.publikasi : [];
+  const patenList = Array.isArray(dosen.paten) ? dosen.paten : [];
+
+  let worksRows = '';
+  let counter = 1;
+
+  const appendWorks = (list, kategori) => {
+    list.forEach(item => {
+      worksRows += `
+        <tr>
+          <td class="num-cell" style="text-align:center;">${counter++}</td>
+          <td style="font-weight:600; color:#1e3a8a;">${escapeHtml(kategori)}</td>
+          <td>${escapeHtml(item.judul || '-')}</td>
+          <td style="text-align:center; mso-number-format:'\\@';">${escapeHtml(item.tahun || '-')}</td>
+          <td>${escapeHtml(item.sumber || 'Sumber belum diverifikasi')}</td>
+          <td>${item.url ? `<a href="${escapeHtml(item.url)}" target="_blank">${escapeHtml(item.url)}</a>` : '-'}</td>
+        </tr>
+      `;
+    });
+  };
+
+  appendWorks(penelitianList, 'Penelitian');
+  appendWorks(pengabdianList, 'Pengabdian Masyarakat');
+  appendWorks(publikasiList, 'Publikasi Karya');
+  appendWorks(patenList, 'HKI / Paten');
+
+  if (counter === 1) {
+    worksRows = `
+      <tr>
+        <td colspan="6" style="text-align:center; padding:12px; color:#64748b; font-style:italic;">
+          Belum ada data karya terdaftar untuk dosen ini.
+        </td>
+      </tr>
+    `;
+  }
+
+  const tableHtml = `
+    <table>
+      <thead>
+        <tr>
+          <th colspan="6" style="background-color:#0b2545; color:#ffffff; font-size:14pt; padding:12px; text-align:left;">
+            PORTOFOLIO DOSEN - ${escapeHtml(dosen.nama || '')}
+          </th>
+        </tr>
+        <tr>
+          <td colspan="6" style="background-color:#f8fafc; color:#64748b; font-size:10pt; padding:6px 12px; border-bottom:2px solid #cbd5e1;">
+            Tanggal Ekspor: ${escapeHtml(exportDate)} &nbsp;|&nbsp; Politeknik Negeri Lhokseumawe (PNL)
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background-color:#f1f5f9; font-weight:bold;">
+          <td colspan="6" style="padding:8px 12px; color:#0b2545; font-size:11pt;">I. PROFIL DOSEN</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600; width:180px;">Nama Lengkap</td>
+          <td colspan="5">${escapeHtml(dosen.nama || '-')}</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">NIDN</td>
+          <td colspan="5" style="mso-number-format:'\\@';">${escapeHtml(dosen.nidn || '-')}</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Program Studi</td>
+          <td colspan="5">${escapeHtml(dosen.prodi || '-')}</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Jurusan</td>
+          <td colspan="5">${escapeHtml(dosen.jurusan || '-')}</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Jabatan Fungsional</td>
+          <td colspan="5">${escapeHtml(dosen.fungsional || '-')}</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Pendidikan Terakhir</td>
+          <td colspan="5">${escapeHtml(dosen.pendidikan || '-')}</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Status Kepegawaian</td>
+          <td colspan="5">${escapeHtml(dosen.status || '-')} (${escapeHtml(dosen.aktivitas || 'Aktif')})</td>
+        </tr>
+        <tr style="background-color:#f1f5f9; font-weight:bold;">
+          <td colspan="6" style="padding:8px 12px; color:#0b2545; font-size:11pt;">II. RINGKASAN JUMLAH KARYA</td>
+        </tr>
+        <tr>
+          <td colspan="6" style="padding:6px 12px;">
+            Penelitian: <strong>${penelitianList.length}</strong> &nbsp;|&nbsp;
+            Pengabdian: <strong>${pengabdianList.length}</strong> &nbsp;|&nbsp;
+            Publikasi: <strong>${publikasiList.length}</strong> &nbsp;|&nbsp;
+            Paten / HKI: <strong>${patenList.length}</strong> &nbsp;|&nbsp;
+            Total Keseluruhan: <strong>${penelitianList.length + pengabdianList.length + publikasiList.length + patenList.length}</strong>
+          </td>
+        </tr>
+        <tr style="background-color:#f1f5f9; font-weight:bold;">
+          <td colspan="6" style="padding:8px 12px; color:#0b2545; font-size:11pt;">III. RINCIAN PORTOFOLIO KARYA</td>
+        </tr>
+        <tr style="background-color:#1e3a8a; color:#ffffff; font-weight:bold; text-align:center;">
+          <th style="background-color:#1e3a8a; color:#ffffff; width:40px;">No</th>
+          <th style="background-color:#1e3a8a; color:#ffffff; width:150px;">Kategori</th>
+          <th style="background-color:#1e3a8a; color:#ffffff;">Judul Karya</th>
+          <th style="background-color:#1e3a8a; color:#ffffff; width:80px;">Tahun</th>
+          <th style="background-color:#1e3a8a; color:#ffffff; width:150px;">Sumber Data</th>
+          <th style="background-color:#1e3a8a; color:#ffffff; width:220px;">Tautan</th>
+        </tr>
+        ${worksRows}
+      </tbody>
+    </table>
+  `;
+
+  const excelXml = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+      <!--[if gte mso 9]>
+      <xml>
+        <x:ExcelWorkbook>
+          <x:ExcelWorksheets>
+            <x:ExcelWorksheet>
+              <x:Name>Portofolio Dosen</x:Name>
+              <x:WorksheetOptions>
+                <x:DisplayGridlines/>
+              </x:WorksheetOptions>
+            </x:ExcelWorksheet>
+          </x:ExcelWorksheets>
+        </x:ExcelWorkbook>
+      </xml>
+      <![endif]-->
+      <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
+      <style>
+        body { font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #1e293b; }
+        table { border-collapse: collapse; width: 100%; }
+        th { border: 1px solid #cbd5e1; padding: 6px 8px; font-weight: bold; }
+        td { border: 1px solid #e2e8f0; padding: 5px 8px; vertical-align: top; mso-number-format: "\\@"; }
+        .num-cell { text-align: right; mso-number-format: "#,##0"; }
+      </style>
+    </head>
+    <body>
+      ${tableHtml}
+    </body>
+    </html>
+  `.trim();
+
+  const fileName = `portofolio-${slugify(dosen.nama)}.xls`;
+  const excelContent = '\uFEFF' + excelXml;
+  triggerBrowserDownload(excelContent, fileName, 'application/vnd.ms-excel;charset=utf-8;');
+}
+
+// Alias untuk kompatibilitas fungsi unduh
+function downloadJsonPerDosen(dosen) {
+  return downloadExcelPerDosen(dosen);
 }
 
 /**
@@ -1820,13 +2076,13 @@ function injectDetailActionButtons(dosen) {
   bar.style.marginLeft = 'auto';
 
   bar.innerHTML = `
-    <button type="button" class="btn-modal-action" id="btn-detail-unduh-json" title="Unduh data profil dan portofolio dosen dalam format JSON">
+    <button type="button" class="btn-modal-action" id="btn-detail-unduh-json" title="Unduh data profil dan portofolio dosen dalam format Excel">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
         <polyline points="7 10 12 15 17 10"></polyline>
         <line x1="12" y1="15" x2="12" y2="3"></line>
       </svg>
-      Unduh Portofolio (JSON)
+      Unduh Portofolio (Excel)
     </button>
     <button type="button" class="btn-modal-action" id="btn-detail-cetak-pdf" title="Cetak atau simpan portofolio ke PDF">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
