@@ -2,105 +2,12 @@
 /**
  * ============================================================================
  * INDEX.PHP - DATA DOSEN POLITEKNIK NEGERI LHOKSEUMAWE
- * Halaman utama portal data dosen Politeknik Negeri Lhokseumawe
- * Terintegrasi langsung dengan API PDDIKTI Kemdiktisaintek tanpa database
+ * Portal Data Dosen & Portofolio Politeknik Negeri Lhokseumawe
  * ============================================================================
  */
 
-require_once __DIR__ . '/api.php';
-
-// Ambil query pencarian jika ada
 $keyword = isset($_GET['q']) ? trim($_GET['q']) : '';
-
-// Data dosen default (ARYATI - Politeknik Negeri Lhokseumawe)
-$defaultDosen = [
-    'id'        => DEFAULT_DOSEN_ID,
-    'nama'      => 'ARYATI',
-    'nidn'      => DEFAULT_DOSEN_NIDN,
-    'nama_pt'   => 'Politeknik Negeri Lhokseumawe',
-    'nama_prodi'=> 'Akuntansi',
-    'jabatan'   => 'Lektor Kepala',
-    'pendidikan'=> 'S2',
-    'status'    => 'Aktif'
-];
-
-$daftarDosen = [];
 $isPencarian = !empty($keyword);
-$pesanStatus = '';
-
-if ($isPencarian) {
-    // Cari melalui API PDDIKTI dengan kombinasi nama instansi
-    $searchQuery = $keyword . ' Politeknik Negeri Lhokseumawe';
-    $hasilCari = cariDosen($searchQuery);
-
-    if (!$hasilCari['sukses'] || empty($hasilCari['data'])) {
-        // Coba pencarian dengan keyword saja jika pencarian spesifik kosong
-        $hasilCari = cariDosen($keyword);
-    }
-
-    if ($hasilCari['sukses'] && !empty($hasilCari['data'])) {
-        foreach ($hasilCari['data'] as $item) {
-            $nidnVal = !empty($item['nidn']) ? trim($item['nidn']) : (!empty($item['nuptk']) ? trim($item['nuptk']) : '');
-            if (empty($nidnVal) && stripos($item['nama'] ?? '', 'ARYATI') !== false) {
-                $nidnVal = DEFAULT_DOSEN_NIDN;
-            }
-            if (empty($nidnVal)) {
-                $nidnVal = 'Data tidak tersedia';
-            }
-
-            $daftarDosen[] = [
-                'id'        => $item['id'],
-                'nama'      => $item['nama'] ?? 'Tanpa Nama',
-                'nidn'      => $nidnVal,
-                'nama_pt'   => !empty($item['nama_pt']) && $item['nama_pt'] !== 'N/A' ? $item['nama_pt'] : 'Politeknik Negeri Lhokseumawe',
-                'nama_prodi'=> !empty($item['nama_prodi']) ? $item['nama_prodi'] : 'Data tidak tersedia',
-                'jabatan'   => 'Dosen',
-                'pendidikan'=> 'Data tidak tersedia',
-                'status'    => 'Aktif'
-            ];
-        }
-    } else {
-        $pesanStatus = 'Dosen dengan kata kunci "<strong>' . htmlspecialchars($keyword) . '</strong>" belum ditemukan di PDDIKTI.';
-    }
-} else {
-    // Tampilan utama / default: Muat daftar dosen Politeknik Negeri Lhokseumawe
-    $hasilDefault = cariDosen('Politeknik Negeri Lhokseumawe');
-    if ($hasilDefault['sukses'] && !empty($hasilDefault['data'])) {
-        foreach ($hasilDefault['data'] as $item) {
-            $nidnVal = !empty($item['nidn']) ? trim($item['nidn']) : (!empty($item['nuptk']) ? trim($item['nuptk']) : '');
-            if (empty($nidnVal) && stripos($item['nama'] ?? '', 'ARYATI') !== false) {
-                $nidnVal = DEFAULT_DOSEN_NIDN;
-            }
-            if (empty($nidnVal)) {
-                $nidnVal = 'Data tidak tersedia';
-            }
-
-            $daftarDosen[] = [
-                'id'        => $item['id'],
-                'nama'      => $item['nama'] ?? 'Tanpa Nama',
-                'nidn'      => $nidnVal,
-                'nama_pt'   => !empty($item['nama_pt']) && $item['nama_pt'] !== 'N/A' ? $item['nama_pt'] : 'Politeknik Negeri Lhokseumawe',
-                'nama_prodi'=> !empty($item['nama_prodi']) ? $item['nama_prodi'] : 'Data tidak tersedia',
-                'jabatan'   => 'Dosen',
-                'pendidikan'=> 'Data tidak tersedia',
-                'status'    => 'Aktif'
-            ];
-        }
-    } else {
-        // Fallback jika API sedang lambat atau offline
-        $profilLive = ambilProfilDosen(DEFAULT_DOSEN_ID);
-        if ($profilLive['sukses'] && !empty($profilLive['data'])) {
-            $data = $profilLive['data'];
-            $defaultDosen['nama']       = $data['nama_dosen'] ?? $defaultDosen['nama'];
-            $defaultDosen['nama_pt']    = $data['nama_pt'] ?? $defaultDosen['nama_pt'];
-            $defaultDosen['nama_prodi'] = $data['nama_prodi'] ?? $defaultDosen['nama_prodi'];
-            $defaultDosen['jabatan']    = $data['jabatan_akademik'] ?? $defaultDosen['jabatan'];
-            $defaultDosen['pendidikan'] = $data['pendidikan_tertinggi'] ?? $defaultDosen['pendidikan'];
-            $defaultDosen['status']     = $data['status_aktivitas'] ?? $defaultDosen['status'];
-        }
-        $daftarDosen[] = $defaultDosen;
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -136,7 +43,7 @@ if ($isPencarian) {
   <section class="hero-section">
     <div class="container hero-content">
       <div class="hero-pill">
-        Sistem Informasi Portofolio Dosen
+        🎓 Sistem Informasi Portofolio Dosen
       </div>
       <h2 class="hero-title">
         DATA DOSEN<br>
@@ -237,10 +144,10 @@ if ($isPencarian) {
               </div>
             </button>
             <button type="button" class="download-item" id="btn-unduh-portofolio-json">
-              <div class="download-item-icon json">JSON</div>
+              <div class="download-item-icon excel">XLS</div>
               <div class="download-item-text">
-                <strong>Unduh Portofolio Lengkap (JSON)</strong>
-                <small>Profil, penelitian, pengabdian, publikasi, paten</small>
+                <strong>Unduh Portofolio Lengkap (Excel)</strong>
+                <small>Profil, penelitian, pengabdian, publikasi, paten format Excel</small>
               </div>
             </button>
             <button type="button" class="download-item" id="btn-unduh-karya-csv">
@@ -450,7 +357,7 @@ if ($isPencarian) {
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            Unduh Portofolio (JSON)
+            Unduh Portofolio (Excel)
           </button>
           <button type="button" class="btn-modal-action" id="modal-btn-cetak-pdf">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
