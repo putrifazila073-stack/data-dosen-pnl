@@ -326,6 +326,13 @@
 
 <script>
 
+    // Deteksi environment: localhost XAMPP pakai api.php, Vercel pakai /api/pddikti
+    const API_ENDPOINT = (
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1' ||
+        window.location.hostname.endsWith('.local')
+    ) ? 'api.php' : '/api/pddikti';
+
     const params =
         new URLSearchParams(window.location.search);
 
@@ -717,7 +724,7 @@
         try {
 
             const url =
-                `/api/pddikti?action=pengabdian&id=${encodeURIComponent(idPddikti)}`;
+                `${API_ENDPOINT}?action=pengabdian&id=${encodeURIComponent(idPddikti)}`;
 
             const response =
                 await fetch(url);
