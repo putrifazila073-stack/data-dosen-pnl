@@ -42,9 +42,6 @@ $isPencarian = !empty($keyword);
   <!-- ==================== HERO SECTION & SEARCH ==================== -->
   <section class="hero-section">
     <div class="container hero-content">
-      <div class="hero-pill">
-        Sistem Informasi Portofolio Dosen
-      </div>
       <h2 class="hero-title">
         DATA DOSEN<br>
         <span>POLITEKNIK NEGERI LHOKSEUMAWE</span>
