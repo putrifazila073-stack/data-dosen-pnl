@@ -1567,6 +1567,11 @@ a:hover {
   background: linear-gradient(135deg, #059669, #10b981);
 }
 
+.download-item-icon.excel,
+.download-item-icon.xls {
+  background: linear-gradient(135deg, #107c41, #1f9a55);
+}
+
 .download-item-icon.json {
   background: linear-gradient(135deg, #d97706, #f59e0b);
 }
