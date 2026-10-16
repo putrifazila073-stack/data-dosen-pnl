@@ -56,7 +56,9 @@
 }
 
 /* --- Reset Dasar --- */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -328,6 +330,187 @@ a:hover {
 .search-chip:hover {
   border-color: var(--primary-purple);
   background: var(--primary-purple-light);
+}
+
+/* --- Riwayat Pencarian (Chips & Dropdown) --- */
+.history-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 12px;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--primary-purple);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.history-chip:hover {
+  border-color: var(--primary-purple);
+  background: var(--primary-purple-light);
+}
+
+.history-chip-text {
+  cursor: pointer;
+}
+
+.history-chip-remove {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1;
+  padding: 1px 4px;
+  margin-left: 2px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.history-chip-remove:hover {
+  color: #ef4444;
+  background: #fee2e2;
+}
+
+.chip-clear-all {
+  color: #64748b;
+  font-size: 0.75rem;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+}
+
+.chip-clear-all:hover {
+  color: #ef4444;
+  border-color: #fca5a5;
+  background: #fef2f2;
+}
+
+/* Dropdown Riwayat Pencarian di Bawah Input */
+.search-history-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  text-align: left;
+  overflow: hidden;
+  animation: dropdownFadeIn 0.15s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-history-dropdown .dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.search-history-dropdown .dropdown-header-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-history-dropdown .btn-dropdown-clear {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+}
+
+.search-history-dropdown .btn-dropdown-clear:hover {
+  color: #ef4444;
+  background: #fee2e2;
+}
+
+.search-history-dropdown .dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.search-history-dropdown .dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  font-size: 0.88rem;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.search-history-dropdown .dropdown-item:hover {
+  background: var(--primary-purple-light);
+  color: var(--primary-purple);
+}
+
+.search-history-dropdown .dropdown-item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.search-history-dropdown .dropdown-item-icon {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.search-history-dropdown .dropdown-item-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-history-dropdown .dropdown-item-remove {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+}
+
+.search-history-dropdown .dropdown-item-remove:hover {
+  color: #ef4444;
+  background: #fee2e2;
 }
 
 /* --- Section Heading --- */
@@ -828,6 +1011,7 @@ a:hover {
     opacity: 0;
     transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1082,7 +1266,8 @@ a:hover {
     padding: 10px 14px;
   }
 
-  .modern-table th, .modern-table td {
+  .modern-table th,
+  .modern-table td {
     padding: 12px 14px;
   }
 }
@@ -1190,9 +1375,11 @@ a:hover {
   0% {
     background-color: #f1f5f9;
   }
+
   50% {
     background-color: #e2e8f0;
   }
+
   100% {
     background-color: #f1f5f9;
   }
@@ -1329,6 +1516,7 @@ a:hover {
     opacity: 0;
     transform: translateY(-6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1866,8 +2054,13 @@ a:hover {
 }
 
 @keyframes modalFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-dialog {
@@ -1887,6 +2080,7 @@ a:hover {
   from {
     transform: translateY(20px) scale(0.98);
   }
+
   to {
     transform: translateY(0) scale(1);
   }
@@ -2220,9 +2414,12 @@ a:hover {
   body * {
     visibility: hidden;
   }
-  .modal-dialog, .modal-dialog * {
+
+  .modal-dialog,
+  .modal-dialog * {
     visibility: visible;
   }
+
   .modal-dialog {
     position: absolute;
     left: 0;
@@ -2231,10 +2428,11 @@ a:hover {
     box-shadow: none;
     border: none;
   }
-  .modal-close-btn, .modal-footer, .navbar, .footer {
+
+  .modal-close-btn,
+  .modal-footer,
+  .navbar,
+  .footer {
     display: none !important;
   }
 }
-
-
-
