@@ -275,7 +275,10 @@
             <!-- PENGABDIAN -->
             <section class="card">
 
-                <h2>Pengabdian Masyarakat</h2>
+                <h2>
+                    Pengabdian Masyarakat
+                    <span class="badge" id="jumlahPengabdian">0</span>
+                </h2>
 
                 <div id="pengabdian">
                     <div class="empty">
@@ -404,6 +407,7 @@
                 const judul =
                     item.judul ||
                     item.title ||
+                    item.judul_kegiatan ||
                     item.nama ||
                     item.name ||
                     "Judul tidak tersedia";
@@ -412,6 +416,7 @@
                 const tahun =
                     item.tahun ||
                     item.year ||
+                    item.tahun_kegiatan ||
                     "";
 
 
@@ -424,9 +429,13 @@
                 let sumberText = "Sumber belum diverifikasi";
                 if (item.sumber && String(item.sumber).trim()) {
                     sumberText = String(item.sumber).trim();
+                } else if (item.jenis_kegiatan) {
+                    sumberText = "PDDIKTI (" + item.jenis_kegiatan + ")";
                 } else if (url && url.includes("garuda.kemdiktisaintek.go.id")) {
                     sumberText = "GARUDA";
                 } else if (url && url.includes("pddikti.kemdiktisaintek.go.id")) {
+                    sumberText = "PDDIKTI";
+                } else if (item.judul_kegiatan) {
                     sumberText = "PDDIKTI";
                 }
 
@@ -719,35 +728,66 @@
     /* FETCH PENGABDIAN DARI PDDIKTI API */
     async function fetchPengabdianPDDIKTI(idPddikti) {
 
-        if (!idPddikti) return null;
+        if (!idPddikti) {
+            return { sukses: false, data: [], pesan: "ID PDDIKTI dosen belum tersedia." };
+        }
 
         try {
 
-            const url =
-                `${API_ENDPOINT}?action=pengabdian&id=${encodeURIComponent(idPddikti)}`;
+            // Kirim request POST dengan Request Payload sesuai format API PDDIKTI
+            const url = `${API_ENDPOINT}?action=pengabdian`;
+            const payload = { id: idPddikti };
 
-            const response =
-                await fetch(url);
+            let response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
 
-            if (!response.ok) return null;
-
-            const json =
-                await response.json();
-
-            if (
-                json.sukses &&
-                Array.isArray(json.data) &&
-                json.data.length > 0
-            ) {
-                return json.data;
+            // Fallback ke GET jika method POST tidak didukung oleh web server
+            if (!response.ok && response.status === 405) {
+                const getUrl = `${API_ENDPOINT}?action=pengabdian&id=${encodeURIComponent(idPddikti)}`;
+                response = await fetch(getUrl);
             }
 
-            return null;
+            if (!response.ok) {
+                return {
+                    sukses: false,
+                    data: [],
+                    pesan: `Gagal memuat API PDDIKTI (Status HTTP: ${response.status})`
+                };
+            }
+
+            const json = await response.json();
+
+            // Mendukung baik format proxy { sukses: true, data: [...] } maupun format asli PDDIKTI { status: "success", data: [...] }
+            const isOk = (json.sukses === true || json.status === "success" || Array.isArray(json.data));
+            const list = Array.isArray(json) ? json : (Array.isArray(json.data) ? json.data : []);
+
+            if (isOk) {
+                return {
+                    sukses: true,
+                    data: list,
+                    pesan: json.pesan || json.message || "Data pengabdian berhasil diambil."
+                };
+            }
+
+            return {
+                sukses: false,
+                data: [],
+                pesan: json.pesan || json.message || "Data pengabdian tidak ditemukan."
+            };
 
         } catch (err) {
 
             console.warn("Gagal fetch pengabdian PDDIKTI:", err.message);
-            return null;
+            return {
+                sukses: false,
+                data: [],
+                pesan: "Gagal terhubung ke API: " + err.message
+            };
 
         }
 
@@ -826,22 +866,35 @@
 
 
             const idPddikti =
-                (data.nama && data.nama.toUpperCase().includes("ASWANDI"))
-                ? "o8kxX4l_Xm_DPoCPzP7UwiD5oWTtP9uaVQHJBWjlhLDrARvw39B2eGNlx-oiPHLRkwEuMw=="
-                : (data.id_pddikti || data.pddikti_id || data.id || "");
+                data.pddikti_id ||
+                data.id_pddikti ||
+                (data.nama && data.nama.toUpperCase().includes("ASWANDI") ? "o8kxX4l_Xm_DPoCPzP7UwiD5oWTtP9uaVQHJBWjlhLDrARvw39B2eGNlx-oiPHLRkwEuMw==" : "") ||
+                data.id ||
+                "";
 
-            const pengabdianPddikti =
+            const resPengabdian =
                 await fetchPengabdianPDDIKTI(idPddikti);
 
-            const pengabdianAkhir =
-                (pengabdianPddikti && pengabdianPddikti.length > 0)
-                ? pengabdianPddikti
-                : (Array.isArray(data.pengabdian) ? data.pengabdian : []);
+            let pengabdianAkhir = [];
+            if (resPengabdian.sukses && Array.isArray(resPengabdian.data) && resPengabdian.data.length > 0) {
+                pengabdianAkhir = resPengabdian.data;
+            } else if (Array.isArray(data.pengabdian) && data.pengabdian.length > 0) {
+                pengabdianAkhir = data.pengabdian;
+            }
+
+            const badgePengabdian = document.getElementById("jumlahPengabdian");
+            if (badgePengabdian) {
+                badgePengabdian.textContent = pengabdianAkhir.length;
+            }
+
+            const pesanKosong = (!resPengabdian.sukses && pengabdianAkhir.length === 0)
+                ? (resPengabdian.pesan || "Gagal memuat data pengabdian.")
+                : "Belum ada data pengabdian masyarakat.";
 
             tampilkanItem(
                 "pengabdian",
                 pengabdianAkhir,
-                "Belum ada data pengabdian masyarakat."
+                pesanKosong
             );
 
 
