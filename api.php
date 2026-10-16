@@ -95,12 +95,13 @@ if ($method === 'OPTIONS') {
     exit;
 }
 
-// Ambil parameter
-$params = array_merge($_GET, $_POST);
-if (!$params && $method === 'POST') {
-    $body = json_decode(file_get_contents('php://input'), true) ?? [];
-    $params = $body;
+// Ambil parameter dari GET, POST form-data, dan JSON Request Payload (php://input)
+$rawInput = file_get_contents('php://input');
+$jsonBody = !empty($rawInput) ? json_decode($rawInput, true) : [];
+if (!is_array($jsonBody)) {
+    $jsonBody = [];
 }
+$params = array_merge($_GET, $_POST, $jsonBody);
 
 $action = strtolower($params['action'] ?? 'search');
 $keyword = $params['keyword'] ?? $params['nama'] ?? $params['q'] ?? '';
