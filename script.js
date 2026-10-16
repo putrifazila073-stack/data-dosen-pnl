@@ -1106,7 +1106,9 @@ async function initIndexPage() {
   const skeletonContainer = document.getElementById('skeleton-container');
   const tableSection = document.getElementById('dosen-table-section');
   const dosenGrid = document.getElementById('dosen-grid');
-  const chips = document.querySelectorAll('.search-chip[data-query]');
+  const historyContainer = document.getElementById('search-history-container');
+  const historyDropdown = document.getElementById('search-history-dropdown');
+  const SEARCH_HISTORY_KEY = 'pnl_dosen_search_history';
 
   // Dropdown Unduh Menu
   const btnUnduhToggle = document.getElementById('btn-unduh-toggle');
@@ -1134,6 +1136,7 @@ async function initIndexPage() {
   if (searchInput && initialQuery) {
     searchInput.value = initialQuery;
     AppState.searchKeyword = initialQuery;
+    if (btnReset) btnReset.style.display = 'inline-block';
   }
 
   if (initialProdi) {
@@ -1162,16 +1165,228 @@ async function initIndexPage() {
   // Render awal data dan statistik
   applyAndRender();
 
-  // Event Handler Pencarian
-  function handleSearchSubmit() {
-    const q = searchInput ? searchInput.value.trim() : '';
+  // ==================== PENGELOLA RIWAYAT PENCARIAN ====================
+  function getSearchHistory() {
+    try {
+      const data = localStorage.getItem(SEARCH_HISTORY_KEY);
+      if (!data) return [];
+      const parsed = JSON.parse(data);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveSearchHistory(query) {
+    const q = (query || '').trim();
+    if (!q || q.length < 2) return;
+    let history = getSearchHistory();
+    // Hilangkan jika sudah ada agar item terbaru menjadi paling depan
+    history = history.filter(item => item.toLowerCase() !== q.toLowerCase());
+    history.unshift(q);
+    if (history.length > 8) history = history.slice(0, 8);
+    try {
+      localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
+    } catch (e) {}
+    renderSearchHistory();
+  }
+
+  function removeSearchHistory(query) {
+    let history = getSearchHistory();
+    history = history.filter(item => item.toLowerCase() !== query.toLowerCase());
+    try {
+      localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
+    } catch (e) {}
+    renderSearchHistory();
+  }
+
+  function clearSearchHistory() {
+    try {
+      localStorage.removeItem(SEARCH_HISTORY_KEY);
+    } catch (e) {}
+    renderSearchHistory();
+    if (historyDropdown) historyDropdown.style.display = 'none';
+  }
+
+  function renderSearchHistory() {
+    const history = getSearchHistory();
+
+    // 1. Render Chips Riwayat Pencarian di Bawah Bar Pencarian
+    if (historyContainer) {
+      if (history.length === 0) {
+        historyContainer.style.display = 'none';
+        historyContainer.innerHTML = '';
+      } else {
+        historyContainer.style.display = 'flex';
+        historyContainer.innerHTML = `
+          <span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Riwayat Pencarian:
+          </span>
+          ${history.map(item => `
+            <div class="search-chip history-chip" data-query="${escapeHtml(item)}" title="Cari: ${escapeHtml(item)}">
+              <span class="history-chip-text">${escapeHtml(item)}</span>
+              <button type="button" class="history-chip-remove" data-remove="${escapeHtml(item)}" title="Hapus riwayat ini" aria-label="Hapus">&times;</button>
+            </div>
+          `).join('')}
+          <button type="button" id="btn-clear-history" class="search-chip chip-clear-all" title="Hapus semua riwayat">✕ Hapus Semua</button>
+        `;
+
+        // Event klik chip riwayat
+        historyContainer.querySelectorAll('.history-chip').forEach(chip => {
+          chip.addEventListener('click', (e) => {
+            if (e.target.closest('.history-chip-remove')) return;
+            const q = chip.getAttribute('data-query');
+            if (searchInput) searchInput.value = q;
+            handleSearchSubmit(q);
+          });
+        });
+
+        // Event klik tombol hapus item chip
+        historyContainer.querySelectorAll('.history-chip-remove').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const q = btn.getAttribute('data-remove');
+            removeSearchHistory(q);
+          });
+        });
+
+        // Event klik hapus semua
+        const btnClear = historyContainer.querySelector('#btn-clear-history');
+        if (btnClear) {
+          btnClear.addEventListener('click', (e) => {
+            e.stopPropagation();
+            clearSearchHistory();
+          });
+        }
+      }
+    }
+
+    // 2. Render Dropdown Riwayat Pencarian di Bawah Input
+    if (historyDropdown) {
+      if (history.length === 0) {
+        historyDropdown.innerHTML = '';
+        historyDropdown.style.display = 'none';
+      } else {
+        historyDropdown.innerHTML = `
+          <div class="dropdown-header">
+            <span class="dropdown-header-title">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              Riwayat Pencarian
+            </span>
+            <button type="button" class="btn-dropdown-clear" id="btn-dropdown-clear" title="Hapus semua riwayat">Hapus Semua</button>
+          </div>
+          <ul class="dropdown-list">
+            ${history.map(item => `
+              <li class="dropdown-item" data-query="${escapeHtml(item)}">
+                <div class="dropdown-item-left">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="dropdown-item-icon">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="dropdown-item-text">${escapeHtml(item)}</span>
+                </div>
+                <button type="button" class="dropdown-item-remove" data-remove="${escapeHtml(item)}" title="Hapus item">&times;</button>
+              </li>
+            `).join('')}
+          </ul>
+        `;
+
+        // Event klik item di dropdown
+        historyDropdown.querySelectorAll('.dropdown-item').forEach(item => {
+          item.addEventListener('click', (e) => {
+            if (e.target.closest('.dropdown-item-remove')) return;
+            const q = item.getAttribute('data-query');
+            if (searchInput) searchInput.value = q;
+            historyDropdown.style.display = 'none';
+            handleSearchSubmit(q);
+          });
+        });
+
+        // Event hapus item dari dropdown
+        historyDropdown.querySelectorAll('.dropdown-item-remove').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const q = btn.getAttribute('data-remove');
+            removeSearchHistory(q);
+          });
+        });
+
+        // Event hapus semua dari dropdown
+        const btnDropdownClear = historyDropdown.querySelector('#btn-dropdown-clear');
+        if (btnDropdownClear) {
+          btnDropdownClear.addEventListener('click', (e) => {
+            e.stopPropagation();
+            clearSearchHistory();
+          });
+        }
+      }
+    }
+  }
+
+  // Interaksi Input Focus & Dropdown Riwayat
+  if (searchInput && historyDropdown) {
+    searchInput.addEventListener('focus', () => {
+      const history = getSearchHistory();
+      if (history.length > 0) {
+        renderSearchHistory();
+        historyDropdown.style.display = 'block';
+      }
+    });
+
+    historyDropdown.addEventListener('mousedown', (e) => {
+      // Mencegah input kehilangan fokus sebelum klik item diproses
+      e.preventDefault();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.search-input-wrap')) {
+        historyDropdown.style.display = 'none';
+      }
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        historyDropdown.style.display = 'none';
+      }
+    });
+  }
+
+  // Render awal riwayat pencarian dari localStorage
+  renderSearchHistory();
+
+  // Event Handler Eksekusi Pencarian
+  function handleSearchSubmit(queryOverride) {
+    const q = (typeof queryOverride === 'string')
+      ? queryOverride.trim()
+      : (searchInput ? searchInput.value.trim() : '');
+
     AppState.searchKeyword = q;
+    if (searchInput && typeof queryOverride === 'string') {
+      searchInput.value = q;
+    }
+
+    if (q) {
+      saveSearchHistory(q);
+    }
 
     if (btnReset) {
       btnReset.style.display = q ? 'inline-block' : 'none';
     }
 
-    const newUrl = q ? `index.html?q=${encodeURIComponent(q)}` : 'index.html';
+    if (historyDropdown) {
+      historyDropdown.style.display = 'none';
+    }
+
+    const isPhp = window.location.pathname.endsWith('.php');
+    const pageUrl = isPhp ? 'index.php' : 'index.html';
+    const newUrl = q ? `${pageUrl}?q=${encodeURIComponent(q)}` : pageUrl;
     window.history.pushState({}, '', newUrl);
 
     applyAndRender();
@@ -1204,25 +1419,23 @@ async function initIndexPage() {
         applyAndRender();
       }, 250);
     });
-  }
 
-  // Event Handler Search Chips
-  chips.forEach(chip => {
-    chip.addEventListener('click', function () {
-      const q = this.getAttribute('data-query');
-      if (searchInput) searchInput.value = q;
-      AppState.searchKeyword = q;
-      if (btnReset) btnReset.style.display = 'inline-block';
-      applyAndRender();
+    // Simpan ke riwayat saat pengguna selesai mengetik dan berpindah fokus jika ada kata kunci
+    searchInput.addEventListener('blur', () => {
+      const q = searchInput.value.trim();
+      if (q && q.length >= 2) {
+        saveSearchHistory(q);
+      }
     });
-  });
+  }
 
   if (btnReset) {
     btnReset.addEventListener('click', () => {
       if (searchInput) searchInput.value = '';
       AppState.searchKeyword = '';
       btnReset.style.display = 'none';
-      window.history.pushState({}, '', 'index.html');
+      const isPhp = window.location.pathname.endsWith('.php');
+      window.history.pushState({}, '', isPhp ? 'index.php' : 'index.html');
       applyAndRender();
     });
   }
