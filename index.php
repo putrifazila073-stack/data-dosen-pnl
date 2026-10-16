@@ -173,16 +173,12 @@ if ($isPencarian) {
         </form>
       </div>
 
-      <!-- Quick Search Chips -->
+      <!-- Reset Pencarian -->
+      <?php if ($isPencarian): ?>
       <div class="search-hints">
-        <span>Saran Pencarian:</span>
-        <a href="index.php?q=ARYATI" class="search-chip">ARYATI (0009067504)</a>
-        <a href="index.php?q=AZWINUR" class="search-chip">AZWINUR (0010057905)</a>
-        <a href="index.php?q=TEUKU+MUSTAQIM" class="search-chip">TEUKU MUSTAQIM (0007066506)</a>
-        <?php if ($isPencarian): ?>
-          <a href="index.php" class="search-chip" style="background: #f1f5f9; color: #475569;">✕ Reset Pencarian</a>
-        <?php endif; ?>
+        <a href="index.php" class="search-chip" style="background: #f1f5f9; color: #475569;">✕ Reset Pencarian</a>
       </div>
+      <?php endif; ?>
     </div>
   </section>
 
