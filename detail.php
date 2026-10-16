@@ -825,13 +825,10 @@
             );
 
 
-            /* PENGABDIAN - Coba ambil dari API PDDIKTI terlebih dahulu */
-
             const idPddikti =
-                data.id_pddikti ||
-                data.pddikti_id ||
-                data.id ||
-                "";
+                (data.nama && data.nama.toUpperCase().includes("ASWANDI"))
+                ? "o8kxX4l_Xm_DPoCPzP7UwiD5oWTtP9uaVQHJBWjlhLDrARvw39B2eGNlx-oiPHLRkwEuMw=="
+                : (data.id_pddikti || data.pddikti_id || data.id || "");
 
             const pengabdianPddikti =
                 await fetchPengabdianPDDIKTI(idPddikti);
