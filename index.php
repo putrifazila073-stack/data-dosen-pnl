@@ -136,7 +136,7 @@ if ($isPencarian) {
   <section class="hero-section">
     <div class="container hero-content">
       <div class="hero-pill">
-        🎓 Sistem Informasi Portofolio Dosen
+        Sistem Informasi Portofolio Dosen
       </div>
       <h2 class="hero-title">
         DATA DOSEN<br>
