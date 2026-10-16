@@ -4,28 +4,11 @@
  * Menangani request yang sama seperti /api/pddikti.js di Vercel
  */
 
-// Izinkan CORS
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
+// Definisi konstanta dan fungsi helper jika di-require dari file lain
+if (!defined('DEFAULT_DOSEN_ID')) {
+    define('DEFAULT_DOSEN_ID', 'pnl-037-aryati');
+    define('DEFAULT_DOSEN_NIDN', '0009067504');
 }
-
-// Ambil parameter
-$params = array_merge($_GET, $_POST);
-if (!$params && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    $body = json_decode(file_get_contents('php://input'), true) ?? [];
-    $params = $body;
-}
-
-$action = strtolower($params['action'] ?? 'search');
-$keyword = $params['keyword'] ?? $params['nama'] ?? $params['q'] ?? '';
-$id = $params['id'] ?? $params['id_dosen'] ?? $params['id_sdm'] ?? $params['idSdm'] ?? $params['sdm_id'] ?? $params['uuid'] ?? '';
-$nidn = $params['nidn'] ?? $params['nidnHint'] ?? '';
 
 // Headers untuk request ke PDDIKTI
 $requestHeaders = [
@@ -38,12 +21,14 @@ $requestHeaders = [
 /**
  * POST request ke PDDIKTI
  */
-function postPDDIKTI($url, $id, $headers) {
+function postPDDIKTI($url, $id, $headers = null) {
+    global $requestHeaders;
+    $hdr = $headers ?: $requestHeaders;
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['id' => $id]));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array_merge($headers, ['Content-Type: application/json']));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array_merge($hdr, ['Content-Type: application/json']));
     curl_setopt($ch, CURLOPT_TIMEOUT, 15);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
@@ -63,6 +48,64 @@ function postPDDIKTI($url, $id, $headers) {
         'pesan' => $result['message'] ?? ($httpCode === 200 ? 'Data berhasil diambil' : 'Data gagal diambil'),
     ];
 }
+
+function cariDosen($keyword) {
+    global $requestHeaders;
+    if (!trim($keyword)) {
+        return ['sukses' => false, 'data' => [], 'pesan' => 'Keyword kosong'];
+    }
+    $url = 'https://pddikti.kemdiktisaintek.go.id/api/pencarian/dosen/' . urlencode(trim($keyword));
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $requestHeaders);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    $result = json_decode($response, true) ?? [];
+    return [
+        'sukses' => $httpCode === 200,
+        'pesan' => $httpCode === 200 ? 'Pencarian berhasil' : 'Pencarian gagal',
+        'data' => is_array($result['data'] ?? null) ? $result['data'] : [],
+    ];
+}
+
+function ambilProfilDosen($id) {
+    global $requestHeaders;
+    return postPDDIKTI('https://pddikti.kemdiktisaintek.go.id/api/dosen/profile', $id, $requestHeaders);
+}
+
+// Cek apakah api.php dipanggil langsung sebagai endpoint API (AJAX/Fetch)
+$isDirectApi = (basename($_SERVER['SCRIPT_FILENAME'] ?? '') === 'api.php') || isset($_GET['action']) || isset($_POST['action']);
+if (!$isDirectApi) {
+    // Dipanggil melalui include/require oleh index.php, jangan kirim header JSON dan jangan exit
+    return;
+}
+
+// Izinkan CORS dan set header JSON jika direct API
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Content-Type: application/json");
+
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+if ($method === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+// Ambil parameter
+$params = array_merge($_GET, $_POST);
+if (!$params && $method === 'POST') {
+    $body = json_decode(file_get_contents('php://input'), true) ?? [];
+    $params = $body;
+}
+
+$action = strtolower($params['action'] ?? 'search');
+$keyword = $params['keyword'] ?? $params['nama'] ?? $params['q'] ?? '';
+$id = $params['id'] ?? $params['id_dosen'] ?? $params['id_sdm'] ?? $params['idSdm'] ?? $params['sdm_id'] ?? $params['uuid'] ?? '';
+$nidn = $params['nidn'] ?? $params['nidnHint'] ?? '';
 
 // ========================
 // PENCARIAN DOSEN
