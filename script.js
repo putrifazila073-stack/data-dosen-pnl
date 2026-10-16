@@ -10,7 +10,12 @@
 
 // Konstanta Konfigurasi
 const DATA_JSON_URL = 'data.json';
-const API_ENDPOINT = '/api/pddikti';
+// Deteksi environment: localhost XAMPP pakai api.php, Vercel pakai /api/pddikti
+const API_ENDPOINT = (
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1' ||
+  window.location.hostname.endsWith('.local')
+) ? 'api.php' : '/api/pddikti';
 
 // State Global Aplikasi
 const AppState = {
