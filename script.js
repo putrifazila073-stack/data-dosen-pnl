@@ -1603,6 +1603,28 @@ async function initDetailPage() {
   }
 
   if (dosen) {
+    // Coba fetch data pengabdian dari PDDIKTI API menggunakan pddikti_id
+    const idPddikti = dosen.id_pddikti || dosen.pddikti_id || '';
+    if (idPddikti) {
+      try {
+        const url = `${API_ENDPOINT}?action=pengabdian&id=${encodeURIComponent(idPddikti)}`;
+        const res = await fetch(url);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.sukses && Array.isArray(json.data) && json.data.length > 0) {
+            // Gabungkan data pengabdian dari PDDIKTI ke dosen
+            dosen = {
+              ...dosen,
+              pengabdian: json.data
+                .map(p => normalizeWorkItem(p, 'Pengabdian Masyarakat'))
+                .filter(Boolean)
+            };
+          }
+        }
+      } catch (err) {
+        console.warn('Gagal fetch pengabdian PDDIKTI:', err.message);
+      }
+    }
     renderDetailPageData(dosen);
   } else {
     // Jika tidak ditemukan di data.json, coba cari melalui API
