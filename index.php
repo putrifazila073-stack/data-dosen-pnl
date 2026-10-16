@@ -147,8 +147,9 @@ if ($isPencarian) {
       </p>
 
       <!-- Form Pencarian -->
+      <!-- Form Pencarian -->
       <div class="search-card">
-        <form action="index.php" method="GET" class="search-form">
+        <form action="index.php" method="GET" class="search-form" id="search-form">
           <div class="search-input-wrap">
             <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"></circle>
@@ -156,14 +157,17 @@ if ($isPencarian) {
             </svg>
             <input 
               type="text" 
+              id="search-input"
               name="q" 
               class="search-input" 
-              placeholder="Cari Nama atau NIDN Dosen (Contoh: ARYATI, AZWINUR, 0009067504)..." 
+              placeholder="Cari Nama atau NIDN Dosen..." 
               value="<?= htmlspecialchars($keyword) ?>"
               autocomplete="off"
             >
+            <!-- Dropdown Riwayat Pencarian -->
+            <div id="search-history-dropdown" class="search-history-dropdown" style="display: none;"></div>
           </div>
-          <button type="submit" class="btn-search">
+          <button type="submit" id="btn-search" class="btn-search">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -173,12 +177,12 @@ if ($isPencarian) {
         </form>
       </div>
 
-      <!-- Reset Pencarian -->
-      <?php if ($isPencarian): ?>
-      <div class="search-hints">
-        <a href="index.php" class="search-chip" style="background: #f1f5f9; color: #475569;">✕ Reset Pencarian</a>
+      <!-- Riwayat Pencarian & Reset -->
+      <div id="search-history-container" class="search-hints" style="display: none;"></div>
+      <div id="search-reset-container" class="search-hints" style="margin-top: 6px;">
+        <button type="button" id="btn-reset-search" class="search-chip"
+          style="<?= $isPencarian ? '' : 'display:none;' ?> background: #f1f5f9; color: #475569;">✕ Reset Pencarian</button>
       </div>
-      <?php endif; ?>
     </div>
   </section>
 
