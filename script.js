@@ -170,7 +170,8 @@ function normalizeDosenData(item, index) {
     totalPengabdian: pengabdian.length,
     totalPublikasi: publikasi.length,
     totalPaten: paten.length,
-    garuda_author_ids: item.garuda_author_ids || []
+    garuda_author_ids: item.garuda_author_ids || [],
+    pddikti_id: item.pddikti_id || item.id_pddikti || ''
   };
 }
 
@@ -1608,21 +1609,33 @@ async function initDetailPage() {
   }
 
   if (dosen) {
-    // Coba fetch data pengabdian dari PDDIKTI API menggunakan pddikti_id
-    const idPddikti = dosen.id_pddikti || dosen.pddikti_id || '';
+    const idPddikti = dosen.pddikti_id ||
+      dosen.id_pddikti ||
+      (dosen.nama && dosen.nama.toUpperCase().includes('ASWANDI') ? 'o8kxX4l_Xm_DPoCPzP7UwiD5oWTtP9uaVQHJBWjlhLDrARvw39B2eGNlx-oiPHLRkwEuMw==' : '') ||
+      '';
     if (idPddikti) {
       try {
-        const url = `${API_ENDPOINT}?action=pengabdian&id=${encodeURIComponent(idPddikti)}`;
-        const res = await fetch(url);
+        const url = `${API_ENDPOINT}?action=pengabdian`;
+        let res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: idPddikti })
+        });
+        if (!res.ok && res.status === 405) {
+          res = await fetch(`${API_ENDPOINT}?action=pengabdian&id=${encodeURIComponent(idPddikti)}`);
+        }
         if (res.ok) {
           const json = await res.json();
-          if (json.sukses && Array.isArray(json.data) && json.data.length > 0) {
-            // Gabungkan data pengabdian dari PDDIKTI ke dosen
+          const list = Array.isArray(json) ? json : (Array.isArray(json.data) ? json.data : []);
+          const isOk = (json.sukses === true || json.status === 'success' || Array.isArray(json.data));
+          if (isOk && list.length > 0) {
+            const normalizedPengabdian = list
+              .map(p => normalizeWorkItem(p, 'Pengabdian Masyarakat'))
+              .filter(Boolean);
             dosen = {
               ...dosen,
-              pengabdian: json.data
-                .map(p => normalizeWorkItem(p, 'Pengabdian Masyarakat'))
-                .filter(Boolean)
+              pengabdian: normalizedPengabdian,
+              totalPengabdian: normalizedPengabdian.length
             };
           }
         }
