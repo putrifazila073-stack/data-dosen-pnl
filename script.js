@@ -902,7 +902,7 @@ function renderModalWorksList(containerId, items, emptyText) {
  * Utilitas untuk memicu unduhan file langsung di browser
  */
 function triggerBrowserDownload(content, filename, mimeType = 'text/plain') {
-  const blob = new Blob([content], { type: mimeType });
+  const blob = (content instanceof Blob) ? content : new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -1230,7 +1230,141 @@ function downloadCsvWorksDetail() {
 }
 
 /**
- * 5. Unduh Portofolio Per Dosen (Excel)
+ * Generator File Excel OpenXML (.xlsx) Murni JavaScript
+ */
+function generateXlsxBlob(sheetXml, stylesXml) {
+  function makeCrc32Table() {
+    const table = new Uint32Array(256);
+    for (let i = 0; i < 256; i++) {
+      let c = i;
+      for (let j = 0; j < 8; j++) {
+        c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      }
+      table[i] = c >>> 0;
+    }
+    return table;
+  }
+  const crcTable = makeCrc32Table();
+  function crc32(buf) {
+    let crc = 0xFFFFFFFF;
+    for (let i = 0; i < buf.length; i++) {
+      crc = (crc >>> 8) ^ crcTable[(crc ^ buf[i]) & 0xFF];
+    }
+    return (crc ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  function strToUint8(str) {
+    if (typeof TextEncoder !== 'undefined') {
+      return new TextEncoder().encode(str);
+    }
+    const arr = new Uint8Array(str.length);
+    for (let i = 0; i < str.length; i++) arr[i] = str.charCodeAt(i) & 0xFF;
+    return arr;
+  }
+
+  const files = [
+    {
+      name: '[Content_Types].xml',
+      data: strToUint8('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>')
+    },
+    {
+      name: '_rels/.rels',
+      data: strToUint8('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>')
+    },
+    {
+      name: 'xl/_rels/workbook.xml.rels',
+      data: strToUint8('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>')
+    },
+    {
+      name: 'xl/workbook.xml',
+      data: strToUint8('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Portofolio Dosen" sheetId="1" r:id="rId1"/></sheets></workbook>')
+    },
+    {
+      name: 'xl/styles.xml',
+      data: strToUint8(stylesXml)
+    },
+    {
+      name: 'xl/worksheets/sheet1.xml',
+      data: strToUint8(sheetXml)
+    }
+  ];
+
+  let localOffset = 0;
+  const localParts = [];
+  const centralParts = [];
+
+  files.forEach(f => {
+    const nameBytes = strToUint8(f.name);
+    const crc = crc32(f.data);
+    const size = f.data.length;
+
+    // Local Header (30 bytes + name length)
+    const lh = new Uint8Array(30 + nameBytes.length);
+    const dv = new DataView(lh.buffer);
+    dv.setUint32(0, 0x04034b50, true);
+    dv.setUint16(4, 20, true);
+    dv.setUint16(6, 0, true);
+    dv.setUint16(8, 0, true);
+    dv.setUint16(10, 0, true);
+    dv.setUint16(12, 0, true);
+    dv.setUint32(14, crc, true);
+    dv.setUint32(18, size, true);
+    dv.setUint32(22, size, true);
+    dv.setUint16(26, nameBytes.length, true);
+    dv.setUint16(28, 0, true);
+    lh.set(nameBytes, 30);
+
+    localParts.push(lh, f.data);
+
+    // Central Header (46 bytes + name length)
+    const ch = new Uint8Array(46 + nameBytes.length);
+    const cdv = new DataView(ch.buffer);
+    cdv.setUint32(0, 0x02014b50, true);
+    cdv.setUint16(4, 20, true);
+    cdv.setUint16(6, 20, true);
+    cdv.setUint16(8, 0, true);
+    cdv.setUint16(10, 0, true);
+    cdv.setUint16(12, 0, true);
+    cdv.setUint16(14, 0, true);
+    cdv.setUint32(16, crc, true);
+    cdv.setUint32(20, size, true);
+    cdv.setUint32(24, size, true);
+    cdv.setUint16(28, nameBytes.length, true);
+    cdv.setUint16(30, 0, true);
+    cdv.setUint16(32, 0, true);
+    cdv.setUint16(34, 0, true);
+    cdv.setUint16(36, 0, true);
+    cdv.setUint32(38, 0, true);
+    cdv.setUint32(42, localOffset, true);
+    ch.set(nameBytes, 46);
+
+    centralParts.push(ch);
+    localOffset += lh.length + size;
+  });
+
+  const centralOffset = localOffset;
+  let centralSize = 0;
+  centralParts.forEach(p => centralSize += p.length);
+
+  // End of Central Directory (22 bytes)
+  const eocd = new Uint8Array(22);
+  const edv = new DataView(eocd.buffer);
+  edv.setUint32(0, 0x06054b50, true);
+  edv.setUint16(4, 0, true);
+  edv.setUint16(6, 0, true);
+  edv.setUint16(8, files.length, true);
+  edv.setUint16(10, files.length, true);
+  edv.setUint32(12, centralSize, true);
+  edv.setUint32(16, centralOffset, true);
+  edv.setUint16(20, 0, true);
+
+  return new Blob([...localParts, ...centralParts, eocd], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  });
+}
+
+/**
+ * 5. Unduh Portofolio Per Dosen (Excel .xlsx)
  */
 function downloadExcelPerDosen(dosen) {
   if (!dosen) return;
@@ -1244,161 +1378,144 @@ function downloadExcelPerDosen(dosen) {
   const pengabdianList = Array.isArray(dosen.pengabdian) ? dosen.pengabdian : [];
   const publikasiList = Array.isArray(dosen.publikasi) ? dosen.publikasi : [];
 
-  let worksRows = '';
-  let counter = 1;
+  let rowsXml = '';
+  let rowIndex = 1;
 
-  const appendWorks = (list, kategori) => {
+  const escapeXml = (val) => {
+    if (val === null || val === undefined) return '';
+    return String(val)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  };
+
+  const addRow = (cells) => {
+    if (!cells || cells.length === 0) {
+      rowsXml += `<row r="${rowIndex}"/>`;
+      rowIndex++;
+      return;
+    }
+    const colLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
+    let rowContent = '';
+    cells.forEach((cell, idx) => {
+      const col = colLetters[idx] || 'G';
+      const cellRef = `${col}${rowIndex}`;
+      const styleAttr = cell.s !== undefined ? ` s="${cell.s}"` : '';
+      const textVal = escapeXml(cell.t);
+      rowContent += `<c r="${cellRef}" t="inlineStr"${styleAttr}><is><t>${textVal}</t></is></c>`;
+    });
+    rowsXml += `<row r="${rowIndex}">${rowContent}</row>`;
+    rowIndex++;
+  };
+
+  // Header Judul Dokumen
+  addRow([{ t: `PORTOFOLIO DOSEN - ${dosen.nama || ''}`, s: 1 }]);
+  addRow([{ t: `Tanggal Ekspor: ${exportDate} | Politeknik Negeri Lhokseumawe (PNL)` }]);
+  addRow([]);
+
+  // I. PROFIL DOSEN
+  addRow([{ t: 'I. PROFIL DOSEN', s: 2 }]);
+  addRow([{ t: 'Nama Lengkap' }, { t: dosen.nama || '-' }]);
+  addRow([{ t: 'NIDN' }, { t: dosen.nidn || '-' }]);
+  addRow([{ t: 'Program Studi' }, { t: dosen.prodi || '-' }]);
+  addRow([{ t: 'Jurusan' }, { t: dosen.jurusan || '-' }]);
+  addRow([{ t: 'Jabatan Fungsional' }, { t: dosen.fungsional || '-' }]);
+  addRow([{ t: 'Pendidikan Terakhir' }, { t: dosen.pendidikan || '-' }]);
+  addRow([{ t: 'Status Kepegawaian' }, { t: `${dosen.status || '-'} (${dosen.aktivitas || 'Aktif'})` }]);
+  addRow([]);
+
+  // II. RINGKASAN JUMLAH KARYA
+  const totalKarya = penelitianList.length + pengabdianList.length + publikasiList.length;
+  addRow([{ t: 'II. RINGKASAN JUMLAH KARYA', s: 2 }]);
+  addRow([{ t: 'Penelitian' }, { t: String(penelitianList.length) }]);
+  addRow([{ t: 'Pengabdian Masyarakat' }, { t: String(pengabdianList.length) }]);
+  addRow([{ t: 'Publikasi Karya' }, { t: String(publikasiList.length) }]);
+  addRow([{ t: 'Total Keseluruhan' }, { t: String(totalKarya) }]);
+  addRow([]);
+
+  // III. RINCIAN PORTOFOLIO KARYA
+  addRow([{ t: 'III. RINCIAN PORTOFOLIO KARYA', s: 2 }]);
+  addRow([
+    { t: 'No', s: 3 },
+    { t: 'Kategori', s: 3 },
+    { t: 'Judul Karya', s: 3 },
+    { t: 'Tahun', s: 3 },
+    { t: 'Sumber Data', s: 3 },
+    { t: 'Tautan / URL', s: 3 }
+  ]);
+
+  let counter = 1;
+  const appendItems = (list, kategori) => {
     list.forEach(item => {
-      worksRows += `
-        <tr>
-          <td class="num-cell" style="text-align:center;">${counter++}</td>
-          <td style="font-weight:600; color:#1e3a8a;">${escapeHtml(kategori)}</td>
-          <td>${escapeHtml(item.judul || '-')}</td>
-          <td style="text-align:center; mso-number-format:'\\@';">${escapeHtml(item.tahun || '-')}</td>
-          <td>${escapeHtml(item.sumber || 'Sumber belum diverifikasi')}</td>
-          <td>${item.url ? `<a href="${escapeHtml(item.url)}" target="_blank">${escapeHtml(item.url)}</a>` : '-'}</td>
-        </tr>
-      `;
+      addRow([
+        { t: String(counter++) },
+        { t: kategori },
+        { t: item.judul || '-' },
+        { t: String(item.tahun || '-') },
+        { t: item.sumber || 'PDDIKTI' },
+        { t: item.url || '-' }
+      ]);
     });
   };
 
-  appendWorks(penelitianList, 'Penelitian');
-  appendWorks(pengabdianList, 'Pengabdian Masyarakat');
-  appendWorks(publikasiList, 'Publikasi Karya');
+  appendItems(penelitianList, 'Penelitian');
+  appendItems(pengabdianList, 'Pengabdian Masyarakat');
+  appendItems(publikasiList, 'Publikasi Karya');
 
   if (counter === 1) {
-    worksRows = `
-      <tr>
-        <td colspan="6" style="text-align:center; padding:12px; color:#64748b; font-style:italic;">
-          Belum ada data karya terdaftar untuk dosen ini.
-        </td>
-      </tr>
-    `;
+    addRow([{ t: '-' }, { t: 'Belum ada data karya terdaftar untuk dosen ini.' }]);
   }
 
-  const tableHtml = `
-    <table>
-      <thead>
-        <tr>
-          <th colspan="6" style="background-color:#0b2545; color:#ffffff; font-size:14pt; padding:12px; text-align:left;">
-            PORTOFOLIO DOSEN - ${escapeHtml(dosen.nama || '')}
-          </th>
-        </tr>
-        <tr>
-          <td colspan="6" style="background-color:#f8fafc; color:#64748b; font-size:10pt; padding:6px 12px; border-bottom:2px solid #cbd5e1;">
-            Tanggal Ekspor: ${escapeHtml(exportDate)} &nbsp;|&nbsp; Politeknik Negeri Lhokseumawe (PNL)
-          </td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="background-color:#f1f5f9; font-weight:bold;">
-          <td colspan="6" style="padding:8px 12px; color:#0b2545; font-size:11pt;">I. PROFIL DOSEN</td>
-        </tr>
-        <tr>
-          <td style="font-weight:600; width:180px;">Nama Lengkap</td>
-          <td colspan="5">${escapeHtml(dosen.nama || '-')}</td>
-        </tr>
-        <tr>
-          <td style="font-weight:600;">NIDN</td>
-          <td colspan="5" style="mso-number-format:'\\@';">${escapeHtml(dosen.nidn || '-')}</td>
-        </tr>
-        <tr>
-          <td style="font-weight:600;">Program Studi</td>
-          <td colspan="5">${escapeHtml(dosen.prodi || '-')}</td>
-        </tr>
-        <tr>
-          <td style="font-weight:600;">Jurusan</td>
-          <td colspan="5">${escapeHtml(dosen.jurusan || '-')}</td>
-        </tr>
-        <tr>
-          <td style="font-weight:600;">Jabatan Fungsional</td>
-          <td colspan="5">${escapeHtml(dosen.fungsional || '-')}</td>
-        </tr>
-        <tr>
-          <td style="font-weight:600;">Pendidikan Terakhir</td>
-          <td colspan="5">${escapeHtml(dosen.pendidikan || '-')}</td>
-        </tr>
-        <tr>
-          <td style="font-weight:600;">Status Kepegawaian</td>
-          <td colspan="5">${escapeHtml(dosen.status || '-')} (${escapeHtml(dosen.aktivitas || 'Aktif')})</td>
-        </tr>
-        <tr style="background-color:#f1f5f9; font-weight:bold;">
-          <td colspan="6" style="padding:8px 12px; color:#0b2545; font-size:11pt;">II. RINGKASAN JUMLAH KARYA</td>
-        </tr>
-        <tr>
-          <td colspan="6" style="padding:6px 12px;">
-            Penelitian: <strong>${penelitianList.length}</strong> &nbsp;|&nbsp;
-            Pengabdian: <strong>${pengabdianList.length}</strong> &nbsp;|&nbsp;
-            Publikasi: <strong>${publikasiList.length}</strong> &nbsp;|&nbsp;
-            Total Keseluruhan: <strong>${penelitianList.length + pengabdianList.length + publikasiList.length}</strong>
-          </td>
-        </tr>
-        <tr style="background-color:#f1f5f9; font-weight:bold;">
-          <td colspan="6" style="padding:8px 12px; color:#0b2545; font-size:11pt;">III. RINCIAN PORTOFOLIO KARYA</td>
-        </tr>
-        <tr style="background-color:#1e3a8a; color:#ffffff; font-weight:bold; text-align:center;">
-          <th style="background-color:#1e3a8a; color:#ffffff; width:40px;">No</th>
-          <th style="background-color:#1e3a8a; color:#ffffff; width:150px;">Kategori</th>
-          <th style="background-color:#1e3a8a; color:#ffffff;">Judul Karya</th>
-          <th style="background-color:#1e3a8a; color:#ffffff; width:80px;">Tahun</th>
-          <th style="background-color:#1e3a8a; color:#ffffff; width:150px;">Sumber Data</th>
-          <th style="background-color:#1e3a8a; color:#ffffff; width:220px;">Tautan</th>
-        </tr>
-        ${worksRows}
-      </tbody>
-    </table>
-  `;
+  const sheetXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <cols>
+    <col min="1" max="1" width="6" customWidth="1"/>
+    <col min="2" max="2" width="24" customWidth="1"/>
+    <col min="3" max="3" width="70" customWidth="1"/>
+    <col min="4" max="4" width="10" customWidth="1"/>
+    <col min="5" max="5" width="20" customWidth="1"/>
+    <col min="6" max="6" width="45" customWidth="1"/>
+  </cols>
+  <sheetData>
+    ${rowsXml}
+  </sheetData>
+</worksheet>`.trim();
 
-  const excelXml = `
-    <html xmlns:o="urn:schemas-microsoft-com:office:office"
-          xmlns:x="urn:schemas-microsoft-com:office:excel"
-          xmlns="http://www.w3.org/TR/REC-html40">
-    <head>
-      <!--[if gte mso 9]>
-      <xml>
-        <x:ExcelWorkbook>
-          <x:ExcelWorksheets>
-            <x:ExcelWorksheet>
-              <x:Name>Portofolio Dosen</x:Name>
-              <x:WorksheetOptions>
-                <x:DisplayGridlines/>
-              </x:WorksheetOptions>
-            </x:ExcelWorksheet>
-          </x:ExcelWorksheets>
-        </x:ExcelWorkbook>
-      </xml>
-      <![endif]-->
-      <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
-      <style>
-        body { font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #1e293b; }
-        table { border-collapse: collapse; width: 100%; }
-        th { border: 1px solid #cbd5e1; padding: 6px 8px; font-weight: bold; }
-        td { border: 1px solid #e2e8f0; padding: 5px 8px; vertical-align: top; mso-number-format: "\\@"; }
-        .num-cell { text-align: right; mso-number-format: "#,##0"; }
-      </style>
-    </head>
-    <body>
-      ${tableHtml}
-    </body>
-    </html>
-  `.trim();
+  const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <fonts count="4">
+    <font><sz val="11"/><name val="Calibri"/></font>
+    <font><b/><sz val="14"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font>
+    <font><b/><sz val="11"/><color rgb="FF0B2545"/><name val="Calibri"/></font>
+    <font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font>
+  </fonts>
+  <fills count="5">
+    <fill><patternFill patternType="none"/></fill>
+    <fill><patternFill patternType="gray125"/></fill>
+    <fill><patternFill patternType="solid"><fgColor rgb="FF0B2545"/></patternFill></fill>
+    <fill><patternFill patternType="solid"><fgColor rgb="FFF1F5F9"/></patternFill></fill>
+    <fill><patternFill patternType="solid"><fgColor rgb="FF1E3A8A"/></patternFill></fill>
+  </fills>
+  <borders count="1"><border><left/><right/><top/><bottom/></border></borders>
+  <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+  <cellXfs count="4">
+    <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>
+    <xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/>
+    <xf numFmtId="0" fontId="2" fillId="3" borderId="0" xfId="0" applyFont="1" applyFill="1"/>
+    <xf numFmtId="0" fontId="3" fillId="4" borderId="0" xfId="0" applyFont="1" applyFill="1"/>
+  </cellXfs>
+</styleSheet>`.trim();
 
-  const fileName = `portofolio-${slugify(dosen.nama)}.xls`;
-  const excelContent = '\uFEFF' + excelXml;
-  triggerBrowserDownload(excelContent, fileName, 'application/vnd.ms-excel;charset=utf-8;');
+  const fileName = `portofolio-${slugify(dosen.nama)}.xlsx`;
+  const xlsxBlob = generateXlsxBlob(sheetXml, stylesXml);
+  triggerBrowserDownload(xlsxBlob, fileName, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 }
 
-// Alias untuk kompatibilitas fungsi unduh
+// Alias untuk kompatibilitas pemanggilan modul
 function downloadJsonPerDosen(dosen) {
   return downloadExcelPerDosen(dosen);
-}
-
-/**
- * 6. Cetak / Simpan Ringkasan Portofolio Dosen (PDF)
- */
-function printOrSavePdf(dosen) {
-  if (!dosen) return;
-  window.print();
 }
 
 /* ============================================================================
@@ -1437,7 +1554,6 @@ async function initIndexPage() {
   const modalClose = document.getElementById('modal-karya-close');
   const modalOverlay = document.getElementById('modal-karya');
   const modalBtnUnduhJson = document.getElementById('modal-btn-unduh-json');
-  const modalBtnCetakPdf = document.getElementById('modal-btn-cetak-pdf');
 
   // Cek parameter URL untuk pencarian awal atau filter prodi
   const urlParams = new URLSearchParams(window.location.search);
@@ -1868,14 +1984,6 @@ async function initIndexPage() {
       }
     });
   }
-
-  if (modalBtnCetakPdf) {
-    modalBtnCetakPdf.addEventListener('click', () => {
-      if (AppState.currentModalDosen) {
-        printOrSavePdf(AppState.currentModalDosen);
-      }
-    });
-  }
 }
 
 /* ============================================================================
@@ -2174,14 +2282,6 @@ function injectDetailActionButtons(dosen) {
       </svg>
       Unduh Portofolio (Excel)
     </button>
-    <button type="button" class="btn-modal-action" id="btn-detail-cetak-pdf" title="Cetak atau simpan portofolio ke PDF">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polyline points="6 9 6 2 18 2 18 9"></polyline>
-        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-        <rect x="6" y="14" width="12" height="8"></rect>
-      </svg>
-      Cetak / Simpan PDF
-    </button>
   `;
 
   header.style.display = 'flex';
@@ -2190,10 +2290,7 @@ function injectDetailActionButtons(dosen) {
   header.appendChild(bar);
 
   const btnJson = document.getElementById('btn-detail-unduh-json');
-  const btnPdf = document.getElementById('btn-detail-cetak-pdf');
-
   if (btnJson) btnJson.addEventListener('click', () => downloadJsonPerDosen(dosen));
-  if (btnPdf) btnPdf.addEventListener('click', () => printOrSavePdf(dosen));
 }
 
 function showDetailError(message) {
