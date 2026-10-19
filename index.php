@@ -15,7 +15,7 @@ $isPencarian = !empty($keyword);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Data Dosen Politeknik Negeri Lhokseumawe</title>
-  <meta name="description" content="Portal Data Dosen Politeknik Negeri Lhokseumawe beserta Portofolio Penelitian, Pengabdian, Publikasi, dan Paten PDDIKTI.">
+  <meta name="description" content="Portal Data Dosen Politeknik Negeri Lhokseumawe beserta Portofolio Penelitian, Pengabdian, dan Publikasi PDDIKTI.">
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,10 +32,6 @@ $isPencarian = !empty($keyword);
           <p>POLITEKNIK NEGERI LHOKSEUMAWE</p>
         </div>
       </div>
-      <div class="nav-badge-pddikti">
-        <span class="dot"></span>
-        PDDIKTI Live API
-      </div>
     </div>
   </header>
 
@@ -47,7 +43,7 @@ $isPencarian = !empty($keyword);
         <span>POLITEKNIK NEGERI LHOKSEUMAWE</span>
       </h2>
       <p class="hero-subtitle">
-        Cari dan temukan portofolio tridharma perguruan tinggi, penelitian, pengabdian, publikasi ilmiah, dan HKI/paten.
+        Cari dan temukan portofolio tridharma perguruan tinggi, penelitian, pengabdian, dan publikasi ilmiah.
       </p>
 
       <!-- Form Pencarian -->
@@ -144,7 +140,7 @@ $isPencarian = !empty($keyword);
               <div class="download-item-icon excel">XLS</div>
               <div class="download-item-text">
                 <strong>Unduh Portofolio Lengkap (Excel)</strong>
-                <small>Profil, penelitian, pengabdian, publikasi, paten format Excel</small>
+                <small>Profil, penelitian, pengabdian, publikasi format Excel</small>
               </div>
             </button>
             <button type="button" class="download-item" id="btn-unduh-karya-csv">
@@ -326,9 +322,6 @@ $isPencarian = !empty($keyword);
         <button type="button" class="modal-tab-btn" data-modaltab="modal-tab-publikasi">
           Publikasi (<span id="modal-count-publikasi">0</span>)
         </button>
-        <button type="button" class="modal-tab-btn" data-modaltab="modal-tab-paten">
-          HKI / Paten (<span id="modal-count-paten">0</span>)
-        </button>
       </div>
 
       <div class="modal-body">
@@ -340,9 +333,6 @@ $isPencarian = !empty($keyword);
         </div>
         <div id="modal-tab-publikasi" class="modal-tab-content">
           <div id="modal-list-publikasi" class="modal-works-list"></div>
-        </div>
-        <div id="modal-tab-paten" class="modal-tab-content">
-          <div id="modal-list-paten" class="modal-works-list"></div>
         </div>
       </div>
 
