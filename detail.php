@@ -770,6 +770,71 @@
     }
 
 
+    /* FETCH PUBLIKASI DARI PDDIKTI API */
+    async function fetchPublikasiPDDIKTI(idPddikti) {
+
+        if (!idPddikti) {
+            return { sukses: false, data: [], pesan: "ID PDDIKTI dosen belum tersedia." };
+        }
+
+        try {
+
+            const url = `${API_ENDPOINT}?action=publikasi`;
+            const payload = { id: idPddikti };
+
+            let response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok && response.status === 405) {
+                const getUrl = `${API_ENDPOINT}?action=publikasi&id=${encodeURIComponent(idPddikti)}`;
+                response = await fetch(getUrl);
+            }
+
+            if (!response.ok) {
+                return {
+                    sukses: false,
+                    data: [],
+                    pesan: `Gagal memuat API PDDIKTI (Status HTTP: ${response.status})`
+                };
+            }
+
+            const json = await response.json();
+            const isOk = (json.sukses === true || json.status === "success" || Array.isArray(json.data));
+            const list = Array.isArray(json) ? json : (Array.isArray(json.data) ? json.data : []);
+
+            if (isOk) {
+                return {
+                    sukses: true,
+                    data: list,
+                    pesan: json.pesan || json.message || "Data publikasi berhasil diambil."
+                };
+            }
+
+            return {
+                sukses: false,
+                data: [],
+                pesan: json.pesan || json.message || "Data publikasi tidak ditemukan."
+            };
+
+        } catch (err) {
+
+            console.warn("Gagal fetch publikasi PDDIKTI:", err.message);
+            return {
+                sukses: false,
+                data: [],
+                pesan: "Gagal terhubung ke API: " + err.message
+            };
+
+        }
+
+    }
+
+
     /* TAMPILKAN */
     async function tampilkanDosen() {
 
@@ -884,22 +949,36 @@
 
             /* PUBLIKASI */
 
-            const jumlah =
-                Array.isArray(data.publikasi)
-                ? data.publikasi.length
-                : 0;
+            const resPublikasi =
+                await fetchPublikasiPDDIKTI(idPddikti);
 
+            let publikasiAkhir = [];
+            if (resPublikasi.sukses && Array.isArray(resPublikasi.data) && resPublikasi.data.length > 0) {
+                publikasiAkhir = resPublikasi.data.map(p => ({
+                    ...p,
+                    sumber: "PDDIKTI",
+                    url: p.url || pddiktiDetailUrl
+                }));
+            } else if (Array.isArray(data.publikasi) && data.publikasi.length > 0) {
+                publikasiAkhir = data.publikasi.map(p => ({
+                    ...p,
+                    url: p.url || (p.sumber === "PDDIKTI" ? pddiktiDetailUrl : "")
+                }));
+            }
 
-            document.getElementById(
-                "jumlahPublikasi"
-            ).textContent =
-                jumlah;
+            const badgePublikasi = document.getElementById("jumlahPublikasi");
+            if (badgePublikasi) {
+                badgePublikasi.textContent = publikasiAkhir.length;
+            }
 
+            const pesanKosongPublikasi = (!resPublikasi.sukses && publikasiAkhir.length === 0)
+                ? (resPublikasi.pesan || "Gagal memuat data publikasi.")
+                : "Belum ada data publikasi.";
 
             tampilkanItem(
                 "publikasi",
-                data.publikasi,
-                "Belum ada data publikasi."
+                publikasiAkhir,
+                pesanKosongPublikasi
             );
 
 
