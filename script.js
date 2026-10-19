@@ -1916,7 +1916,7 @@ async function initDetailPage() {
   if (dosen) {
     const idPddikti = dosen.pddikti_id ||
       dosen.id_pddikti ||
-      (dosen.nama && dosen.nama.toUpperCase().includes('ASWANDI') ? 'o8kxX4l_Xm_DPoCPzP7UwiD5oWTtP9uaVQHJBWjlhLDrARvw39B2eGNlx-oiPHLRkwEuMw==' : '') ||
+      dosen.id_sdm ||
       '';
     if (idPddikti) {
       try {
