@@ -143,12 +143,10 @@ function normalizeDosenData(item, index) {
   const rawPenelitian = Array.isArray(item.penelitian) ? item.penelitian : [];
   const rawPengabdian = Array.isArray(item.pengabdian) ? item.pengabdian : [];
   const rawPublikasi  = Array.isArray(item.publikasi)  ? item.publikasi  : [];
-  const rawPaten      = Array.isArray(item.paten)      ? item.paten      : [];
-
   const penelitian = rawPenelitian.map(p => normalizeWorkItem(p, 'Penelitian')).filter(Boolean);
   const pengabdian = rawPengabdian.map(p => normalizeWorkItem(p, 'Pengabdian Masyarakat')).filter(Boolean);
   const publikasi  = rawPublikasi.map(p => normalizeWorkItem(p, 'Publikasi Karya')).filter(Boolean);
-  const paten      = rawPaten.map(p => normalizeWorkItem(p, 'HKI/Paten')).filter(Boolean);
+  const paten      = [];
 
   return {
     id: id,
@@ -704,18 +702,15 @@ window.openModalKarya = function (dosenId, targetTabId = 'modal-tab-penelitian')
   const cPen = document.getElementById('modal-count-penelitian');
   const cPeng = document.getElementById('modal-count-pengabdian');
   const cPub = document.getElementById('modal-count-publikasi');
-  const cPat = document.getElementById('modal-count-paten');
 
   if (cPen) cPen.textContent = dosen.penelitian.length;
   if (cPeng) cPeng.textContent = dosen.pengabdian.length;
   if (cPub) cPub.textContent = dosen.publikasi.length;
-  if (cPat) cPat.textContent = dosen.paten.length;
 
   // Render daftar karya untuk masing-masing tab (memastikan sumber & tahun tampil)
   renderModalWorksList('modal-list-penelitian', dosen.penelitian, 'Belum ada data penelitian untuk dosen ini.');
   renderModalWorksList('modal-list-pengabdian', dosen.pengabdian, 'Belum ada data pengabdian masyarakat untuk dosen ini.');
   renderModalWorksList('modal-list-publikasi', dosen.publikasi, 'Belum ada data publikasi karya untuk dosen ini.');
-  renderModalWorksList('modal-list-paten', dosen.paten, 'Belum ada data HKI atau Paten untuk dosen ini.');
 
   // Aktifkan tab yang diminta
   switchModalTab(targetTabId);
@@ -876,8 +871,7 @@ function downloadCsvAllDosen() {
     'Ikatan Kerja',
     'Jumlah Penelitian',
     'Jumlah Pengabdian',
-    'Jumlah Publikasi',
-    'Jumlah Paten'
+    'Jumlah Publikasi'
   ];
 
   let csvRows = [];
@@ -899,8 +893,7 @@ function downloadCsvAllDosen() {
       d.ikatan_kerja,
       d.totalPenelitian,
       d.totalPengabdian,
-      d.totalPublikasi,
-      d.totalPaten
+      d.totalPublikasi
     ];
     csvRows.push(row.map(formatCsvCell).join(','));
   });
@@ -937,8 +930,7 @@ function downloadCsvByProdi() {
     'Status Aktivitas',
     'Jumlah Penelitian',
     'Jumlah Pengabdian',
-    'Jumlah Publikasi',
-    'Jumlah Paten'
+    'Jumlah Publikasi'
   ];
 
   let csvRows = [];
@@ -955,8 +947,7 @@ function downloadCsvByProdi() {
       d.status_aktivitas,
       d.totalPenelitian,
       d.totalPengabdian,
-      d.totalPublikasi,
-      d.totalPaten
+      d.totalPublikasi
     ];
     csvRows.push(row.map(formatCsvCell).join(','));
   });
@@ -985,8 +976,7 @@ function downloadExcelFullPortfolio() {
   dataset.forEach((d, idx) => {
     const totalKarya = (Number(d.totalPenelitian) || 0) +
                        (Number(d.totalPengabdian) || 0) +
-                       (Number(d.totalPublikasi) || 0) +
-                       (Number(d.totalPaten) || 0);
+                       (Number(d.totalPublikasi) || 0);
 
     rowsHtml += `
       <tr>
@@ -1002,7 +992,6 @@ function downloadExcelFullPortfolio() {
         <td class="num-cell">${Number(d.totalPenelitian) || 0}</td>
         <td class="num-cell">${Number(d.totalPengabdian) || 0}</td>
         <td class="num-cell">${Number(d.totalPublikasi) || 0}</td>
-        <td class="num-cell">${Number(d.totalPaten) || 0}</td>
         <td class="num-cell" style="font-weight:bold; background-color:#f1f5f9;">${totalKarya}</td>
       </tr>
     `;
@@ -1012,12 +1001,12 @@ function downloadExcelFullPortfolio() {
     <table>
       <thead>
         <tr>
-          <th colspan="14" style="background-color:#0b2545; color:#ffffff; font-size:14pt; padding:12px; text-align:left;">
+          <th colspan="13" style="background-color:#0b2545; color:#ffffff; font-size:14pt; padding:12px; text-align:left;">
             PORTOFOLIO LENGKAP DOSEN POLITEKNIK NEGERI LHOKSEUMAWE (PNL)
           </th>
         </tr>
         <tr>
-          <td colspan="14" style="background-color:#f8fafc; color:#64748b; font-size:10pt; padding:6px 12px; border-bottom:2px solid #cbd5e1;">
+          <td colspan="13" style="background-color:#f8fafc; color:#64748b; font-size:10pt; padding:6px 12px; border-bottom:2px solid #cbd5e1;">
             Tanggal Ekspor: ${escapeHtml(exportDate)} &nbsp;|&nbsp; Total Dosen: ${dataset.length} &nbsp;|&nbsp; Sumber Data: Portal Resmi PNL &amp; PDDikti / GARUDA
           </td>
         </tr>
@@ -1034,7 +1023,6 @@ function downloadExcelFullPortfolio() {
           <th style="background-color:#1e3a8a; color:#ffffff;">Penelitian</th>
           <th style="background-color:#1e3a8a; color:#ffffff;">Pengabdian</th>
           <th style="background-color:#1e3a8a; color:#ffffff;">Publikasi</th>
-          <th style="background-color:#1e3a8a; color:#ffffff;">Paten / HKI</th>
           <th style="background-color:#0b2545; color:#ffffff;">Total Karya</th>
         </tr>
       </thead>
@@ -1159,21 +1147,6 @@ function downloadCsvWorksDetail() {
         item.url || ''
       ].map(formatCsvCell).join(','));
     });
-
-    // 4. Paten
-    d.paten.forEach(item => {
-      csvRows.push([
-        counter++,
-        d.nama,
-        d.nidn,
-        d.prodi,
-        'HKI / Paten',
-        item.judul,
-        item.tahun || '',
-        item.sumber || 'Sumber belum diverifikasi',
-        item.url || ''
-      ].map(formatCsvCell).join(','));
-    });
   });
 
   const csvContent = '\uFEFF' + csvRows.join('\r\n');
@@ -1194,7 +1167,6 @@ function downloadExcelPerDosen(dosen) {
   const penelitianList = Array.isArray(dosen.penelitian) ? dosen.penelitian : [];
   const pengabdianList = Array.isArray(dosen.pengabdian) ? dosen.pengabdian : [];
   const publikasiList = Array.isArray(dosen.publikasi) ? dosen.publikasi : [];
-  const patenList = Array.isArray(dosen.paten) ? dosen.paten : [];
 
   let worksRows = '';
   let counter = 1;
@@ -1217,7 +1189,6 @@ function downloadExcelPerDosen(dosen) {
   appendWorks(penelitianList, 'Penelitian');
   appendWorks(pengabdianList, 'Pengabdian Masyarakat');
   appendWorks(publikasiList, 'Publikasi Karya');
-  appendWorks(patenList, 'HKI / Paten');
 
   if (counter === 1) {
     worksRows = `
@@ -1283,8 +1254,7 @@ function downloadExcelPerDosen(dosen) {
             Penelitian: <strong>${penelitianList.length}</strong> &nbsp;|&nbsp;
             Pengabdian: <strong>${pengabdianList.length}</strong> &nbsp;|&nbsp;
             Publikasi: <strong>${publikasiList.length}</strong> &nbsp;|&nbsp;
-            Paten / HKI: <strong>${patenList.length}</strong> &nbsp;|&nbsp;
-            Total Keseluruhan: <strong>${penelitianList.length + pengabdianList.length + publikasiList.length + patenList.length}</strong>
+            Total Keseluruhan: <strong>${penelitianList.length + pengabdianList.length + publikasiList.length}</strong>
           </td>
         </tr>
         <tr style="background-color:#f1f5f9; font-weight:bold;">
@@ -1360,6 +1330,9 @@ function printOrSavePdf(dosen) {
    ============================================================================ */
 
 async function initIndexPage() {
+  // Pastikan elemen hero-pill dan badge sumber dihilangkan jika ada cache browser
+  document.querySelectorAll('.hero-pill, .nav-badge-pddikti').forEach(el => el.remove());
+
   const searchForm = document.getElementById('search-form');
   const searchInput = document.getElementById('search-input');
   const btnSearch = document.getElementById('btn-search');
@@ -1973,18 +1946,15 @@ function renderDetailPageData(dosen) {
   setCounter('counter-penelitian', dosen.penelitian.length);
   setCounter('counter-pengabdian', dosen.pengabdian.length);
   setCounter('counter-publikasi', dosen.publikasi.length);
-  setCounter('counter-paten', dosen.paten.length);
 
   setCounter('sub-counter-penelitian', `Total: ${dosen.penelitian.length} Penelitian`);
   setCounter('sub-counter-pengabdian', `Total: ${dosen.pengabdian.length} Pengabdian`);
   setCounter('sub-counter-publikasi', `Total: ${dosen.publikasi.length} Publikasi`);
-  setCounter('sub-counter-paten', `Total: ${dosen.paten.length} HKI / Paten`);
 
   // Render Portofolio Tables dengan Judul, Tahun, Sumber, & Tautan
   renderDetailPagePortfolioTable('container-penelitian', dosen.penelitian, '🔬', 'Belum ada data penelitian untuk dosen ini.');
   renderDetailPagePortfolioTable('container-pengabdian', dosen.pengabdian, '🤝', 'Belum ada data pengabdian masyarakat untuk dosen ini.');
   renderDetailPagePortfolioTable('container-publikasi', dosen.publikasi, '📚', 'Belum ada data publikasi karya untuk dosen ini.');
-  renderDetailPagePortfolioTable('container-paten', dosen.paten, '🛡️', 'Belum ada data HKI atau Paten untuk dosen ini.');
 
   // Tambahkan tombol unduh per dosen jika belum ada
   injectDetailActionButtons(dosen);
@@ -2189,8 +2159,7 @@ function renderDetailPageFromApi(apiData) {
       .map(p => normalizeWorkItem(p, 'Pengabdian Masyarakat')).filter(Boolean),
     publikasi: (apiData.publikasi && apiData.publikasi.data ? apiData.publikasi.data : [])
       .map(p => normalizeWorkItem(p, 'Publikasi Karya')).filter(Boolean),
-    paten: (apiData.paten && apiData.paten.data ? apiData.paten.data : [])
-      .map(p => normalizeWorkItem(p, 'HKI/Paten')).filter(Boolean)
+    paten: []
   };
 
   renderDetailPageData(dosenObj);
