@@ -305,20 +305,6 @@
 
             </section>
 
-
-            <!-- PATEN -->
-            <section class="card">
-
-                <h2>HKI / Paten</h2>
-
-                <div id="paten">
-                    <div class="empty">
-                        Belum ada data HKI / Paten.
-                    </div>
-                </div>
-
-            </section>
-
         </div>
 
 
@@ -709,16 +695,6 @@
         }
 
 
-        if (
-            Array.isArray(garuda.paten) &&
-            garuda.paten.length > 0
-        ) {
-
-            hasil.paten =
-                garuda.paten;
-
-        }
-
 
         return hasil;
 
@@ -876,10 +852,18 @@
                 await fetchPengabdianPDDIKTI(idPddikti);
 
             let pengabdianAkhir = [];
+            const pddiktiDetailUrl = idPddikti ? `https://pddikti.kemdiktisaintek.go.id/detail-dosen/${encodeURIComponent(idPddikti)}` : "";
             if (resPengabdian.sukses && Array.isArray(resPengabdian.data) && resPengabdian.data.length > 0) {
-                pengabdianAkhir = resPengabdian.data;
+                pengabdianAkhir = resPengabdian.data.map(p => ({
+                    ...p,
+                    sumber: "PDDIKTI",
+                    url: p.url || pddiktiDetailUrl
+                }));
             } else if (Array.isArray(data.pengabdian) && data.pengabdian.length > 0) {
-                pengabdianAkhir = data.pengabdian;
+                pengabdianAkhir = data.pengabdian.map(p => ({
+                    ...p,
+                    url: p.url || (p.sumber === "PDDIKTI" ? pddiktiDetailUrl : "")
+                }));
             }
 
             const badgePengabdian = document.getElementById("jumlahPengabdian");
@@ -918,14 +902,6 @@
                 "Belum ada data publikasi."
             );
 
-
-            /* PATEN */
-
-            tampilkanItem(
-                "paten",
-                data.paten,
-                "Belum ada data HKI / Paten."
-            );
 
 
             /* TAMPILKAN */
