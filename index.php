@@ -101,7 +101,7 @@ $isPencarian = !empty($keyword);
           </label>
           <div class="select-prodi-wrap">
             <select id="filter-prodi" class="select-prodi" aria-label="Filter berdasarkan Program Studi">
-              <option value="">Semua Program Studi (312 Dosen)</option>
+              <option value="">Semua Program Studi (301 Dosen)</option>
             </select>
           </div>
         </div>
@@ -126,7 +126,7 @@ $isPencarian = !empty($keyword);
               <div class="download-item-icon csv">CSV</div>
               <div class="download-item-text">
                 <strong>Unduh Data Semua Dosen (CSV)</strong>
-                <small>Daftar 312 dosen lengkap format Excel / CSV</small>
+                <small>Daftar 301 dosen lengkap format Excel / CSV</small>
               </div>
             </button>
             <button type="button" class="download-item" id="btn-unduh-prodi-csv">
