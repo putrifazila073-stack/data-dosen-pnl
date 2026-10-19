@@ -273,13 +273,13 @@ function calculateProdiStats(prodiName, dataset = AppState.allDosen) {
   });
   const countPengabdian = seenPengabdian.size;
 
-  // 4. Jumlah Publikasi Karya (Deduplikasi aman berdasarkan normalisasi judul atau url dokumen)
+  // 4. Jumlah Publikasi Karya (Deduplikasi aman berdasarkan normalisasi judul karya)
   const seenPublikasi = new Set();
   list.forEach(d => {
     d.publikasi.forEach(item => {
-      const key = item.url
-        ? item.url.toLowerCase()
-        : item.judul.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const key = item.judul
+        ? item.judul.toLowerCase().replace(/[^a-z0-9]/g, '')
+        : '';
       if (key) seenPublikasi.add(key);
     });
   });
