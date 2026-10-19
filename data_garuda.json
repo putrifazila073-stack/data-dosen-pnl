@@ -1048,51 +1048,6 @@
         ]
     },
     {
-        "id": "pnl-029-anwar",
-        "nama": "ANWAR",
-        "nidn": "0008107104",
-        "perguruan_tinggi": "Politeknik Negeri Lhokseumawe",
-        "prodi": "-",
-        "jurusan": "Lainnya",
-        "jabatan_fungsional": "",
-        "pendidikan_terakhir": "S2",
-        "status_kepegawaian": "PNS",
-        "status_aktivitas": "Aktif",
-        "ikatan_kerja": "Dosen Tetap",
-        "semester": "2026/2027 Ganjil",
-        "penelitian": [],
-        "pengabdian": [],
-        "publikasi": [
-            {
-                "judul": "PENGARUH DIAMETER DAN KETEBALAN PASIR PADA SARINGAN TERHADAP TOTAL SOLID DALAM AIR",
-                "tahun": 2003,
-                "sumber": "GARUDA",
-                "author_id": "1088974",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/1056038"
-            },
-            {
-                "judul": "Perancangan Jaringan Multi Protocol Label Switching Menggunakan Mikrotik Routerboard RB951Ui",
-                "tahun": 2021,
-                "sumber": "GARUDA",
-                "author_id": "2558012",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/2443873"
-            },
-            {
-                "judul": "KNOWLEDGE MANAGEMENT DAN PENGARUHNYA TERHADAP KINERJA ORGANISASI (SUATU TINJAUAN TEORITIS)",
-                "tahun": 2016,
-                "sumber": "GARUDA",
-                "author_id": "6229433",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/970259"
-            }
-        ],
-        "paten": [],
-        "garuda_author_ids": [
-            1088974,
-            2558012,
-            6229433
-        ]
-    },
-    {
         "id": "pnl-030-anwar",
         "nama": "ANWAR",
         "nidn": "0008107104",
@@ -2297,43 +2252,6 @@
         "paten": []
     },
     {
-        "id": "pnl-065-elvina",
-        "nama": "ELVINA",
-        "nidn": "0010097507",
-        "perguruan_tinggi": "Politeknik Negeri Lhokseumawe",
-        "prodi": "-",
-        "jurusan": "Lainnya",
-        "jabatan_fungsional": "",
-        "pendidikan_terakhir": "S2",
-        "status_kepegawaian": "PNS",
-        "status_aktivitas": "Aktif",
-        "ikatan_kerja": "Dosen Tetap",
-        "semester": "2026/2027 Ganjil",
-        "penelitian": [],
-        "pengabdian": [],
-        "publikasi": [
-            {
-                "judul": "PENGARUH PERLINDUNGAN EKONOMI TERHADAP KESEJAHTERAAN TENAGA KERJA OUTSOURCING PADA PT PLN AREA LHOKSEUMAWE",
-                "tahun": 2018,
-                "sumber": "GARUDA",
-                "author_id": "3773690",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/970243"
-            },
-            {
-                "judul": "Studi tentang Persepsi Kenyamanan Pejalan Kaki terhadap Pemanfaatan Trotoar di Jalan Ahmad Yani dan Jalan Diponegoro Kota Palangkaraya",
-                "tahun": 2024,
-                "sumber": "GARUDA",
-                "author_id": "1910111",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/4752412"
-            }
-        ],
-        "paten": [],
-        "garuda_author_ids": [
-            3773690,
-            1910111
-        ]
-    },
-    {
         "id": "pnl-066-elvina",
         "nama": "ELVINA",
         "nidn": "0010097507",
@@ -3271,24 +3189,6 @@
         ]
     },
     {
-        "id": "pnl-087-halimatus-sakdiah",
-        "nama": "HALIMATUS SAKDIAH",
-        "nidn": "0012087604",
-        "perguruan_tinggi": "Politeknik Negeri Lhokseumawe",
-        "prodi": "-",
-        "jurusan": "Lainnya",
-        "jabatan_fungsional": "",
-        "pendidikan_terakhir": "S2",
-        "status_kepegawaian": "PNS",
-        "status_aktivitas": "Aktif",
-        "ikatan_kerja": "Dosen Tetap",
-        "semester": "2026/2027 Ganjil",
-        "penelitian": [],
-        "pengabdian": [],
-        "publikasi": [],
-        "paten": []
-    },
-    {
         "id": "pnl-088-halimatus-sakdiah",
         "nama": "HALIMATUS SAKDIAH",
         "nidn": "0012087604",
@@ -4217,35 +4117,6 @@
         "garuda_author_ids": [
             287089,
             6080440
-        ]
-    },
-    {
-        "id": "pnl-114-intan-cahyani",
-        "nama": "INTAN CAHYANI",
-        "nidn": "0003107205",
-        "perguruan_tinggi": "Politeknik Negeri Lhokseumawe",
-        "prodi": "-",
-        "jurusan": "Lainnya",
-        "jabatan_fungsional": "",
-        "pendidikan_terakhir": "S2",
-        "status_kepegawaian": "PNS",
-        "status_aktivitas": "Aktif",
-        "ikatan_kerja": "Dosen Tetap",
-        "semester": "2026/2027 Ganjil",
-        "penelitian": [],
-        "pengabdian": [],
-        "publikasi": [
-            {
-                "judul": "KNOWLEDGE MANAGEMENT DAN PENGARUHNYA TERHADAP KINERJA ORGANISASI (SUATU TINJAUAN TEORITIS)",
-                "tahun": 2016,
-                "sumber": "GARUDA",
-                "author_id": "6229433",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/970259"
-            }
-        ],
-        "paten": [],
-        "garuda_author_ids": [
-            6229433
         ]
     },
     {
@@ -5719,43 +5590,6 @@
         "paten": []
     },
     {
-        "id": "pnl-155-maulizar",
-        "nama": "MAULIZAR",
-        "nidn": "0005047405",
-        "perguruan_tinggi": "Politeknik Negeri Lhokseumawe",
-        "prodi": "-",
-        "jurusan": "Lainnya",
-        "jabatan_fungsional": "",
-        "pendidikan_terakhir": "S2",
-        "status_kepegawaian": "PNS",
-        "status_aktivitas": "Aktif",
-        "ikatan_kerja": "Dosen Tetap",
-        "semester": "2026/2027 Ganjil",
-        "penelitian": [],
-        "pengabdian": [],
-        "publikasi": [
-            {
-                "judul": "DOMESTIC INSTITUTIONAL OWNERSHIP DAN FOREIGN INSTITUTIONAL OWNERSHIP TERHADAP LIKUIDITAS SAHAM (Studi pada Industri Manufaktur yang Terdaftar di Bursa Efek Indonesia)",
-                "tahun": 2023,
-                "sumber": "GARUDA",
-                "author_id": "2521103",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/3374841"
-            },
-            {
-                "judul": "Optimasi Laju Alir Tri-Ethylene Glycol terhadap Efisiensi Penyerapan Air pada Kolom Absorbsi Di PT. Pertamina Hulu Energi",
-                "tahun": 2023,
-                "sumber": "GARUDA",
-                "author_id": "6011304",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/3428259"
-            }
-        ],
-        "paten": [],
-        "garuda_author_ids": [
-            2521103,
-            6011304
-        ]
-    },
-    {
         "id": "pnl-156-maulizar",
         "nama": "MAULIZAR",
         "nidn": "0005047405",
@@ -6630,35 +6464,6 @@
             2558133,
             469392,
             7776008
-        ]
-    },
-    {
-        "id": "pnl-178-muhammad-yazid",
-        "nama": "MUHAMMAD YAZID",
-        "nidn": "0010077406",
-        "perguruan_tinggi": "Politeknik Negeri Lhokseumawe",
-        "prodi": "-",
-        "jurusan": "Lainnya",
-        "jabatan_fungsional": "",
-        "pendidikan_terakhir": "S2",
-        "status_kepegawaian": "PNS",
-        "status_aktivitas": "Aktif",
-        "ikatan_kerja": "Dosen Tetap",
-        "semester": "2026/2027 Ganjil",
-        "penelitian": [],
-        "pengabdian": [],
-        "publikasi": [
-            {
-                "judul": "Pengembangan Bumbu Rempah Aceh Kering sebagai Inovasi Aditif Mi Aceh: Mendorong Komersialisasi Produk Lokal untuk Kemandirian Pangan di Desa Jeulikat, Blang Mangat, Lhokseumawe",
-                "tahun": 2026,
-                "sumber": "GARUDA",
-                "author_id": "10909352",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/6111574"
-            }
-        ],
-        "paten": [],
-        "garuda_author_ids": [
-            10909352
         ]
     },
     {
@@ -7731,35 +7536,6 @@
         ]
     },
     {
-        "id": "pnl-209-nursyidah",
-        "nama": "NURSYIDAH",
-        "nidn": "0004017404",
-        "perguruan_tinggi": "Politeknik Negeri Lhokseumawe",
-        "prodi": "-",
-        "jurusan": "Lainnya",
-        "jabatan_fungsional": "",
-        "pendidikan_terakhir": "S2",
-        "status_kepegawaian": "PNS",
-        "status_aktivitas": "Aktif",
-        "ikatan_kerja": "Dosen Tetap",
-        "semester": "2026/2027 Ganjil",
-        "penelitian": [],
-        "pengabdian": [],
-        "publikasi": [
-            {
-                "judul": "MODEL PENGUKURAN KEPUASAN KERJA DAN PENINGKATAN KINERJA (STUDI KASUS PADA STAF PENGAJAR POLITEKNIK NEGERI LHOKSEUMAWE)",
-                "tahun": 2018,
-                "sumber": "GARUDA",
-                "author_id": "5996858",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/970271"
-            }
-        ],
-        "paten": [],
-        "garuda_author_ids": [
-            5996858
-        ]
-    },
-    {
         "id": "pnl-210-nursyidah",
         "nama": "NURSYIDAH",
         "nidn": "0004017404",
@@ -8067,35 +7843,6 @@
             3773748,
             6521138,
             4376322
-        ]
-    },
-    {
-        "id": "pnl-220-rahmi-raihan",
-        "nama": "RAHMI RAIHAN",
-        "nidn": "0025097507",
-        "perguruan_tinggi": "Politeknik Negeri Lhokseumawe",
-        "prodi": "-",
-        "jurusan": "Lainnya",
-        "jabatan_fungsional": "",
-        "pendidikan_terakhir": "S2",
-        "status_kepegawaian": "PNS",
-        "status_aktivitas": "Aktif",
-        "ikatan_kerja": "Dosen Tetap",
-        "semester": "2026/2027 Ganjil",
-        "penelitian": [],
-        "pengabdian": [],
-        "publikasi": [
-            {
-                "judul": "ANALISIS TINGKAT BAGI HASIL, INDEKS SAHAM JII DAN PERTUMBUHAN EKONOMI TERHADAP DEPOSITO MUDHARABAH PADA PT BANK SYARIAH MANDIRI DI INDONESIA",
-                "tahun": 2020,
-                "sumber": "GARUDA",
-                "author_id": "3773779",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/2775845"
-            }
-        ],
-        "paten": [],
-        "garuda_author_ids": [
-            3773779
         ]
     },
     {
@@ -10675,43 +10422,6 @@
         ]
     },
     {
-        "id": "pnl-292-yuli-anisah",
-        "nama": "YULI ANISAH",
-        "nidn": "0011077402",
-        "perguruan_tinggi": "Politeknik Negeri Lhokseumawe",
-        "prodi": "-",
-        "jurusan": "Lainnya",
-        "jabatan_fungsional": "",
-        "pendidikan_terakhir": "S2",
-        "status_kepegawaian": "PNS",
-        "status_aktivitas": "Aktif",
-        "ikatan_kerja": "Dosen Tetap",
-        "semester": "2026/2027 Ganjil",
-        "penelitian": [],
-        "pengabdian": [],
-        "publikasi": [
-            {
-                "judul": "DAMPAK INVESTASI DAN KONSUMSI TERHADAP PERTUMBUHAN EKONOMI INDONESIA: PENDEKATAN ANALISIS ERROR CORECTION MODEL",
-                "tahun": 2019,
-                "sumber": "GARUDA",
-                "author_id": "2783700",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/970284"
-            },
-            {
-                "judul": "PEMBERDAYAAN EKONOMI KREATIF PENGOLAHAN LIMBAH KAIN PERCA DI DESA ALUE LIM KEC. BLANG MANGAT KOTA LHOKSEUMAWE",
-                "tahun": 2017,
-                "sumber": "GARUDA",
-                "author_id": "1259823",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/1280640"
-            }
-        ],
-        "paten": [],
-        "garuda_author_ids": [
-            2783700,
-            1259823
-        ]
-    },
-    {
         "id": "pnl-293-yuli-anisah",
         "nama": "YULI ANISAH",
         "nidn": "0011077402",
@@ -10821,24 +10531,6 @@
             3564067,
             1529459
         ]
-    },
-    {
-        "id": "pnl-296-yusmika-indah",
-        "nama": "YUSMIKA INDAH",
-        "nidn": "0018048607",
-        "perguruan_tinggi": "Politeknik Negeri Lhokseumawe",
-        "prodi": "-",
-        "jurusan": "Lainnya",
-        "jabatan_fungsional": "",
-        "pendidikan_terakhir": "S2",
-        "status_kepegawaian": "PNS",
-        "status_aktivitas": "Aktif",
-        "ikatan_kerja": "Dosen Tetap",
-        "semester": "2026/2027 Ganjil",
-        "penelitian": [],
-        "pengabdian": [],
-        "publikasi": [],
-        "paten": []
     },
     {
         "id": "pnl-297-yusmika-indah",
@@ -11106,67 +10798,6 @@
         "paten": [],
         "garuda_author_ids": [
             1484248
-        ]
-    },
-    {
-        "id": "pnl-306-zulfikar",
-        "nama": "ZULFIKAR",
-        "nidn": "0015026908",
-        "perguruan_tinggi": "Politeknik Negeri Lhokseumawe",
-        "prodi": "-",
-        "jurusan": "Lainnya",
-        "jabatan_fungsional": "",
-        "pendidikan_terakhir": "S2",
-        "status_kepegawaian": "PNS",
-        "status_aktivitas": "Aktif",
-        "ikatan_kerja": "Dosen Tetap",
-        "semester": "2026/2027 Ganjil",
-        "penelitian": [],
-        "pengabdian": [],
-        "publikasi": [
-            {
-                "judul": "PENGARUH MOTIVASI KERJA, BUDAYA ORGANISASI DAN LINGKUNGAN KERJA TERHADAP KINERJA PEGAWAI (Studi Pada Sekretariat Daerah Kabupaten Bireuen)",
-                "tahun": 2017,
-                "sumber": "GARUDA",
-                "author_id": "3773750",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/970269"
-            },
-            {
-                "judul": "Rancang Bangun Sistem Pendingin Otomatis Berbasis Sensor Suhu untuk Optimalisasi Pembangkit Listrik Tenaga Surya 50 Wp",
-                "tahun": 2026,
-                "sumber": "GARUDA",
-                "author_id": "10811166",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/6032311"
-            },
-            {
-                "judul": "MENGHITUNG BERAT BANDUL UNTUK MENGGERAKKAN BUTTERFLY VALVE (UV-7209) DI SEA WATER INTAKE DALAM MENCEGAH BACK PRESSURE PADA POMPA (G-7201) PADA KONDISI BLACKOUT",
-                "tahun": 2020,
-                "sumber": "GARUDA",
-                "author_id": "471948",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/2116139"
-            },
-            {
-                "judul": "Effect of torrefaction temperature and HDPE binder addition on the physicochemical and combustion properties of elephant grass bio pellets",
-                "tahun": 2026,
-                "sumber": "GARUDA",
-                "author_id": "10623547",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/6064090"
-            },
-            {
-                "judul": "Perancangan dan Analisis Kinerja Jaringan ESP-Mesh dalam Sistem Pemantauan Pasien",
-                "tahun": 2026,
-                "sumber": "GARUDA",
-                "author_id": "10933050",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/6543421"
-            }
-        ],
-        "paten": [],
-        "garuda_author_ids": [
-            3773750,
-            10811166,
-            471948,
-            10623547,
-            10933050
         ]
     },
     {
