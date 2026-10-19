@@ -83,8 +83,10 @@ foreach ($trmLecturers as $d) {
     $trmPengabdian += count($d['pengabdian']);
     $trmPublikasiTotal += count($d['publikasi']);
     foreach ($d['publikasi'] as $pub) {
-        $key = !empty($pub['url']) ? $pub['url'] : strtolower(preg_replace('/[^a-z0-9]/', '', $pub['judul']));
-        $trmPublikasiUnique[$key] = true;
+        $key = strtolower(preg_replace('/[^a-z0-9]/', '', $pub['judul'] ?? ''));
+        if ($key) {
+            $trmPublikasiUnique[$key] = true;
+        }
     }
 }
 
@@ -156,10 +158,24 @@ assertTest("script.js memuat downloadCsvWorksDetail", strpos($scriptJs, 'downloa
 assertTest("script.js memuat openModalKarya", strpos($scriptJs, 'openModalKarya') !== false);
 assertTest("script.js memuat renderDetailPagePortfolioTable", strpos($scriptJs, 'renderDetailPagePortfolioTable') !== false);
 
-// 10. Uji Detail.html
+// 10. Uji Detail.html & Fitur Unduh Modal
 $detailHtml = file_get_contents(__DIR__ . '/detail.html');
+$indexPhp = file_get_contents(__DIR__ . '/index.php');
 assertTest("detail.html menghubungkan script.js", strpos($detailHtml, 'script.js') !== false);
 assertTest("detail.html memiliki container tabel portofolio", strpos($detailHtml, 'container-penelitian') !== false);
+assertTest("index.html & index.php memuat tombol Unduh Portofolio (Excel)", 
+    strpos($indexHtml, 'Unduh Portofolio (Excel)') !== false &&
+    strpos($indexPhp, 'Unduh Portofolio (Excel)') !== false
+);
+assertTest("Tombol Cetak / Simpan PDF sudah dihapus dari modal dosen (index.html & index.php)", 
+    strpos($indexHtml, 'id="modal-btn-cetak-pdf"') === false &&
+    strpos($indexPhp, 'id="modal-btn-cetak-pdf"') === false
+);
+assertTest("script.js menghasilkan file format .xlsx untuk portofolio dosen", 
+    strpos($scriptJs, '.xlsx') !== false &&
+    strpos($scriptJs, 'generateXlsxBlob') !== false &&
+    strpos($scriptJs, 'downloadExcelPerDosen') !== false
+);
 
 echo "\n=======================================================\n";
 echo "HASIL PENGUJIAN: $passCount LULUS, $failCount GAGAL\n";
