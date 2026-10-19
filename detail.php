@@ -909,8 +909,7 @@
             const idPddikti =
                 data.pddikti_id ||
                 data.id_pddikti ||
-                (data.nama && data.nama.toUpperCase().includes("ASWANDI") ? "o8kxX4l_Xm_DPoCPzP7UwiD5oWTtP9uaVQHJBWjlhLDrARvw39B2eGNlx-oiPHLRkwEuMw==" : "") ||
-                data.id ||
+                data.id_sdm ||
                 "";
 
             const resPengabdian =
