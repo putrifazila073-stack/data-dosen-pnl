@@ -91,6 +91,9 @@ function normalizeWorkItem(item, category = '') {
   if (item.sumber && String(item.sumber).trim()) {
     sumber = String(item.sumber).trim();
     isVerified = true;
+  } else if (item.jenis_kegiatan || item.judul_kegiatan) {
+    sumber = 'PDDIKTI';
+    isVerified = true;
   } else if (item.url && item.url.includes('garuda.kemdiktisaintek.go.id')) {
     sumber = 'GARUDA';
     isVerified = true;
@@ -143,8 +146,16 @@ function normalizeDosenData(item, index) {
   const rawPenelitian = Array.isArray(item.penelitian) ? item.penelitian : [];
   const rawPengabdian = Array.isArray(item.pengabdian) ? item.pengabdian : [];
   const rawPublikasi  = Array.isArray(item.publikasi)  ? item.publikasi  : [];
+  const pddiktiLink = (item.pddikti_id || item.id_pddikti) 
+    ? `https://pddikti.kemdiktisaintek.go.id/detail-dosen/${encodeURIComponent(item.pddikti_id || item.id_pddikti)}` 
+    : '';
   const penelitian = rawPenelitian.map(p => normalizeWorkItem(p, 'Penelitian')).filter(Boolean);
-  const pengabdian = rawPengabdian.map(p => normalizeWorkItem(p, 'Pengabdian Masyarakat')).filter(Boolean);
+  const pengabdian = rawPengabdian.map(p => {
+    const itemWithUrl = (p && typeof p === 'object' && !p.url && (p.sumber === 'PDDIKTI' || p.jenis_kegiatan || p.judul_kegiatan))
+      ? { ...p, url: pddiktiLink, sumber: p.sumber || 'PDDIKTI' }
+      : p;
+    return normalizeWorkItem(itemWithUrl, 'Pengabdian Masyarakat');
+  }).filter(Boolean);
   const publikasi  = rawPublikasi.map(p => normalizeWorkItem(p, 'Publikasi Karya')).filter(Boolean);
   const paten      = [];
 
@@ -712,6 +723,36 @@ window.openModalKarya = function (dosenId, targetTabId = 'modal-tab-penelitian')
   renderModalWorksList('modal-list-penelitian', dosen.penelitian, 'Belum ada data penelitian untuk dosen ini.');
   renderModalWorksList('modal-list-pengabdian', dosen.pengabdian, 'Belum ada data pengabdian masyarakat untuk dosen ini.');
   renderModalWorksList('modal-list-publikasi', dosen.publikasi, 'Belum ada data publikasi karya untuk dosen ini.');
+
+  // Jika membuka tab pengabdian dan punya pddikti_id, sinkronkan secara live dengan PDDIKTI API
+  const idPddiktiModal = dosen.pddikti_id || dosen.id_pddikti;
+  if (idPddiktiModal && targetTabId === 'modal-tab-pengabdian') {
+    fetch(`${API_ENDPOINT}?action=pengabdian`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: idPddiktiModal })
+    })
+    .then(r => r.json())
+    .then(json => {
+      const list = Array.isArray(json) ? json : (Array.isArray(json.data) ? json.data : []);
+      if (list && list.length > 0 && AppState.currentModalDosen && AppState.currentModalDosen.id === dosen.id) {
+        const pddiktiLink = `https://pddikti.kemdiktisaintek.go.id/detail-dosen/${encodeURIComponent(idPddiktiModal)}`;
+        const freshPengabdian = list.map(p => normalizeWorkItem({
+          judul: p.judul_kegiatan || p.judul || p.title || '',
+          tahun: p.tahun_kegiatan || p.tahun || '',
+          sumber: 'PDDIKTI',
+          isVerified: true,
+          url: p.url || pddiktiLink
+        }, 'Pengabdian Masyarakat')).filter(Boolean);
+        dosen.pengabdian = freshPengabdian;
+        dosen.totalPengabdian = freshPengabdian.length;
+        const cPengUpdated = document.getElementById('modal-count-pengabdian');
+        if (cPengUpdated) cPengUpdated.textContent = freshPengabdian.length;
+        renderModalWorksList('modal-list-pengabdian', freshPengabdian, 'Belum ada data pengabdian masyarakat untuk dosen ini.');
+      }
+    })
+    .catch(() => {});
+  }
 
   // Aktifkan tab yang diminta
   switchModalTab(targetTabId);
@@ -1859,8 +1900,15 @@ async function initDetailPage() {
           const list = Array.isArray(json) ? json : (Array.isArray(json.data) ? json.data : []);
           const isOk = (json.sukses === true || json.status === 'success' || Array.isArray(json.data));
           if (isOk && list.length > 0) {
+            const pddiktiLink = `https://pddikti.kemdiktisaintek.go.id/detail-dosen/${encodeURIComponent(idPddikti)}`;
             const normalizedPengabdian = list
-              .map(p => normalizeWorkItem(p, 'Pengabdian Masyarakat'))
+              .map(p => normalizeWorkItem({
+                judul: p.judul_kegiatan || p.judul || p.title || '',
+                tahun: p.tahun_kegiatan || p.tahun || '',
+                sumber: 'PDDIKTI',
+                isVerified: true,
+                url: p.url || pddiktiLink
+              }, 'Pengabdian Masyarakat'))
               .filter(Boolean);
             dosen = {
               ...dosen,
