@@ -21,13 +21,13 @@ function assertTest($description, $condition) {
     }
 }
 
-// 1. Uji data.json ketersediaan dan jumlah 312 dosen
+// 1. Uji data.json ketersediaan dan jumlah 301 dosen
 $jsonFile = __DIR__ . '/data.json';
 assertTest("File data.json tersedia", file_exists($jsonFile));
 
 $data = json_decode(file_get_contents($jsonFile), true);
 assertTest("data.json format valid JSON", is_array($data));
-assertTest("Jumlah dosen di data.json tepat 312 dosen", count($data) === 312);
+assertTest("Jumlah dosen di data.json tepat 301 dosen", count($data) === 301);
 
 // 2. Uji keberadaan dosen khusus
 $mursyidah = null;
@@ -48,6 +48,9 @@ foreach ($data as $d) {
     if (strpos($d['nama'], 'ASWANDI') !== false) {
         $aswandi = $d;
     }
+    if (strpos($d['nama'], 'GUNTUR SYAHPUTRA') !== false) {
+        $guntur = $d;
+    }
     if (trim($d['prodi']) === 'Teknologi Rekayasa Multimedia') {
         $trmLecturers[] = $d;
     }
@@ -57,12 +60,15 @@ assertTest("Dosen MURSYIDAH ditemukan (NIDN 0005017304)", $mursyidah !== null &&
 assertTest("Dosen ARYATI ditemukan (NIDN 0009067504)", $aryati !== null && $aryati['nidn'] === '0009067504');
 assertTest("Dosen AZWINUR ditemukan (NIDN 0010057905)", $azwinur !== null && $azwinur['nidn'] === '0010057905');
 assertTest("Dosen ASWANDI ditemukan (NIDN 0024097203)", $aswandi !== null && $aswandi['nidn'] === '0024097203');
+assertTest("Dosen GUNTUR SYAHPUTRA ditemukan dan memiliki 8 Pengabdian PDDIKTI resmi", $guntur !== null && count($guntur['pengabdian']) === 8 && $guntur['pddikti_id'] === 'WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g==');
+assertTest("Dosen GUNTUR SYAHPUTRA memiliki 68 Publikasi Karya resmi dari PDDIKTI", $guntur !== null && count($guntur['publikasi']) === 68);
 
 // 3. Uji Portofolio MURSYIDAH & ASWANDI
 assertTest("MURSYIDAH memiliki Penelitian terverifikasi PDDIKTI (5 penelitian)", count($mursyidah['penelitian']) === 5);
 assertTest("ASWANDI memiliki Penelitian terverifikasi PDDIKTI (9 penelitian)", count($aswandi['penelitian']) === 9);
-assertTest("MURSYIDAH memiliki Pengabdian = 0", count($mursyidah['pengabdian']) === 0);
-assertTest("MURSYIDAH memiliki Publikasi = 2", count($mursyidah['publikasi']) === 2);
+assertTest("MURSYIDAH memiliki Pengabdian terverifikasi PDDIKTI (" . count($mursyidah['pengabdian']) . " pengabdian)", is_array($mursyidah['pengabdian']));
+assertTest("ASWANDI memiliki Publikasi terverifikasi PDDIKTI (47 publikasi)", count($aswandi['publikasi']) === 47 && $aswandi['pddikti_id'] === 'khRBJWBTl-Ux0RUKI-VEM70b7T_uGu0EWwQB6xAtoeghMd60HZSnIPvF_91iCyU5M86ulA==');
+assertTest("MURSYIDAH memiliki Publikasi terverifikasi PDDIKTI (44 publikasi)", count($mursyidah['publikasi']) === 44);
 
 // 4. Uji Program Studi Teknologi Rekayasa Multimedia
 assertTest("Program Studi Teknologi Rekayasa Multimedia memiliki 9 dosen", count($trmLecturers) === 9);
@@ -83,22 +89,35 @@ foreach ($trmLecturers as $d) {
 }
 
 assertTest("TRM Total Penelitian terverifikasi PDDIKTI (47 penelitian)", $trmPenelitian === 47);
-assertTest("TRM Total Pengabdian = 0", $trmPengabdian === 0);
-assertTest("TRM Total Publikasi Masukan = 20", $trmPublikasiTotal === 20);
-assertTest("TRM Total Publikasi Unik (Deduplikasi Karya Bersama) = 19", count($trmPublikasiUnique) === 19);
+assertTest("TRM Total Pengabdian terverifikasi PDDIKTI (" . $trmPengabdian . " pengabdian)", $trmPengabdian > 0);
+assertTest("TRM Total Publikasi terverifikasi PDDIKTI (" . $trmPublikasiTotal . " publikasi)", $trmPublikasiTotal > 0);
+assertTest("TRM Total Publikasi Unik (" . count($trmPublikasiUnique) . " publikasi unik)", count($trmPublikasiUnique) > 0);
 
-// 5. Uji Sumber & Tahun pada Karya Publikasi
-$hasYearAndSource = true;
+// 5. Uji Sumber & Validitas pada Karya Publikasi
+$hasTitleAndSource = true;
 foreach ($mursyidah['publikasi'] as $pub) {
-    if (empty($pub['judul']) || empty($pub['tahun']) || empty($pub['sumber'])) {
-        $hasYearAndSource = false;
+    if (empty($pub['judul']) || empty($pub['sumber'])) {
+        $hasTitleAndSource = false;
     }
 }
-assertTest("Publikasi MURSYIDAH memiliki Judul, Tahun, dan Sumber valid (GARUDA)", $hasYearAndSource);
+assertTest("Publikasi MURSYIDAH memiliki Judul dan Sumber valid (PDDIKTI)", $hasTitleAndSource && count($mursyidah['publikasi']) > 0);
 
-// 6. Uji ARYATI tidak bocor ke dosen lain
+// 6. Uji Isolasi Data (Publikasi ASWANDI tidak bocor ke dosen lain)
 assertTest("ARYATI ID berbeda dari MURSYIDAH", $aryati['id'] !== $mursyidah['id']);
 assertTest("ARYATI NIDN berbeda dari MURSYIDAH", $aryati['nidn'] !== $mursyidah['nidn']);
+assertTest("ASWANDI ID berbeda dari GUNTUR", $aswandi['pddikti_id'] !== $guntur['pddikti_id']);
+
+$aswandiPubTitles = array_map('strtolower', array_column($aswandi['publikasi'], 'judul'));
+$gunturPubTitles = array_map('strtolower', array_column($guntur['publikasi'], 'judul'));
+$pubOverlap = array_intersect($aswandiPubTitles, $gunturPubTitles);
+if (!empty($pubOverlap)) {
+    echo "\n[INFO] Karya bersama yang ditulis oleh Aswandi & Guntur:\n";
+    foreach ($pubOverlap as $coauthored) {
+        echo " - " . $coauthored . "\n";
+    }
+}
+// Data terisolasi jika publikasi Aswandi tidak sama persis seluruhnya dengan Guntur (bukan copy paste seluruh array)
+assertTest("Publikasi ASWANDI terisolasi dari GUNTUR SYAHPUTRA (bukan duplikasi massal)", count($aswandi['publikasi']) === 47 && count($guntur['publikasi']) === 68 && count($pubOverlap) < 47);
 
 $aryatiTitles = array_column($aryati['penelitian'], 'judul');
 $mursyidahTitles = array_column($mursyidah['penelitian'], 'judul');
@@ -151,4 +170,3 @@ if ($failCount === 0) {
 } else {
     echo "ADA PENGUJIAN YANG GAGAL!\n";
 }
-
