@@ -24,11 +24,15 @@ $requestHeaders = [
 function postPDDIKTI($url, $id, $headers = null) {
     global $requestHeaders;
     $hdr = $headers ?: $requestHeaders;
+    $customHeaders = array_merge($hdr, [
+        'Content-Type: application/json',
+        'Referer: https://pddikti.kemdiktisaintek.go.id/detail-dosen/' . urlencode($id)
+    ]);
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['id' => $id]));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array_merge($hdr, ['Content-Type: application/json']));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $customHeaders);
     curl_setopt($ch, CURLOPT_TIMEOUT, 15);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
