@@ -156,7 +156,12 @@ function normalizeDosenData(item, index) {
       : p;
     return normalizeWorkItem(itemWithUrl, 'Pengabdian Masyarakat');
   }).filter(Boolean);
-  const publikasi  = rawPublikasi.map(p => normalizeWorkItem(p, 'Publikasi Karya')).filter(Boolean);
+  const publikasi = rawPublikasi.map(p => {
+    const itemWithUrl = (p && typeof p === 'object' && !p.url && (p.sumber === 'PDDIKTI' || p.jenis_kegiatan || p.judul_kegiatan))
+      ? { ...p, url: pddiktiLink, sumber: p.sumber || 'PDDIKTI' }
+      : p;
+    return normalizeWorkItem(itemWithUrl, 'Publikasi Karya');
+  }).filter(Boolean);
   const paten      = [];
 
   return {
@@ -749,6 +754,35 @@ window.openModalKarya = function (dosenId, targetTabId = 'modal-tab-penelitian')
         const cPengUpdated = document.getElementById('modal-count-pengabdian');
         if (cPengUpdated) cPengUpdated.textContent = freshPengabdian.length;
         renderModalWorksList('modal-list-pengabdian', freshPengabdian, 'Belum ada data pengabdian masyarakat untuk dosen ini.');
+      }
+    })
+    .catch(() => {});
+  }
+
+  // Jika membuka tab publikasi dan punya pddikti_id, sinkronkan secara live dengan PDDIKTI API
+  if (idPddiktiModal && targetTabId === 'modal-tab-publikasi') {
+    fetch(`${API_ENDPOINT}?action=publikasi`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: idPddiktiModal })
+    })
+    .then(r => r.json())
+    .then(json => {
+      const list = Array.isArray(json) ? json : (Array.isArray(json.data) ? json.data : []);
+      if (list && list.length > 0 && AppState.currentModalDosen && AppState.currentModalDosen.id === dosen.id) {
+        const pddiktiLink = `https://pddikti.kemdiktisaintek.go.id/detail-dosen/${encodeURIComponent(idPddiktiModal)}`;
+        const freshPublikasi = list.map(p => normalizeWorkItem({
+          judul: p.judul_kegiatan || p.judul || p.title || '',
+          tahun: (p.tahun_kegiatan && Number(p.tahun_kegiatan) > 0) ? p.tahun_kegiatan : (p.tahun || ''),
+          sumber: 'PDDIKTI',
+          isVerified: true,
+          url: p.url || pddiktiLink
+        }, 'Publikasi Karya')).filter(Boolean);
+        dosen.publikasi = freshPublikasi;
+        dosen.totalPublikasi = freshPublikasi.length;
+        const cPubUpdated = document.getElementById('modal-count-publikasi');
+        if (cPubUpdated) cPubUpdated.textContent = freshPublikasi.length;
+        renderModalWorksList('modal-list-publikasi', freshPublikasi, 'Belum ada data publikasi karya untuk dosen ini.');
       }
     })
     .catch(() => {});
@@ -1919,6 +1953,43 @@ async function initDetailPage() {
         }
       } catch (err) {
         console.warn('Gagal fetch pengabdian PDDIKTI:', err.message);
+      }
+
+      // Fetch publikasi dari PDDIKTI API
+      try {
+        const urlPub = `${API_ENDPOINT}?action=publikasi`;
+        let resPub = await fetch(urlPub, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: idPddikti })
+        });
+        if (!resPub.ok && resPub.status === 405) {
+          resPub = await fetch(`${API_ENDPOINT}?action=publikasi&id=${encodeURIComponent(idPddikti)}`);
+        }
+        if (resPub.ok) {
+          const jsonPub = await resPub.json();
+          const listPub = Array.isArray(jsonPub) ? jsonPub : (Array.isArray(jsonPub.data) ? jsonPub.data : []);
+          const isOkPub = (jsonPub.sukses === true || jsonPub.status === 'success' || Array.isArray(jsonPub.data));
+          if (isOkPub && listPub.length > 0) {
+            const pddiktiLink = `https://pddikti.kemdiktisaintek.go.id/detail-dosen/${encodeURIComponent(idPddikti)}`;
+            const normalizedPublikasi = listPub
+              .map(p => normalizeWorkItem({
+                judul: p.judul_kegiatan || p.judul || p.title || '',
+                tahun: (p.tahun_kegiatan && Number(p.tahun_kegiatan) > 0) ? p.tahun_kegiatan : (p.tahun || ''),
+                sumber: 'PDDIKTI',
+                isVerified: true,
+                url: p.url || pddiktiLink
+              }, 'Publikasi Karya'))
+              .filter(Boolean);
+            dosen = {
+              ...dosen,
+              publikasi: normalizedPublikasi,
+              totalPublikasi: normalizedPublikasi.length
+            };
+          }
+        }
+      } catch (err) {
+        console.warn('Gagal fetch publikasi PDDIKTI:', err.message);
       }
     }
     renderDetailPageData(dosen);
