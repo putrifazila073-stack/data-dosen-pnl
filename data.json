@@ -8932,42 +8932,480 @@
         ],
         "publikasi": [
             {
-                "judul": "Implementasi Aplikasi The Dude Untuk Monitoring Jaringan Berbasis Telegram",
-                "tahun": 2025
+                "judul": "Pelatihan Virtual Reality (VR) Berbasis Video 360 dalam Rangka Optimalisasi Teknologi Multimedia untuk Mendukung Sarana Promosi Sekolah pada SMK Negeri 5 Lhokseumawe",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Prosiding seminar nasional",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
             },
             {
-                "judul": "Analisis Dan Perancangan Virtual Tour Berbasis Video 360 Pada Gedung Jurusan Teknologi Informasi Dan Komputer Menggunakan Teknik Multi Panorama",
-                "tahun": 2025
-            },
-            {
-                "judul": "Perancangan Game 2D \"Bertutur Aceh Dasar\" Berbasis Android",
-                "tahun": 2026
-            },
-            {
-                "judul": "Pembuatan Game 3D Petualangan Labirin Menggunakan Algoritma Dijkstra pada Non-Player Character (NPC)",
-                "tahun": 2024
-            },
-            {
-                "judul": "Analisa Perbandingan Honeypot Cowrie dan Honeypot Dionaea dalam Mendeteksi Serangan Port Scanning dan Brute Force",
-                "tahun": 2024
+                "judul": "Penerapan Konsep Pre-Experimental Untuk Pengukuran Keterampilan Menggunakan Teknologi Informasi Bagi Guru Smk Negeri 5 Lhokseumawe",
+                "tahun": 2021,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Prosiding seminar nasional",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
             },
             {
                 "judul": "Peningkatan Ketrampilan Penggunaan Teknologi Informasi pada Sistem Pembelajaran Daring bagi Guru SMK Negeri 5 Lhokseumawe",
-                "tahun": 2021
+                "tahun": 2021,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Prosiding seminar nasional",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Analisis Dan Perancangan Virtual Tour Berbasis Video 360 Pada Gedung Jurusan Teknologi Informasi Dan Komputer Menggunakan Teknik Multi Panorama",
+                "tahun": 2025,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Prosiding seminar nasional",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Implementasi Moving Average dalam Pergerakan Objek 3 Dimensi Berdasarkan Gerakan Tangan Menggunakan Mediapipe",
+                "tahun": 2025,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Prosiding seminar nasional",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Analisa Perbandingan Honeypot Cowrie dan Honepot Dionaea dalam Mendeteksi Serangan Port Scanning dan Brute Force",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Analisis Kemampuan Akademik Mahasiswa Berdasarkan Latar Belakang Keluarga, Tempat Tinggal, Pertemanan, Sikap Belajar, Konsep Diri, Iklim Kampus, Dan Tenaga Pengajar DenganÂ &#8230;",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Analisis Perbandingan Manajemen Strategi pada Makanan Siap Saji Mcdonald&#39;s dan KFC",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "APPLICATION OF ARTIFICIAL NEURAL NETWORKS ON USER AND PASSWORD AUTHENTICATION USING THE AUTOASSOCIATIVE MEMORY METHOD",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Decision Support System Pemilihan Wakil Kepala Sekolah Menggunakan Metode Weighted Aggregated Sum Product Assesment (WASPAS) Pada SMK Cerdas Murni",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Deteksi Tingkat Kemiripan Data Siswa Peserta Ujian Berbasis Komputer Pada Bimbingan Belajar Expert Dengan Menggunakan Metode Levenshtein Distance",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Implementasi Data Mining Untuk Mengestimasi Penjualan Masker Alfamask Menggunakan Metode Regresi Linear Berganda",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Implementasi Internet of Things Untuk Prototype Pembersih Kaca Gedung Bertingkat Menggunakan Raspberry Pi dan Aplikasi Android",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Implementasi Metode Dempster Shafer Untuk Mendiagnosa Milk Fever Disease Sapi Perah Pada Gundaling Farmstead Berastagi",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Implementasi Teknik Binary Search Pada Kamus Indonesia-Batak Toba",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Implementation of RFID-Based Attendance Integrated with Management Systems and Notifications via WhatsApp",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "LOGIKA FUZZY DALAM SISTEM PENDUKUNG KEPUTUSAN UNTUK MENENTUKAN PEMENANG TENDER PROYEK (STUDI KASUS DI PT. IDA PUTRI SENANDUNG)",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Pelatihan Penerapan Sistem Layanan Informasi Bagi Guru SMKN 5 Lhokseumawe",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Pembuatan Aplikasi Pengenalan Suara Dan Objek Hewan Sebagai Media Pengenalan Bagi Anak Usia Dini Dengan Metode Computer Based Instruction (CBI)",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Pembuatan Game 3D Petualangan Labirin Menggunakan Algoritma Dijkstra pada Non-Player Character (NPC)",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Penerapan Algoritma C4. 5 Dalam Analisa Kelayakan Penerima Bonus Tahunan Pegawai (Studi Kasus: PT. Multi Pratama Nauli Medan)",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "PENERAPAN ALGORITMA IMAGE TINTING PADA CITRA DIGITAL MENGGUNAKAN METODE STATISTICAL REGION MERGING",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Penerapan Konsep Pre-Experimental Untuk Pengukuran Keterampilan Menggunakan Teknologi Informasi Bagi Guru Smk Negeri 5 Lhokseumawe",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "PENERAPAN METODE ADDITIVE RATIO ASSESSMENT DALAM MENENTUKAN GURU UNTUK MENGIKUTI KONFERENSI LAYANAN KOMPETENSI PADA DINAS PENDIDIKAN DAN KEBUDAYAAN KAB. ACEH TENGGARA",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Penerapan Metode Clustering Dalam Menentukan Persentase Penyakit Pada Pasien Dengan Menggunakan Algoritma K-Means Pada Puskesmas Jawa Maraja, Kab. Simalungun",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Penerapan Metode ORESTE Pada Sistem Pendukung Keputusan Menentukan Kualitas Kinerja Tentor Bimbel Manna Lubuk Pakam",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Penerapan Sistem Pakar Untuk Mendeteksi Troubleshooting Pada Hardware Lapatop Lenovo Menggunkan Metode Certainty Factor",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Perancangan Buku Ilustrasi Seni Bela Diri Taijutsu",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Perbandingan Akurasi Algoritma Principal Component Analysis Dengan Algoritma Convolutional Neural Network Dalam Pengenalan Wajah",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Rancang Bangun Game &#8220;MeuEndBude&#8221; Multiplayer Online 3D Menggunakan Algoritma Line Trace (Raycast)",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Rancang Bangun Mesin Pompa Air Otomatis Untuk Penyaluran Air Dari Tangki Ke Kran Pengambilan Air Di Desa Regaji Menggunakan Teknik Counter Berbasis Mikrokontroler",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "RANCANG BANGUN NAS SERVER DI LINGKUNGAN JURUSAN TIK PNL DALAM UPAYA MENGURANGI KETERGANTUNGAN TERHADAP JARINGAN INTERNET",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Rancang Bangun Virtual Tour Reality Menggunakan Pannelum Panorama Viewer",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Simulasi Perkiraan Keuntungan Penjualan Pulsa Dengan menggunakan Metode Monthe Carlo",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pakar Dalam Mendiagnosa Penyakit Pneumonia Pada Anak Dengan Metode Teorema Bayes Dan Certainty Factor",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pakar Mendeteksi Gizi Buruk Pada Balita Menggunakan Metode Case Based Reasoning",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pakar Mendeteksi Kerusakan Pada HP OPPO F3 Plus Bagian EMMC (Embedded Multi Media Controller) Dengan Menggunakan metode Dempster Shafer",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "SISTEM PAKAR MENDIAGNOSA HAMA PADA TANAMAN LANSIUM DOMESTICUM (DUKU) MENGGUNAKAN METODE CERTAINTY FACTOR",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pakar Mendiagnosa Penyakit Pada Pomeranian Dengan Menggunakan Metode Certainty Factor",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pakar Mengidentifikasi Kerusakan Mesin Produksi (AMP) Di PT Karya Murni (Hotmix) Menggunakan Metode Certainty Factor",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pakar Untuk mendeteksi Penyakit Bercak Kuning Pada Jmur Tiram",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pendukung Keputusan Dalam Menentukan Nilai Market Jaminan Pada Mikro PT. Bank Pan Indonesia, Tbk Dengan Metode MOORA",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pendukung Keputusan Dalam Pembentukan Tim Medis Pada Klinik PTP-VI Berangir Dengan Metode VIKOR",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "SISTEM PENDUKUNG KEPUTUSAN DALAM PENENTUAN JABATAN KAPOLRES DI JAJARAN KEPOLISIAN DAERAH SUMATERA UTARA (POLDA SUMUT) DENGAN METODE SIMPLE ADDITIVE WEIGHT (SAW): SISTEMÂ &#8230;",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pendukung Keputusan Menentukan Indeks Performa Perawat Di Ruang Isolasi Rumah Sakit Santa Elisabet Medan Menggunakan Metode WASPAS (Weight Aggregated Sum Product Assesment)",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pendukung Keputusan Menentukan Jumlah Produksi Bubuk Daun Teh Gambir Terhadap Permintaan Konsumen Menggunakan Metode Fuzzy Mamdani",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pendukung Keputusan Menentukan Kelayakan Pembuatan Serfitikat Tanah Pada Kantor Notaris BPN Menggunakan Metode MOORA",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pendukung Keputusan Menentukan Perekrutan Tenaga Bantuan Medis Pada Puskesmas Pintu Angin Di Kota Sibolga Dengan Metode Fuzzy Sugeno",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pendukung Keputusan Penyeleksian Mitra Jasa Logistik dengan menggunakan metode MOORA (Multi Objective Optimization by Ratio Analysis) pada PT LEL EXPRESS",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pendukung Keputusan Untuk Menentukan Pemilihan Nasabah Terbaik Pada PT. BPR NBP 33 Galang Lubuk Pakam Menggunakan Metode Elimination and Choice Expressing Reality (ELECTRE)",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pendukung Keputusan Untuk Menentukan Prioritas Pendistribusian Obat Menggunakan Metode Weight Product (WP) Pada PT. Kimia Farma Trading Dan Distribution Cabang Medan",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pendukung Keputusan Untuk Menentukan Professional Housekeeper Pada Departement Housekeeping Divisi Roomboy Di CV. Echo Tirta Hotel (E Hotel) Menggunakan Metode WASPASÂ &#8230;",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pendukung Keputusan Untuk Rekrutmen Android Developer Pada CV. KHz Technology Menggunakan Metode Preference Selection Index",
+                "tahun": "",
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
             },
             {
                 "judul": "Klasifikasi Penyakit Diabetic Retinopathy Menggunakan Multilayer Perceptron",
                 "tahun": 2022,
-                "sumber": "GARUDA",
-                "author_id": "2784377",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/3746215"
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
             },
             {
-                "judul": "Rancang Bangun Game “MeuEndBude” Multiplayer Online 3D Menggunakan Algoritma Line Trace (Raycast)",
+                "judul": "Klasifikasi Citra Songket Aceh Menggunakan Metode Probabilistic Neural Network",
                 "tahun": 2023,
-                "sumber": "GARUDA",
-                "author_id": "642600",
-                "url": "https://garuda.kemdiktisaintek.go.id/documents/detail/4432705"
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Lain-lain",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pendukung Keputusan Dalam Penentuan Jabatan Kapolres Di Jajaran Kepolisian Daerah Sumatera Utara (Polda Sumut) Dengan Metode Simple Additive Weight (SAW)",
+                "tahun": 2019,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Jurnal nasional terakreditasi",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Analisis Kemampuan Akademik Mahasiswa Berdasarkan Latar  Belakang Keluarga, Tempat Tinggal, Pertemanan, Sikap  Belajar, Konsep Diri, Iklim Kampus, Dan Tenaga Pengajar  Dengan Jaringan Syaraf Tiruan Backpropagation",
+                "tahun": 2020,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Jurnal nasional terakreditasi",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Penerapan Metode Levenshtein Distance Dalam Mendeteksi Hasil Jawaban Peserta Kelas Daring Dengan Teknik Web Scraping Manual",
+                "tahun": 2021,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Jurnal nasional terakreditasi",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "DIAGNOSIS SYSTEM PENYAKIT CLUBROOT PADA TANAMAN KUBIS DENGAN MENGGUNAKAN METODE CERTAINTY FACTOR",
+                "tahun": 2022,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Jurnal nasional terakreditasi",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Klasifikasi citra Songket Aceh Menggunakan  Metode  Probabilistic Neural Network",
+                "tahun": 2023,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Jurnal nasional terakreditasi",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Penerapan Metode SAW pada Aplikasi Menentukan Lokasi untuk Pembangkit Listrik Mikro Turbin Bayu Berbasis Web",
+                "tahun": 2023,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Jurnal nasional terakreditasi",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Implementation of RFID-Based Attendance Integrated with Management Systems and Notifications via WhatsApp",
+                "tahun": 2024,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Jurnal nasional terakreditasi",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Perbandingan Akurasi Algoritma Principal Component Analysis Dengan Algoritma Convolutional Neural Network Dalam Pengenalan Wajah",
+                "tahun": 2024,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Jurnal nasional terakreditasi",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Rancang Bangun Virtual Tour Reality Menggunakan Pannelum Panorama Viewer",
+                "tahun": 2024,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Jurnal nasional terakreditasi",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "PERANCANGAN JAM DIGITAL DAN SISTEM BEL OTOMATIS PADA SEKOLAH DENGAN TEKNIK COUNTER BERBASIS MIKROKONTROLER",
+                "tahun": 2020,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Jurnal nasional",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Data Mining Untuk Mengestimasi Angka Kemiskinan Di Sumatera Utara Menggunakan Metode Regresi Linier Berganda",
+                "tahun": 2021,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Jurnal nasional",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "PEMBUATAN WEBSITE STKIP AMAL BAKTI",
+                "tahun": 2021,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Jurnal nasional",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
+            },
+            {
+                "judul": "Sistem Pendukung Keputusan Dalam Pembentukan Tim Medis  Pada Klinik PTP-VI Berangir Dengan Metode VIKOR",
+                "tahun": 2021,
+                "sumber": "PDDIKTI",
+                "jenis_kegiatan": "Jurnal nasional",
+                "url": "https://pddikti.kemdiktisaintek.go.id/detail-dosen/WRfHcp-b2-cvILPgh-5dn0GbTZoN10hzfZb66gXcmWdqU7xXOjcgLBowdLuksav5A5Yc1g%3D%3D"
             }
         ],
         "paten": [],
