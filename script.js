@@ -326,7 +326,8 @@ function populateProdiDropdown(dosenList) {
 
   const prodiSorted = Array.from(prodiSet).sort((a, b) => a.localeCompare(b, 'id'));
 
-  let optionsHtml = '<option value="">Semua Program Studi (312 Dosen)</option>';
+  const totalCount = (AppState.allDosen && AppState.allDosen.length) ? AppState.allDosen.length : 301;
+  let optionsHtml = `<option value="">Semua Program Studi (${totalCount} Dosen)</option>`;
   prodiSorted.forEach(prodi => {
     const isSelected = AppState.selectedProdi.toLowerCase() === prodi.toLowerCase() ? 'selected' : '';
     optionsHtml += `<option value="${escapeHtml(prodi)}" ${isSelected}>${escapeHtml(prodi)}</option>`;
